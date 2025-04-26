@@ -13,8 +13,11 @@ function TenantPage() {
     setError(selectedTenants.error);
     setTenants(selectedTenants.tenants);
   }, [selectedTenants]);
-  function handleFetchUser() {
+  function handleFetchTenant() {
     dispatch(fetchTenants());
+  }
+  {
+    // console.log(tenants);
   }
   return (
     <div>
@@ -25,7 +28,7 @@ function TenantPage() {
           {tenant.tenantId} | {tenant.tenantName} | {tenant.customerName}
         </li>
       ))}
-      <button className="btn" onClick={handleFetchUser}>
+      <button className="btn" onClick={handleFetchTenant}>
         Fetch
       </button>
     </div>

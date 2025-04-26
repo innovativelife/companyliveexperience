@@ -1,0 +1,34 @@
+:root {
+    --color-unselectedFooterContent: #FFFFFF;
+    --color-selecteFooterContent: #FEBE14;
+    --size-footerText: 12px;
+}
+
+.buttonContent svg{
+    width: 50%;
+    fill: var(--color-unselectedFooterContent);
+}
+
+.selectedNav svg{
+    fill: var(--color-selecteFooterContent);
+}
+
+.buttonContent h4{
+    color: var(--color-unselectedFooterContent);;
+    font-weight: bold;
+    font-size: var(--size-footerText);
+}
+
+.selectedNav h4{
+    color: var(--color-selecteFooterContent);
+}
+
+.buttonContent{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}

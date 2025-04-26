@@ -1,0 +1,44 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+:root {
+  --color-topSearchBoarder: #FEBF11;
+  --color-topSearch: #FFFFFF;
+  --color-normalText: #1A2426;
+  --size-normalText: 16px;
+}
+
+.search {
+  width: 80%;
+  padding-left: 10%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid var(--color-topSearchBoarder);
+  border-right: none;
+  padding: 5px;
+  height: 25px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  background-color: var(--color-topSearch);
+  color: var(--color-normalText);
+  font-size: var(--size-normalText);
+}
+
+.searchTerm:focus{
+  color: var(--color-normalText);
+}
+
+.searchButton {
+  width: 40px;
+  height: 41px;
+  border: 1px solid var(--color-topSearchBoardery);
+  background: var(--color-topSearchBoarder);
+  text-align: center;
+  color: var(--color-topSearch);
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}

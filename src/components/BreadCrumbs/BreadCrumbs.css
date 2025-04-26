@@ -1,0 +1,7 @@
+.breadCrumbs{
+    display: flex;
+}
+.breadCrumbs svg{
+    width: 20px;
+    margin-right: 20px;
+}

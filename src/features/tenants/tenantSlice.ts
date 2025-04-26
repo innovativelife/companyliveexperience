@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 export interface Tenant {
-    tenantId: string,
-    tenantName: string,
-    customerName: string
+  tenantId: string,
+  tenantName: string,
+  customerName: string
 }
 export interface TenantState {
-    loading: boolean;
-    tenants: Array<Tenant>;
-    error: string | undefined;
+  loading: boolean;
+  tenants: Array<Tenant>;
+  error: string | undefined;
 }
 const initialState: TenantState = {
   loading: false,
@@ -17,18 +17,33 @@ const initialState: TenantState = {
 }
 export const fetchTenants = createAsyncThunk(
   "tenants/fetchTenants",
-  () => {
-    const res = fetch('http://127.0.0.1:8080/Tenants',
-        {
-            method: "GET", 
-            mode: "cors",
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                "tenantid": "Root", 
-                "uid": "tester"
-              }),
-      }).then(data => data.json());
-    return res;
+  // () => {
+  //   const res = fetch('http://127.0.0.1:8080/Tenants',
+  //       {
+  //           method: "GET", 
+  //           mode: "cors",
+  //           headers: new Headers({
+  //               'Content-Type': 'application/json',
+  //               "tenantid": "Root", 
+  //               "uid": "tester"
+  //             }),
+  //     }).then(data => data.json());
+  //     // res["tenants"];
+  //   return res["tenants"];
+  // }
+  async () => {
+    const response = await fetch('http://127.0.0.1:8080/Tenants', {
+      method: "GET", 
+      mode: "cors",
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        "tenantid": "Root", 
+        "uid": "tester"
+      }),
+    });
+
+    const data = await response.json();
+    return data["tenants"];
   }
 )
 const tenantSlice = createSlice({
@@ -50,5 +65,5 @@ const tenantSlice = createSlice({
   },
   reducers: {}
 })
-export const tenantSelector = (state: RootState) => state.tenantReducer;
+export const tenantSelector = (state: RootState) => state.tenant;
 export default tenantSlice.reducer;
