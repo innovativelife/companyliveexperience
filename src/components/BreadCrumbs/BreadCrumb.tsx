@@ -1,18 +1,24 @@
 import React from "react";
-import Link from "@mui/material/Link";
 import { useNavigate } from "react-router-dom";
-import { UiConfig } from "../../features/uiConfig/uiConfigSlice";
+import { useSelector } from "react-redux";
+
+//Components
+import Link from "@mui/material/Link";
+
+//Data
+import { selectBreadCrumbColorRgb } from "../../features/uiConfig/uiSelectors";
 
 type BreadCrumbProps = {
-  uiConfig: UiConfig;
   locationName: string;
   link: string;
 };
 
-const BreadCrumb = ({ locationName, link, uiConfig }: BreadCrumbProps) => {
-  let navigate = useNavigate();
+const BreadCrumb = ({ locationName, link }: BreadCrumbProps) => {
+  //Get imported data
+  const breadCrumbColorRgb = useSelector(selectBreadCrumbColorRgb);
 
   // Navigate to the breadcrumbs link
+  let navigate = useNavigate();
   function handleClick() {
     navigate(link);
   }
@@ -20,7 +26,7 @@ const BreadCrumb = ({ locationName, link, uiConfig }: BreadCrumbProps) => {
   return (
     <Link
       underline="hover"
-      color={`rgb(${uiConfig.breadCrumbColorRgb})`}
+      color={`rgb(${breadCrumbColorRgb})`}
       href="#"
       onClick={handleClick}
     >

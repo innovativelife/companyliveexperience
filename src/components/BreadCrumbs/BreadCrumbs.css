@@ -1,6 +1,17 @@
+:root {
+    --color-breadCrumbBar: #FEBE14;
+}
+
 .breadCrumbs{
     display: flex;
 }
+
+.breadCrumbs{
+    padding: 5px;
+    padding-left: 5%;
+    background-color: var(--color-breadCrumbBar);
+}
+
 .breadCrumbs svg{
     width: 20px;
     margin-right: 20px;

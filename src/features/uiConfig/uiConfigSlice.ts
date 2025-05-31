@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+
+//Temporary Data -- Ask how to change
+import temporaryData from "../../temporaryData.json";
+const tenantid = temporaryData.tenantid;
+
 export interface UiConfig {
   googleFont: string,
   appBannerUrl: string,
@@ -9,6 +14,7 @@ export interface UiConfig {
   calendarTitle: string,
   policyTitle: string,
   moreTitle: string,
+  searchPromptText: string,
   homeSvg: string,
   peopleSvg: string,
   calendarSvg: string,
@@ -60,6 +66,7 @@ const anInitialState :UiConfig = {
   calendarTitle: "",
   policyTitle: "",
   moreTitle: "",
+  searchPromptText: "",
   homeSvg: "",
   peopleSvg: "",
   calendarSvg: "",
@@ -115,7 +122,7 @@ const initialState: UiConfigState = {
 export const fetchUiConfigs = createAsyncThunk(
   "uiConfig/fetchUiConfigs",
   async () => {
-    const response = await fetch('http://127.0.0.1:8080/UiConfig/tenant1', {
+    const response = await fetch(`http://127.0.0.1:8080/UiConfig/${tenantid}`, {
       method: "GET", 
       mode: "cors",
       headers: new Headers({

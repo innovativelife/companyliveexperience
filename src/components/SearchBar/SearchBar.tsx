@@ -1,26 +1,33 @@
 import React, { useState, useCallback, ChangeEvent } from "react";
+import { useSelector } from "react-redux";
+
+//Css
 import "./SearchBar.css";
-import { UiConfig } from "../../features/uiConfig/uiConfigSlice";
+
+//Data
+import {
+  selectSearchBarData,
+  selectNormalTextFontSize,
+  selectTextColor,
+} from "../../features/uiConfig/uiSelectors";
 
 type SearchBarProps = {
-  uiConfig: UiConfig;
   onSearch: (term: string) => void;
-  searchBarInitialText: string;
 };
 
-const SearchBar = ({
-  uiConfig,
-  onSearch,
-  searchBarInitialText,
-}: SearchBarProps) => {
+const SearchBar = ({ onSearch }: SearchBarProps) => {
+  //Get imported data
+  const { topSearchBoarderColor, topSearchColor, searchSvg, searchPromptText } =
+    useSelector(selectSearchBarData);
+  const normalTextFontSize = useSelector(selectNormalTextFontSize);
+  const textColor = useSelector(selectTextColor);
+
+  //Set tokens
   const root = document.documentElement;
-  root.style.setProperty("--color-topSearch", uiConfig.topSearchColor);
-  root.style.setProperty(
-    "--color-topSearchBoarder",
-    uiConfig.topSearchBoarderColor
-  );
-  root.style.setProperty("--size-normalText", uiConfig.normalTextFontSize);
-  root.style.setProperty("--color-normalText", uiConfig.textColor);
+  root.style.setProperty("--color-topSearch", topSearchColor);
+  root.style.setProperty("--color-topSearchBoarder", topSearchBoarderColor);
+  root.style.setProperty("--size-normalText", normalTextFontSize);
+  root.style.setProperty("--color-normalText", textColor);
 
   const [term, setTerm] = useState("");
 
@@ -40,12 +47,12 @@ const SearchBar = ({
       <input
         type="text"
         className="searchTerm"
-        placeholder={searchBarInitialText}
+        placeholder={searchPromptText}
         onChange={handleTermChange}
       />
       <button type="submit" className="searchButton">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-          <path d={uiConfig.searchSvg} />
+          <path d={searchSvg} />
         </svg>
       </button>
     </form>

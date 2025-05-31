@@ -1,16 +1,23 @@
 import React from "react";
-import SvgButton from "../SvgButton/SvgButton";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
+
+//Components
+import SvgButton from "../SvgButton/SvgButton";
+
+//Data
 import { Employee } from "../../features/employees/employeeSlice";
+import {
+  selectContactSvgs,
+  selectNormalTextFontSize,
+} from "../../features/uiConfig/uiSelectors";
 
 type ContactListProps = {
   person: Employee;
   onFavourite: (person: string) => void;
   onEmailUser: (person: string) => void;
   onPhoneUser: (person: string) => void;
-  emailSrc: string;
-  phoneSrc: string;
-  starSrc: string;
   long: boolean;
   shade: string;
 };
@@ -20,12 +27,17 @@ const PersonContact = ({
   onFavourite,
   onEmailUser,
   onPhoneUser,
-  emailSrc,
-  phoneSrc,
-  starSrc,
   long,
   shade,
 }: ContactListProps) => {
+  //Get imported data
+  const normalTextFontSize = useSelector(selectNormalTextFontSize);
+  const { favouriteSvg, messageSvg, phoneCallSvg } =
+    useSelector(selectContactSvgs);
+
+  const root = document.documentElement;
+  root.style.setProperty("(--size-normalText", normalTextFontSize);
+
   let navigate = useNavigate();
 
   if (long) {
@@ -38,7 +50,7 @@ const PersonContact = ({
         <SvgButton
           user={person.employeeNumber}
           onHandleClick={onFavourite}
-          imgSrc={starSrc}
+          imgSrc={favouriteSvg}
           styleType="favourite"
         />
         <div className="avatarContainer">
@@ -58,13 +70,13 @@ const PersonContact = ({
           <SvgButton
             user={person.employeeNumber}
             onHandleClick={onEmailUser}
-            imgSrc={emailSrc}
+            imgSrc={messageSvg}
             styleType="contact"
           />
           <SvgButton
             user={person.employeeNumber}
             onHandleClick={onPhoneUser}
-            imgSrc={phoneSrc}
+            imgSrc={phoneCallSvg}
             styleType="contact"
           />
         </div>

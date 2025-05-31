@@ -1,18 +1,24 @@
 import React from "react";
-import PersonContact from "./Contact";
-import tokens from "../../temporaryData.json";
-import { Employee } from "../../features/employees/employeeSlice";
+import { useSelector } from "react-redux";
 
+//Css
 import "./ContactList.css";
+
+//Components
+import PersonContact from "./Contact";
+
+//Data
+import { Employee } from "../../features/employees/employeeSlice";
+import {
+  selectAlternatingColours,
+  selectAvatarTextFontSize,
+} from "../../features/uiConfig/uiSelectors";
 
 type ContactListProps = {
   people: Employee[];
   onFavourite: (person: string) => void;
   onEmailUser: (person: string) => void;
   onPhoneUser: (person: string) => void;
-  emailSrc: string;
-  phoneSrc: string;
-  starSrc: string;
   long: boolean;
 };
 
@@ -21,18 +27,19 @@ const Contacts = ({
   onFavourite,
   onEmailUser,
   onPhoneUser,
-  emailSrc,
-  phoneSrc,
-  starSrc,
   long,
 }: ContactListProps) => {
-  const root = document.documentElement;
-  root.style.setProperty("--color-cardLight", tokens.colours.cardLightColorHex);
-  root.style.setProperty("--color-cardDark", tokens.colours.cardDarkColorHex);
-  root.style.setProperty(
-    "--size-avatarText",
-    tokens.fontSizes.avatarTextFontSize
+  //Get imported data
+  const { widgets1Color, widgets2Color } = useSelector(
+    selectAlternatingColours
   );
+  const avatarTextFontSize = useSelector(selectAvatarTextFontSize);
+
+  //Set tokens
+  const root = document.documentElement;
+  root.style.setProperty("--color-cardLight", widgets1Color);
+  root.style.setProperty("--color-cardDark", widgets2Color);
+  root.style.setProperty("--size-avatarText", avatarTextFontSize);
 
   return (
     <section id="contacts">
@@ -46,9 +53,6 @@ const Contacts = ({
             onFavourite={onFavourite}
             onEmailUser={onEmailUser}
             onPhoneUser={onPhoneUser}
-            emailSrc={emailSrc}
-            phoneSrc={phoneSrc}
-            starSrc={starSrc}
             long={long}
             shade={shade}
           />

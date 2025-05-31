@@ -1,32 +1,87 @@
 import React from "react";
-import BottomBarButton from "./BottomBarButton";
+import { useSelector } from "react-redux";
+
+//Css
 import "./BottomBar.css";
-import { PageButton } from "./BottomBarButton";
-import tokens from "../../temporaryData.json";
+
+//Components
+import BottomBarButton from "./BottomBarButton";
+import MessageInput from "../MessageInput/MessageInput";
+
+//Data
+import { selectBottomBarData } from "../../features/uiConfig/uiSelectors";
 
 type BottomBarProps = {
-  pageButtons: PageButton[];
   currentPage: string;
+  showMessageBar: boolean;
 };
 
-const BottomBar = ({ pageButtons, currentPage }: BottomBarProps) => {
+const BottomBar = ({ currentPage, showMessageBar }: BottomBarProps) => {
+  const {
+    homeTitle,
+    homeSvg,
+    peopleTitle,
+    peopleSvg,
+    calendarTitle,
+    calendarSvg,
+    policyTitle,
+    policySvg,
+    moreTitle,
+    moreSvg,
+    bottomBarColor,
+  } = useSelector(selectBottomBarData);
+
   const root = document.documentElement;
-  root.style.setProperty("--color-footer", tokens.colours.footerColorHex);
+  root.style.setProperty("--color-footer", bottomBarColor);
+
+  const pageButtons = [
+    {
+      name: homeTitle,
+      imgSrc: homeSvg,
+      location: `/${homeTitle}`.toLowerCase(),
+    },
+    {
+      name: peopleTitle,
+      imgSrc: peopleSvg,
+      location: `/${peopleTitle}`.toLowerCase(),
+    },
+    {
+      name: calendarTitle,
+      imgSrc: calendarSvg,
+      location: `/${calendarTitle}`.toLowerCase(),
+    },
+    {
+      name: policyTitle,
+      imgSrc: policySvg,
+      location: `/${policyTitle}`.toLowerCase(),
+    },
+    {
+      name: moreTitle,
+      imgSrc: moreSvg,
+      location: `/${moreTitle}`.toLowerCase(),
+    },
+  ];
 
   return (
-    <nav id="bottomBar">
-      {pageButtons.map((page) => {
-        return (
-          <BottomBarButton
-            pageButton={page}
-            key={page.name}
-            isCurrentPage={
-              page.name.toLowerCase() === currentPage.toLowerCase()
-            }
-          />
-        );
-      })}
-    </nav>
+    <div id="bottomBar">
+      {showMessageBar && <MessageInput />}
+      <div id="bottomNavBar">
+        {pageButtons.map((page, index) => {
+          return (
+            //Check the page has a name
+            page.name && (
+              <BottomBarButton
+                pageButton={page}
+                key={page.name}
+                isCurrentPage={
+                  page.name.toLowerCase() === currentPage.toLowerCase()
+                }
+              />
+            )
+          );
+        })}
+      </div>
+    </div>
   );
 };
 

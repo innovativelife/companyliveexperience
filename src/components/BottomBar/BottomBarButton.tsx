@@ -1,7 +1,12 @@
 import React from "react";
-import "./BottomBarButton.css";
-import tokens from "../../temporaryData.json";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+//Css
+import "./BottomBarButton.css";
+
+//Data
+import { selectBottomBarButtonData } from "../../features/uiConfig/uiSelectors";
 
 export interface PageButton {
   name: string;
@@ -18,12 +23,17 @@ const BottomBarButton = ({
   pageButton,
   isCurrentPage,
 }: BottomBarBottomProps) => {
+  //Get imported data
+  const { bottomButttonSelectedColor, bottomButttonUnselectedColor } =
+    useSelector(selectBottomBarButtonData);
+
+  //Set tokens
   const root = document.documentElement;
   root.style.setProperty(
     "--color-unselectedFooterContent",
-    tokens.colours.footerContentColorHex
+    bottomButttonUnselectedColor
   );
-  root.style.setProperty("--size-footerText", tokens.fontSizes.footerFontSize);
+  root.style.setProperty("--size-footerText", bottomButttonSelectedColor);
 
   const selectionStatus = isCurrentPage
     ? "buttonContent selectedNav"
