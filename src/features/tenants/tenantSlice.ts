@@ -17,20 +17,6 @@ const initialState: TenantState = {
 }
 export const fetchTenants = createAsyncThunk(
   "tenants/fetchTenants",
-  // () => {
-  //   const res = fetch('http://127.0.0.1:8080/Tenants',
-  //       {
-  //           method: "GET", 
-  //           mode: "cors",
-  //           headers: new Headers({
-  //               'Content-Type': 'application/json',
-  //               "tenantid": "Root", 
-  //               "uid": "tester"
-  //             }),
-  //     }).then(data => data.json());
-  //     // res["tenants"];
-  //   return res["tenants"];
-  // }
   async () => {
     const response = await fetch('http://127.0.0.1:8080/Tenants', {
       method: "GET", 

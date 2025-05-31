@@ -1,23 +1,33 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+//Css
+import "./BreadCrumbs.css";
+
+//Components
 import BreadCrumb from "./BreadCrumb";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import { useLocation, useNavigate } from "react-router-dom";
 
-import "./BreadCrumbs.css";
-import { UiConfig } from "../../features/uiConfig/uiConfigSlice";
+//Data
+import {
+  selectBackSvg,
+  selectBreadCrumbBarColor,
+} from "../../features/uiConfig/uiSelectors";
 
-type BreadCrumbsProps = {
-  uiConfig: UiConfig;
-};
+const BreadCrumbs = () => {
+  //Get imported data
+  const backSvg = useSelector(selectBackSvg);
+  const breadCrumbBarColor = useSelector(selectBreadCrumbBarColor);
 
-const BreadCrumbs = ({ uiConfig }: BreadCrumbsProps) => {
+  //Set css variables
+  const root = document.documentElement;
+  root.style.setProperty("--color-breadCrumbBar", breadCrumbBarColor);
+
   // Stores the current location of the file
   const location = useLocation().pathname;
   // Stores the names of all the sections of the file path
   const sectionNames = location.split("/").filter(Boolean);
-
-  // console.log(uiConfig);
 
   // Navigate to the previous page
   let navigate = useNavigate();
@@ -40,7 +50,7 @@ const BreadCrumbs = ({ uiConfig }: BreadCrumbsProps) => {
         fill="black"
         onClick={handleClick}
       >
-        <path d={uiConfig.backSvg} />
+        <path d={backSvg} />
       </svg>
       <Breadcrumbs maxItems={2} aria-label="breadcrumb">
         {sectionNames.map((section, index) => {
@@ -48,9 +58,8 @@ const BreadCrumbs = ({ uiConfig }: BreadCrumbsProps) => {
           const breadcrumbLink = location.split(section)[0] + section;
           return (
             <BreadCrumb
-              uiConfig={uiConfig}
               key={index}
-              locationName={section}
+              locationName={section.charAt(0).toUpperCase() + section.slice(1)}
               link={breadcrumbLink}
             />
           );

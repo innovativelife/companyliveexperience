@@ -5,6 +5,9 @@
 #bottomBar{
     position: fixed;
     bottom: 0;
+}
+
+#bottomNavBar{
     display: flex;
     justify-content: space-evenly;
     width: 100%;

@@ -1,12 +1,15 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import SearchTopBar from "../components/TopBar/SearchTopBar";
+//Components
+import SearchTopBar from "../components/TopBar/SearchTopBar/SearchTopBar";
 import BottomBar from "../components/BottomBar/BottomBar";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import PostList from "../components/Posts/PostList";
 
-// import HorizontalCards from "../components/HorizontalCards/HorizontalCards";
-import { PageButton } from "../components/BottomBar/BottomBarButton";
-import sampleData from "../temporaryData.json";
+//Data
+import { fetchPosts, postSelector } from "../features/posts/postSlice";
+import { fetchUiConfigs } from "../features/uiConfig/uiConfigSlice";
 
 const Home = () => {
   //Search bar data
@@ -15,21 +18,30 @@ const Home = () => {
   }, []);
 
   //Page Data
-  const pageButtons: PageButton[] = sampleData.pageButtons;
   const currentPage = useLocation().pathname.split("/").filter(Boolean)[0];
+
+  //Chanel data
+  const [currentChannel, setCurrentChannel] = useState("all");
+
+  const dispatch = useAppDispatch();
+
+  //All employee Data
+  const posts = useAppSelector(postSelector).posts;
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
+
+  //All graphic data
+  useEffect(() => {
+    dispatch(fetchUiConfigs());
+  }, [dispatch]);
 
   return (
     <>
-      <SearchTopBar
-        searchBarText={sampleData.searchBar.searchBarText}
-        primaryColour={sampleData.colours.primaryColorHex}
-        backgroundColour={sampleData.colours.backgroundColorHex}
-        headerColour={sampleData.colours.headerColorHex}
-        onSearch={search}
-        searchIconSrc={sampleData.searchBar.imgSrc}
-      />
-
-      <BottomBar pageButtons={pageButtons} currentPage={currentPage} />
+      <SearchTopBar onSearch={search} />
+      <PostList posts={posts} />
+      <BottomBar currentPage={currentPage} showMessageBar={true} />
+      <div className="bottomMessagePading" />
     </>
   );
 };

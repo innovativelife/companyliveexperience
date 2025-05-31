@@ -1,0 +1,35 @@
+:root {
+    --color-topBar: #1A2426;
+    --color-text: #1A2426;
+    --color-buttonTextColor: #FFFFFF;
+    --size-normalText: 16px;
+    --color-textFieldColor: #FFFFFF;
+    --color-backgroundColor: #FFFFFF;
+    --color-buttonColor: #1A2426;
+    --color-channelBackgroundColor: #1A2426;
+}
+
+.messageInput{
+    background-color: var(--color-backgroundColor);
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.messageInput .input{
+    padding: 10px;
+    width: 70%;
+    font-size: var(--size-normalText);
+    color: var(--color-text);
+    background-color: var(--color-textFieldColor);
+}
+
+.messageInput button{
+    padding: 10px;
+    font-size: var(--size-normalText);
+    color: var(--color-buttonTextColor);
+    background-color: var(--color-buttonColor);
+}
+
+.channels{
+    background-color: var(--color-channelBackgroundColor);
+}

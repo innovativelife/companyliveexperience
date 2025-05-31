@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from '../features/users/userSlice';
 import tenantReducer from '../features/tenants/tenantSlice'
 import uiConfigReducer from '../features/uiConfig/uiConfigSlice'
 import employeeReducer from '../features/employees/employeeSlice'
+import postReducer from '../features/posts/postSlice'
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
     tenant: tenantReducer,
     ui: uiConfigReducer,
-    employee: employeeReducer
+    employee: employeeReducer,
+    post: postReducer
   },
 });
 export type AppDispatch = typeof store.dispatch;
