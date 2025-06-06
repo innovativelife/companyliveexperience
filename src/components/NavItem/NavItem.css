@@ -1,0 +1,35 @@
+.nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: var(--color-secondary);
+  }
+  
+  .nav-item.active {
+    border-radius: 9999px;
+    color: var(--color-text);
+  }
+  
+  .nav-item.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    color: inherit;
+  }
+  
+  .nav-item.label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.015em;
+    color: inherit;
+  }
+  
+  .nav-item.label.dark {
+    color: #1c170d;
+  }

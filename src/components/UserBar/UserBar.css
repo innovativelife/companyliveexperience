@@ -1,0 +1,37 @@
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    min-height: 72px;
+  }
+  
+  .avatar {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 9999px;
+    height: 56px;
+    aspect-ratio: 1 / 1;
+    width: fit-content;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  /* .user-name {
+    color: #171512;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: normal;
+  }
+  
+  .additional-text {
+    color: #827b68;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: normal;
+  } */

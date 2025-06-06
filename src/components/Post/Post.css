@@ -1,0 +1,51 @@
+  
+  .post .image-container {
+    display: flex;
+    /* background-color: white; */
+    padding: 0.75rem 0;
+  }
+  
+  .post .main-image {
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    aspect-ratio: 3 / 2;
+    flex: 1;
+  }
+  
+  .post .action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .post .action-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* .icon {
+    color: #827b68;
+  } */
+  
+  /* .count {
+    color: #827b68;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: normal;
+    letter-spacing: 0.015em;
+  } */
+  
+  .message {
+    /* color: #171512;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: normal; */
+    padding: 0.25rem 1rem 0.75rem 1rem;
+  }

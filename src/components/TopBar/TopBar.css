@@ -1,47 +1,30 @@
-:root {
-    --color-topBar: #1A2426;
-    --color-breadCrumbBar: #FEBE14;
-    --color-loginTopBarColor: #FFFFFF;
-}
-
-.topBarlogo{
-    width: 50%;
-    padding-left: 5%;
-}
-
-.plainTopBar{
-    width: 100%;
-    background-color: var(--color-topBar);
-    padding-top: 10%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.searchTopBar{
-    width: 100%;
-    background-color: var(--color-topBar);
-    padding-top: 14%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.searchTopBar .search{
-    padding-bottom: 5%;
-}
-
-.loggedOutTopBar{
-    width: 100%;
-    background-color: var(--color-loginTopBarColor);
-    padding-top: 5%;
-    padding-bottom: 5%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.breadCrumbs{
-    padding: 5px;
-    padding-left: 5%;
-    background-color: var(--color-breadCrumbBar);
-}
-
 .topBar{
     position: sticky;
     top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-primary);
+    padding: 1rem;       /* equivalent to p-4 */
+    padding-bottom: 0.5rem; /* equivalent to pb-2 */
+}
+
+.topBar .icon-container {
+    color: var(--color-text);
+    display: flex;
+    width: 3rem;       /* 12 x 0.25rem */
+    height: 3rem;
+    flex-shrink: 0;
+    align-items: center;
+  }
+  
+  .topBar .title {
+    color: var(--color-text);
+    font-size: 1.125rem; /* text-lg */
+    font-weight: bold;
+    line-height: 1.25;   /* leading-tight */
+    letter-spacing: -0.015em;
+    flex: 1;
+    text-align: center;
+    padding-right: 3rem; /* pr-12 = 12 * 0.25rem */
 }

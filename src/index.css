@@ -6,18 +6,21 @@
 html,body{margin:0;padding:0}
 
 :root {
-  --color-heading1: #000000;
-  --color-subHeading: #000000;
-  --color-text: #000000;
-  --color-background: #ffffff;
-  --size-heading1: 60px;
-  --size-heading2: 30px;
-  --size-heading3: 20px;
-  --size-heading4: 12px;
-  --size-normalText: 20px;
   --spacing-large: 20px;
   --spacing-medium: 10px;
   --spacing-small: 5px;
+
+  --color-primary: #F2E6CE;
+  --color-secondary: #827A69;
+  --color-tertiary: #FCFAF7;
+  --color-background: #FFFFFF;
+  --color-text: #171412;
+  --color-inputs: #F5F2F2;
+
+  --size-title:18px;
+  --size-heading:18px;
+  --size-text:16px;
+  --size-subtext:14px;
 }
 
 body {
@@ -37,39 +40,21 @@ code {
 }
 
 h1 {
-  color: var(--color-heading);
-  font-size: var(--size-heading1);
-  margin-bottom: var(--spacing-large);
+  color: var(--color-text);
+  font-size: var(--size-title);
 }
 
 h2 {
-  color: var(--colorsubHeading-heading);
-  font-size: var(--size-heading2);
-  margin-bottom: var(--spacing-medium);
+  color: var(--color-text);
+  font-size: var(--size-heading);
 }
 
 h3{
-  color: var(--color-footerContent);
-  font-size: var(--size-heading3);
-  margin-bottom: var(--spacing-small);
-}
-
-h4{
-  color: var(--color-footerContent);
-  font-size: var(--size-heading4);
-  margin-bottom: var(--spacing-small);
+  color: var(--color-secondary);
+  font-size: var(--size-subtext);
 }
 
 p {
   color: var(--color-text);
-  font-size: var(--size-normalText);
-  margin-bottom: var(--spacing-large);
-}
-
-.bottomPading{
-  margin-top: 40px;
-}
-
-.bottomMessagePading{
-  margin-top: 180px;
+  font-size: var(--size-text);
 }

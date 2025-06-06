@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
 //Temporary Data -- Ask how to change
-import temporaryData from "../../temporaryData.json";
+import temporaryData from "../../localData.json";
 const tenantid = temporaryData.tenantid;
 const userUID= temporaryData.userUID;
 
@@ -12,7 +12,8 @@ export interface Post {
   status: string,
   sendTo: string,
   employeeUID: string,
-  message: string
+  message: string,
+  imageURL: string
 }
 
 export interface PostState {
@@ -30,7 +31,7 @@ const initialState: PostState = {
 export const fetchPosts = createAsyncThunk(
   "posts/fetchPosts",
   async () => {
-    const response = await fetch(`http://127.0.0.1:8080/post/${tenantid}`, {
+    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/post`,{
       method: "GET",
       mode: "cors",
       headers: new Headers({
@@ -47,7 +48,7 @@ export const fetchPosts = createAsyncThunk(
 export const createPost = createAsyncThunk(
   "posts/createPost",
   async (messageString: string) => {
-    const response = await fetch(`http://127.0.0.1:8080/post/${tenantid}`, {
+    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/post`, {
       method: "POST",
       mode: "cors",
       headers: new Headers({
