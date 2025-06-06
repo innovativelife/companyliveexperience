@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
 //Temporary Data -- Ask how to change
-import temporaryData from "../../temporaryData.json";
+import temporaryData from "../../localData.json";
 const tenantid = temporaryData.tenantid;
 
 export interface Employee {
@@ -14,6 +14,7 @@ export interface Employee {
   phoneNumber: string;
   positionTitle: string;
   personalDescription: string;
+  avatarURL: string;
 }
 
 const anInitialState: Employee = {
@@ -25,19 +26,20 @@ const anInitialState: Employee = {
   phoneNumber: "",
   positionTitle: "",
   personalDescription: "",
+  avatarURL: "",
 };
 
 export interface EmployeeState {
   loading: boolean;
   employees: Array<Employee>;
-  singleEmployee: Array<Employee>;
+  singleEmployee: Employee;
   error: string | undefined;
 }
 
 const initialState: EmployeeState = {
   loading: false,
   employees: [],
-  singleEmployee: [],
+  singleEmployee: anInitialState,
   error: undefined,
 };
 
@@ -45,7 +47,7 @@ export const fetchEmployees = createAsyncThunk(
   "employees/fetchEmployees",
   async () => {
     const response = await fetch(
-      `http://127.0.0.1:8080/Employees/${tenantid}`,
+      `http://127.0.0.1:8080/api/v1/tenants/${tenantid}/Employees`,
       {
         method: "GET",
         mode: "cors",
@@ -66,7 +68,7 @@ export const fetchEmployee = createAsyncThunk(
   "employees/fetchEmployee",
   async (employeeUID: string) => {
     const response = await fetch(
-      `http://127.0.0.1:8080/Employees/${tenantid}?employeeUID=${employeeUID}`,
+      `http://127.0.0.1:8080/api/v1/tenants/${tenantid}/Employees/${employeeUID}`,
       {
         method: "GET",
         mode: "cors",
@@ -78,7 +80,7 @@ export const fetchEmployee = createAsyncThunk(
       }
     );
     const data = await response.json();
-    return data["employees"];
+    return data["employee"];
   }
 );
 
@@ -102,7 +104,7 @@ const employeeSlice = createSlice({
     });
     builder.addCase(fetchEmployee.rejected, (state, action) => {
       state.loading = false;
-      state.singleEmployee = [];
+      state.singleEmployee = anInitialState;
       state.error = action.error.message;
     });
   },

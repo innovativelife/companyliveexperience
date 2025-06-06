@@ -1,0 +1,14 @@
+.nav-container {
+    background-color: var(--color-tertiary);
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+  }
+  
+  .nav-bar {
+    display: flex;
+    gap: 0.5rem;
+    border-top: 1px solid #f3f0e7;
+    background-color: var(--color-tertiary);
+    padding: 0.5rem 1rem 0.75rem 1rem;
+  }

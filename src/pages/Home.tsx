@@ -1,34 +1,38 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 //Components
-import SearchTopBar from "../components/TopBar/SearchTopBar/SearchTopBar";
-import BottomBar from "../components/BottomBar/BottomBar";
+import TopBar from "../components/TopBar/TopBar";
+import NavBar from "../components/NavBar/NavBar";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import PostList from "../components/Posts/PostList";
+import PostList from "../components/PostList/PostList";
+import Banner from "../components/Banner/Banner";
+import Padding from "../components/Padding/Padding";
 
 //Data
-import { fetchPosts, postSelector } from "../features/posts/postSlice";
+import { fetchPosts } from "../features/posts/postSlice";
 import { fetchUiConfigs } from "../features/uiConfig/uiConfigSlice";
+import { fetchEmployees } from "../features/employees/employeeSlice";
+import { selectPages } from "./../features/uiConfig/uiSelectors";
+import localData from "../localData.json";
 
 const Home = () => {
-  //Search bar data
-  const search = useCallback((term: string) => {
-    console.log(`Searching ${term}`);
-  }, []);
-
-  //Page Data
-  const currentPage = useLocation().pathname.split("/").filter(Boolean)[0];
+  //Top bar data
+  const { homeTitle } = useSelector(selectPages);
+  const iconPath = localData.svgPaths.plus;
+  const topBarButtonLocation = "/";
 
   //Chanel data
-  const [currentChannel, setCurrentChannel] = useState("all");
-
   const dispatch = useAppDispatch();
 
-  //All employee Data
-  const posts = useAppSelector(postSelector).posts;
+  //All post Data
   useEffect(() => {
     dispatch(fetchPosts());
+  }, [dispatch]);
+
+  //All post Data
+  useEffect(() => {
+    dispatch(fetchEmployees());
   }, [dispatch]);
 
   //All graphic data
@@ -38,10 +42,15 @@ const Home = () => {
 
   return (
     <>
-      <SearchTopBar onSearch={search} />
-      <PostList posts={posts} />
-      <BottomBar currentPage={currentPage} showMessageBar={true} />
-      <div className="bottomMessagePading" />
+      <TopBar
+        title={homeTitle}
+        icon={iconPath}
+        buttonClickLocation={topBarButtonLocation}
+      />
+      <Banner />
+      <PostList />
+      <NavBar />
+      <Padding />
     </>
   );
 };

@@ -1,0 +1,10 @@
+.bannerContainer {
+    display: flex;
+    align-items: center;
+    padding-top: 0.5rem 1rem;   /* py-2 px-4 */
+  }
+  
+.bannerContainer img {
+    position: center;
+    width: 100%;     /* Tailwind w-fit */
+  }
