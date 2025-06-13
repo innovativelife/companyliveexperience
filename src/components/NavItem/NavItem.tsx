@@ -19,7 +19,8 @@ const TopBar = ({ label, iconPath, active, location }: TopBarProps) => {
   }
 
   //Determine color
-  const itemClass = `nav-item ${active ? "active" : ""}`;
+  const itemClass = `navItem ${active ? "active" : ""}`;
+  const labelClass = `label ${active ? "active" : ""}`;
 
   return (
     <div className={itemClass} onClick={handleClick}>
@@ -34,7 +35,7 @@ const TopBar = ({ label, iconPath, active, location }: TopBarProps) => {
           <path d={iconPath} />
         </svg>
       </div>
-      <h3>{label}</h3>
+      <h3 className={itemClass}>{label}</h3>
     </div>
   );
 };

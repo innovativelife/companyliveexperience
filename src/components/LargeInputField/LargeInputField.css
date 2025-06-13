@@ -1,0 +1,40 @@
+.inputContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem; /* gap-4 */
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  box-sizing: border-box;
+}
+
+.inputContainer .inputLabel {
+  display: flex;
+  flex-direction: column;
+  min-width: 10rem; /* min-w-40 */
+  flex: 1;
+  box-sizing: border-box;
+
+}
+
+.inputContainer .inputArea {
+  width: 100%;
+  min-width: 0;
+  flex: 1;
+  resize: none;
+  overflow: hidden;
+  border: none;
+  border-radius: 0.75rem; /* rounded-xl */
+  background-color: var(--color-inputs);
+  color: var(--color-text);
+  min-height: 9rem; /* min-h-36 */
+  padding: 1rem; /* p-4 */
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.inputContainer .inputArea::placeholder {
+  color: var(--color-secondary);
+}

@@ -16,15 +16,27 @@ export interface Post {
   imageURL: string
 }
 
+const anInitialState: Post = {
+  postId: "",
+  timeSent: "",
+  status: "",
+  sendTo: "",
+  employeeUID: "",
+  message: "",
+  imageURL: "",
+};
+
 export interface PostState {
   loading: boolean;
   posts: Array<Post>;
+  singlePost: Post;
   error: string | undefined;
 }
 
 const initialState: PostState = {
   loading: false,
   posts: [],
+  singlePost: anInitialState,
   error: undefined,
 };
 
@@ -42,6 +54,23 @@ export const fetchPosts = createAsyncThunk(
     });
     const data = await response.json();
     return data["posts"];
+  }
+);
+
+export const fetchPost = createAsyncThunk(
+  "posts/fetchPost",
+  async (postId:string) => {
+    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/post?postId=${postId}`,{
+      method: "GET",
+      mode: "cors",
+      headers: new Headers({
+        "Content-Type": "application/json",
+        tenantid: "tenant1",
+        uid: "tester",
+      }),
+    });
+    const data = await response.json();
+    return data["posts"][0];
   }
 );
 
@@ -95,6 +124,22 @@ const postSlice = createSlice({
       state.posts = [];
       state.error = action.error.message;
     });
+
+    builder.addCase(fetchPost.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      fetchPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singlePost = action.payload;
+      }
+    );
+    builder.addCase(fetchPost.rejected, (state, action) => {
+      state.loading = false;
+      state.singlePost = anInitialState;
+      state.error = action.error.message;
+    });
+
     builder.addCase(createPost.pending, (state) => {
       state.loading = true;
     });

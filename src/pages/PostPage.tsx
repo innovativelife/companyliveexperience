@@ -1,36 +1,43 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 //Components
 import TopBar from "../components/TopBar/TopBar";
 import NavBar from "../components/NavBar/NavBar";
+import Post from "../components/Post/Post";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import PostList from "../components/PostList/PostList";
-import Banner from "../components/Banner/Banner";
 import Padding from "../components/Padding/Padding";
+import ReplyList from "../components/ReplyList/ReplyList";
+import PostInput from "../components/ReplyInput/ReplyInput";
 
 //Data
-import { fetchPosts } from "../features/posts/postSlice";
+import { fetchPost, postSelector } from "../features/posts/postSlice";
 import { fetchUiConfigs } from "../features/uiConfig/uiConfigSlice";
 import { fetchEmployees } from "../features/employees/employeeSlice";
-import { selectPages } from "./../features/uiConfig/uiSelectors";
+import { fetchReplies } from "../features/replies/repliesSlice";
 import localData from "../localData.json";
 
-const Home = () => {
+const PostPage = () => {
   //Top bar data
-  const { homeTitle } = useSelector(selectPages);
-  const iconPath = localData.svgPaths.plus;
-  const topBarButtonLocation = "/";
+  const iconPath = localData.svgPaths.back;
+  const topBarButtonLocation = "/home";
 
   //Chanel data
   const dispatch = useAppDispatch();
+  const { postId } = useParams();
+  const post = useAppSelector(postSelector).singlePost;
 
   //All post Data
   useEffect(() => {
-    dispatch(fetchPosts());
+    dispatch(fetchPost(postId ?? ""));
   }, [dispatch]);
 
-  //All post Data
+  //All replies data
+  useEffect(() => {
+    dispatch(fetchReplies(postId ?? ""));
+  }, [dispatch]);
+
+  //All employee Data
   useEffect(() => {
     dispatch(fetchEmployees());
   }, [dispatch]);
@@ -43,16 +50,18 @@ const Home = () => {
   return (
     <>
       <TopBar
-        title={homeTitle}
+        title="Post"
         icon={iconPath}
         buttonClickLocation={topBarButtonLocation}
       />
-      <Banner />
-      <PostList />
+      <Post post={post} />
+      <ReplyList />
+      <PostInput postId={postId ?? ""} />
       <NavBar />
+
       <Padding />
     </>
   );
 };
 
-export default Home;
+export default PostPage;

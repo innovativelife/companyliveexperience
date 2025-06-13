@@ -3,10 +3,7 @@ import "./Post.css";
 
 //Components
 import UserBar from "../UserBar/UserBar";
-import ActionItem from "../ActionItem/ActionItem";
-
-//Data
-import localData from "../../localData.json";
+import { timeAgo } from "../../hooks/timeAgo";
 
 //Data Types
 import { Post as PostType } from "../../features/posts/postSlice";
@@ -20,24 +17,17 @@ const Post = ({ post }: PostProps) => {
 
   return (
     <div className="post">
-      <UserBar userId={post.employeeUID} timeSent={post.timeSent} />
+      <UserBar userId={post.employeeUID} descriptor={timeAgo(post.timeSent)} />
 
       {/* Message (conditionally rendered) */}
       {hasMessage && <p className="message">{post.message}</p>}
 
       {/* Image Block (conditionally rendered) */}
       {hasImage && (
-        <div className="image-container">
-          <img className="main-image" src={post.imageURL} alt="Post content" />
+        <div className="imageContainer">
+          <img className="mainImage" src={post.imageURL} alt="Post content" />
         </div>
       )}
-
-      {/* Action Buttons */}
-      <div className="action-bar">
-        <ActionItem icon={localData.svgPaths.heart} count={23} />
-        <ActionItem icon={localData.svgPaths.chat} count={5} />
-        <ActionItem icon={localData.svgPaths.paperPlane} count={2} />
-      </div>
     </div>
   );
 };

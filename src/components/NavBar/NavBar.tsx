@@ -11,9 +11,9 @@ import NavItem from "../NavItem/NavItem";
 //Data
 import { selectPages } from "../../features/uiConfig/uiSelectors";
 
-type TopBarProps = {};
+type NavBarProps = {};
 
-const TopBar = ({}: TopBarProps) => {
+const NavBar = ({}: NavBarProps) => {
   //Get imported data
   const { homeTitle, peopleTitle, calendarTitle, tribesTitle, moreTitle } =
     useSelector(selectPages);
@@ -51,8 +51,8 @@ const TopBar = ({}: TopBarProps) => {
   ];
 
   return (
-    <div className="nav-container">
-      <div className="nav-bar">
+    <div className="navBarContainer">
+      <div className="navBar">
         {navItems.map((item, index) => (
           <NavItem
             key={index}
@@ -67,4 +67,4 @@ const TopBar = ({}: TopBarProps) => {
   );
 };
 
-export default TopBar;
+export default NavBar;
