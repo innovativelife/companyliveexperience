@@ -18,7 +18,7 @@ const UserBar = ({ userId, size = "large" }: UserBarProps) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchEmployee(userId));
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   const sender = useAppSelector(employeeSelector).singleEmployee;
 

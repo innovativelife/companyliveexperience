@@ -15,10 +15,12 @@ const initialState: TenantState = {
   tenants: [],
   error: undefined,
 }
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 export const fetchTenants = createAsyncThunk(
   "tenants/fetchTenants",
   async () => {
-    const response = await fetch('http://127.0.0.1:8080/Tenants', {
+    const response = await fetch(`${API_BASE_URL}/api/v1/Admin/Tenants`, {
       method: "GET", 
       mode: "cors",
       headers: new Headers({

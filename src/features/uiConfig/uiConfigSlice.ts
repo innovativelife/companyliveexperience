@@ -4,6 +4,7 @@ import { RootState } from "../../app/store";
 //Temporary Data -- Ask how to change
 import temporaryData from "../../localData.json";
 const tenantid = temporaryData.tenantid;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface UiConfig {
   googleFont: string,
@@ -66,7 +67,7 @@ const initialState: UiConfigState = {
 export const fetchUiConfigs = createAsyncThunk(
   "uiConfig/fetchUiConfigs",
   async () => {
-    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/UiConfig`, { 
+    const response = await fetch(`${API_BASE_URL}/api/v1/tenants/${tenantid}/UiConfig`, { 
       method: "GET", 
       mode: "cors",
       headers: new Headers({

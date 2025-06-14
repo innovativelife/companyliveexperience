@@ -7,6 +7,7 @@ const Home = lazy(() => import("./pages/HomePage"));
 const Post = lazy(() => import("./pages/PostPage"));
 const NewPost = lazy(() => import("./pages/NewPostPage"));
 const NoPage = lazy(() => import("./pages/NoPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
 
 // Create Routes for all the pages
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="login" element={<LoginPage />} />
             <Route path="home" element={<Home />} />
             <Route path="home/post/:postId" element={<Post />} />
             <Route path="home/newpost" element={<NewPost />} />

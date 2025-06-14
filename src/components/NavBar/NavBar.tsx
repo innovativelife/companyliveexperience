@@ -11,9 +11,7 @@ import NavItem from "../NavItem/NavItem";
 //Data
 import { selectPages } from "../../features/uiConfig/uiSelectors";
 
-type NavBarProps = {};
-
-const NavBar = ({}: NavBarProps) => {
+const NavBar = () => {
   //Get imported data
   const { homeTitle, peopleTitle, calendarTitle, tribesTitle, moreTitle } =
     useSelector(selectPages);
