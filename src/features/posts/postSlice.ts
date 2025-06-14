@@ -5,6 +5,7 @@ import { RootState } from "../../app/store";
 import temporaryData from "../../localData.json";
 const tenantid = temporaryData.tenantid;
 const userUID= temporaryData.userUID;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface Post {
   postId: string,
@@ -43,7 +44,7 @@ const initialState: PostState = {
 export const fetchPosts = createAsyncThunk(
   "posts/fetchPosts",
   async () => {
-    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/post`,{
+    const response = await fetch(`${API_BASE_URL}/api/v1/tenants/${tenantid}/post`,{
       method: "GET",
       mode: "cors",
       headers: new Headers({
@@ -60,7 +61,7 @@ export const fetchPosts = createAsyncThunk(
 export const fetchPost = createAsyncThunk(
   "posts/fetchPost",
   async (postId:string) => {
-    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/post?postId=${postId}`,{
+    const response = await fetch(`${API_BASE_URL}/api/v1/tenants/${tenantid}/post?postId=${postId}`,{
       method: "GET",
       mode: "cors",
       headers: new Headers({
@@ -77,7 +78,7 @@ export const fetchPost = createAsyncThunk(
 export const createPost = createAsyncThunk(
   "posts/createPost",
   async (messageString: string) => {
-    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/post`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/tenants/${tenantid}/post`, {
       method: "POST",
       mode: "cors",
       headers: new Headers({

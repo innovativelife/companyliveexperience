@@ -4,6 +4,7 @@ import { RootState } from "../../app/store";
 //Temporary Data -- Ask how to change
 import temporaryData from "../../localData.json";
 const tenantid = temporaryData.tenantid;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface Employee {
   employeeNumber: string;
@@ -47,7 +48,7 @@ export const fetchEmployees = createAsyncThunk(
   "employees/fetchEmployees",
   async () => {
     const response = await fetch(
-      `http://127.0.0.1:8080/api/v1/tenants/${tenantid}/Employees`,
+      `${API_BASE_URL}/api/v1/tenants/${tenantid}/Employees`,
       {
         method: "GET",
         mode: "cors",
@@ -68,7 +69,7 @@ export const fetchEmployee = createAsyncThunk(
   "employees/fetchEmployee",
   async (employeeUID: string) => {
     const response = await fetch(
-      `http://127.0.0.1:8080/api/v1/tenants/${tenantid}/Employees/${employeeUID}`,
+      `${API_BASE_URL}/api/v1/tenants/${tenantid}/Employees/${employeeUID}`,
       {
         method: "GET",
         mode: "cors",

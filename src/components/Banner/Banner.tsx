@@ -7,9 +7,7 @@ import "./Banner.css";
 //Import data
 import { selectAppBannerUrl } from "../../features/uiConfig/uiSelectors";
 
-type BannerProps = {};
-
-const Banner = ({}: BannerProps) => {
+const Banner = () => {
   const appBannerUrl = useSelector(selectAppBannerUrl);
   const fallbackImageUrl = localData.ImageNotFound;
 

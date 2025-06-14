@@ -5,6 +5,7 @@ import { RootState } from "../../app/store";
 import temporaryData from "../../localData.json";
 const tenantid = temporaryData.tenantid;
 const userUID= temporaryData.userUID;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface Reply {
   tenantId: string,
@@ -39,7 +40,7 @@ const initialState: ReplyState = {
 export const fetchReplies = createAsyncThunk(
   "replies/fetchReplies",
   async (postId: string) => {
-    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/${postId}/replies`,{
+    const response = await fetch(`${API_BASE_URL}/api/v1/tenants/${tenantid}/${postId}/replies`,{
       method: "GET",
       mode: "cors",
       headers: new Headers({
@@ -56,7 +57,7 @@ export const fetchReplies = createAsyncThunk(
 export const createReply = createAsyncThunk(
   "replies/createReply",
   async ({ messageString, postId }: { messageString: string, postId: string }) => {
-    const response = await fetch(`http://127.0.0.1:8080/api/v1/tenants/${tenantid}/${postId}/reply`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/tenants/${tenantid}/${postId}/reply`, {
       method: "POST",
       mode: "cors",
       headers: new Headers({

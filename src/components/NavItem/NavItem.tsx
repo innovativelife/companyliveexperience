@@ -12,7 +12,7 @@ type TopBarProps = {
 
 const TopBar = ({ label, iconPath, active, location }: TopBarProps) => {
   //Navigation
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   function handleClick() {
     navigate(location);
