@@ -56,10 +56,9 @@ jobs:
 
       # Step 5a: Deploy to a Preview Channel (triggered by PR or manual dispatch)
       # We use an 'if' condition to run this step ONLY on pull_request or manual trigger.
-      # On manual trigger, it uses the provided channel_id input.
       # On PR trigger, the action automatically generates a channel ID.
       - name: Deploy to Firebase Hosting Preview Channel
-        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'pull_request'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -73,10 +72,9 @@ jobs:
           # You might also want an expiration for manual preview channels
           expires: 7d # Example: channel expires after 7 days
 
-      # Step 5b: Deploy to the Live Channel (triggered by push to main)
-      # We use a separate 'if' condition to run this step ONLY on push to the main branch.
+      # Step 5b: Deploy to the Live Channel (triggered by push to main or manual trigger)
       - name: Deploy to Firebase Hosting Live Channel
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}' # Still needed for potential status checks
