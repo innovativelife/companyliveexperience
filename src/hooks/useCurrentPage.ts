@@ -6,11 +6,13 @@ export const useCurrentPage = (): string => {
 
   switch (page) {
     case "":
-      return "home";
+      return "Home";
+    case "home":
+      return "Home";
     case "about":
-      return "about";
+      return "About";
     case "dashboard":
-      return "dashboard";
+      return "Dashboard";
     default:
       return "unknown";
   }

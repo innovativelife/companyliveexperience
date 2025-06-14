@@ -9,7 +9,7 @@
     padding-bottom: 0.5rem; /* equivalent to pb-2 */
 }
 
-.topBar .icon-container {
+.topBar .iconContainer {
     color: var(--color-text);
     display: flex;
     width: 3rem;       /* 12 x 0.25rem */

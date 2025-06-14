@@ -1,4 +1,4 @@
-.actionItemContainer {
+.actionItem {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6,11 +6,21 @@
   padding: 0.5rem 0.75rem; /* equivalent to px-3 py-2 */
 }
 
-.actionItem {
+.actionItem .actionIconContainer{
   color: var(--color-secondary);
 }
 
-.actionIcon {
+/* .actionItem .actionIcon {
+  width: 24px;
+  height: 24px;
+} */
+/* 
+.actionItem path{
+  width: 24px;
+  height: 24px;
+} */
+
+.actionItem svg{
   width: 24px;
   height: 24px;
 }

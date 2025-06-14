@@ -1,0 +1,42 @@
+.avatarTxt {
+  padding: 0rem;
+  border-radius: 50%;
+  background-color: #ccc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.avatarTxt.large {
+  width: 56px;
+  height: 56px;
+}
+
+.avatarTxt.small {
+  width: 2.5rem;
+  height: 2.5rem; /* size-10 */
+  flex-shrink: 0;
+}
+
+.avatarImg {
+  padding: 0rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 9999px;
+  aspect-ratio: 1 / 1;
+  width: fit-content;
+}
+
+.avatarImg.large {
+  height: 56px;
+}
+
+.avatarImg.small {
+  width: 2.5rem;
+  height: 2.5rem; /* size-10 */
+  flex-shrink: 0;
+}

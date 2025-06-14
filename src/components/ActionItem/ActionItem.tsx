@@ -1,12 +1,16 @@
 //Css
 import "./ActionItem.css";
 
-type ActionItemProps = { icon: string; count: number };
+type ActionItemProps = {
+  icon: string;
+  count: number;
+  handleClick?: () => void;
+};
 
-const ActionItem = ({ icon, count }: ActionItemProps) => {
+const ActionItem = ({ icon, count, handleClick }: ActionItemProps) => {
   return (
-    <div className="actionItemContainer">
-      <div className="actionItem">
+    <div className="actionItem" onClick={handleClick}>
+      <div className="actionIconContainer">
         <svg className="actionIcon" fill="currentColor" viewBox="0 0 256 256">
           <path d={icon}></path>
         </svg>

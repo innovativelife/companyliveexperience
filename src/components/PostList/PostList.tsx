@@ -1,26 +1,46 @@
-import { useEffect } from "react";
-
 //Css
-// import "./PostList.css";
+import "./PostList.css";
 
 //Components
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import Post from "../Post/Post";
+import ActionItemBar from "../ActionItemBar/ActionItemBar";
+import localData from "../../localData.json";
+import { Post as PostType } from "../../features/posts/postSlice";
 
 //Data
-import { postSelector } from "../../features/posts/postSlice";
+// import { postSelector } from "../../features/posts/postSlice";
 
-type PostListProps = {};
+type PostListProps = {
+  posts?: PostType[];
+};
 
-const PostList = ({}: PostListProps) => {
-  //All employee Data
-  const posts = useAppSelector(postSelector).posts;
-
+const PostList = ({ posts }: PostListProps) => {
+  //All post Data
+  // const posts = useAppSelector(postSelector).posts;
   return (
     <>
-      {posts.map((post) => (
-        <Post key={post.postId} post={post} />
-      ))}
+      {posts?.length === 0 ? (
+        <>
+          <img
+            src={localData.speachBubble}
+            className="speachBubble"
+            alt="SpeachBubble"
+            onError={(e) => {
+              e.currentTarget.onerror = null; // Prevent infinite loop
+              e.currentTarget.src = localData.ImageNotFound;
+            }}
+          />
+          <h3>No Posts yet</h3>
+        </>
+      ) : (
+        Array.isArray(posts) &&
+        posts.map((post) => (
+          <div key={post.postId}>
+            <Post post={post} />
+            <ActionItemBar postId={post.postId} />
+          </div>
+        ))
+      )}
     </>
   );
 };

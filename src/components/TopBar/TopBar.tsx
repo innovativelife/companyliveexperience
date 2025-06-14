@@ -20,7 +20,7 @@ const TopBar = ({ title, icon, buttonClickLocation }: TopBarProps) => {
     <div className="topBar">
       <div
         onClick={handleClick}
-        className="icon-container"
+        className="iconContainer"
         data-icon="ArrowLeft"
         data-size="24px"
         data-weight="regular"
