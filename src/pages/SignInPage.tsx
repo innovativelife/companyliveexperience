@@ -12,7 +12,7 @@ import {
   GoogleLogin,
   CredentialResponse,
 } from "@react-oauth/google";
-import React, { useState } from "react"; // Import useState for potentially showing errors
+import { useState } from "react"; // Import useState for potentially showing errors
 
 // Get the Auth instance
 const auth = getAuth(app);
