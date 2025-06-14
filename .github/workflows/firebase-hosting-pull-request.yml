@@ -64,7 +64,7 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
           projectId: companylive-c3879
-          public: build # <<-- IMPORTANT: Change 'build' to 'dist' if that's your output directory
+          public: dist
           # Pass the channelId input ONLY when manually triggered.
           # The action automatically handles channel IDs for PRs.
           # We check if the input exists because it won't on a PR trigger.
@@ -80,6 +80,6 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}' # Still needed for potential status checks
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
           projectId: companylive-c3879
-          public: build # <<-- IMPORTANT: Change 'build' to 'dist' if that's your output directory
-          # No channelId needed here, action defaults to deploying to live channel on push
+          public: dist
+          channelId: live
           
