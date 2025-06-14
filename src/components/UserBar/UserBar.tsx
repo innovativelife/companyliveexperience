@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { timeAgo } from "../../hooks/timeAgo";
 
 //Css
 import "./UserBar.css";

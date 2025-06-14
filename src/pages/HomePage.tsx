@@ -18,7 +18,7 @@ import { fetchEmployees } from "../features/employees/employeeSlice";
 import { selectPages } from "../features/uiConfig/uiSelectors";
 import localData from "../localData.json";
 
-import { useGetPostsQuery, useCreatePostMutation } from "../services/postAPI";
+import { useGetPostsQuery } from "../services/postAPI";
 
 const HomePage = () => {
   //Top bar data
@@ -68,6 +68,7 @@ const HomePage = () => {
         />
         {isFetching && <Spinner />}
         <Banner />
+        {isError && <Spinner />}
         <PostList posts={posts} />
         <NavBar />
         <Padding />

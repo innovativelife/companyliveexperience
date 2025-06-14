@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import React, { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { timeAgo } from "../../hooks/timeAgo";
 import localData from "../../localData.json";
 

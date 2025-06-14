@@ -20,7 +20,6 @@ const TopBar = ({ label, iconPath, active, location }: TopBarProps) => {
 
   //Determine color
   const itemClass = `navItem ${active ? "active" : ""}`;
-  const labelClass = `label ${active ? "active" : ""}`;
 
   return (
     <div className={itemClass} onClick={handleClick}>

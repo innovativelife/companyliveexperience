@@ -7,12 +7,7 @@ type SvgButtonProps = {
   styleType: string;
 };
 
-const SvgButton = ({
-  onHandleClick,
-  imgSrc,
-  user,
-  styleType,
-}: SvgButtonProps) => {
+const SvgButton = ({ onHandleClick, imgSrc }: SvgButtonProps) => {
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       onHandleClick(event);

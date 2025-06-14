@@ -1,4 +1,3 @@
-import React, { useCallback, FormEvent } from "react";
 import "./ColoredSvgButton.css";
 
 type ColoredSvgButtonProps = {

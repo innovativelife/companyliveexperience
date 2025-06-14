@@ -1,13 +1,6 @@
-import React, {
-  useState,
-  useCallback,
-  ChangeEvent,
-  useEffect,
-  FormEvent,
-} from "react";
+import React, { useState, useCallback, ChangeEvent } from "react";
 
 //Components
-import SvgButton from "../SvgButton/SvgButton";
 import Avatar from "../Avatar/Avatar";
 
 //Css
@@ -16,7 +9,7 @@ import "./ReplyInput.css";
 //Data Types
 type PostProps = { postId: string };
 import localData from "../../localData.json";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 
 import { fetchReplies, createReply } from "../../features/replies/repliesSlice";
 

@@ -20,8 +20,6 @@ const UserBar = ({ userId, size = "large" }: UserBarProps) => {
     dispatch(fetchEmployee(userId));
   }, [dispatch]);
 
-  const avatarSize = `avatarImg ${size ?? "large"}`;
-
   const sender = useAppSelector(employeeSelector).singleEmployee;
 
   const [imageError, setImageError] = useState(false);

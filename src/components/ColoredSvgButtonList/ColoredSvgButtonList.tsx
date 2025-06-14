@@ -4,9 +4,6 @@ import "./ColoredSvgButtonList.css";
 //Components
 import ColoredSvgButton from "../ColoredSvgButton/ColoredSvgButton";
 
-//Data
-import localData from "../../localData.json";
-
 export interface uploadOptionsType {
   svg: string;
   label: string;
