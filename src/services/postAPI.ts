@@ -2,13 +2,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Post } from '../features/posts/postSlice'; // use your existing type
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 const tenantid = "tenant1"; // You can pass this dynamically later
 const userUID = "tester";
 
 export const postsApi = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://127.0.0.1:8080/api/v1/tenants/',
+    baseUrl: `${API_BASE_URL}/api/v1/tenants/`,
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
       headers.set('tenantid', tenantid);
