@@ -2,6 +2,7 @@
 
 // Import the functions you need from the SDKs you need
 import { initializeApp, FirebaseApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getAnalytics, Analytics } from "firebase/analytics"; // Also import the Analytics type
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -29,13 +30,10 @@ const app: FirebaseApp = initializeApp(firebaseConfig);
 
 // Initialize Analytics and get a reference to the service
 // Specify the return type explicitly (though often inferred)
-const analytics: Analytics = getAnalytics(app);
+export const analytics: Analytics = getAnalytics(app);
 
-// Optional: Export the initialized app and analytics instances
-export { app, analytics };
+// Get the Auth service instance
+export const auth = getAuth(app);
 
-// If you plan to use other Firebase services like Auth, Firestore, etc.,
-// remember to import their get functions and potentially their types,
-// and initialize/export them here as well:
-// import { getAuth, Auth } from 'firebase/auth';
-// export const auth: Auth = getAuth(app);
+// Create a Google Auth Provider instance
+export const googleProvider = new GoogleAuthProvider();
