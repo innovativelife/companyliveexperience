@@ -6,18 +6,19 @@ import UserBar from "../UserBar/UserBar";
 import { timeAgo } from "../../hooks/timeAgo";
 
 //Data Types
-import { Post as PostType } from "../../features/posts/postSlice";
+import { PostType } from "../../features/posts/postTypes";
+import { Employee } from "../../features/employees/employeeTypes";
 
-type PostProps = { post: PostType };
+type PostProps = { post: PostType; employee?: Employee };
 
-const Post = ({ post }: PostProps) => {
+const Post = ({ post, employee }: PostProps) => {
   //Check the messages contents
   const hasImage = Boolean(post.imageURL);
   const hasMessage = Boolean(post.message);
 
   return (
     <div className="post">
-      <UserBar userId={post.employeeUID} descriptor={timeAgo(post.timeSent)} />
+      <UserBar employee={employee} descriptor={timeAgo(post.timeSent)} />
 
       {/* Message (conditionally rendered) */}
       {hasMessage && <p className="message">{post.message}</p>}

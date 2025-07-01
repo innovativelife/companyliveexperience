@@ -4,17 +4,18 @@ import "./PostList.css";
 //Components
 import Post from "../Post/Post";
 import ActionItemBar from "../ActionItemBar/ActionItemBar";
-import localData from "../../localData.json";
-import { Post as PostType } from "../../features/posts/postSlice";
 
 //Data
-// import { postSelector } from "../../features/posts/postSlice";
+import { images } from "../../assets/images";
+import { PostType } from "../../features/posts/postTypes";
+import { Employee } from "../../features/employees/employeeTypes";
 
 type PostListProps = {
   posts?: PostType[];
+  employees?: Record<string, Employee>;
 };
 
-const PostList = ({ posts }: PostListProps) => {
+const PostList = ({ posts, employees }: PostListProps) => {
   //All post Data
   // const posts = useAppSelector(postSelector).posts;
   return (
@@ -22,12 +23,12 @@ const PostList = ({ posts }: PostListProps) => {
       {posts?.length === 0 ? (
         <>
           <img
-            src={localData.speachBubble}
+            src={images.speachBubble}
             className="speachBubble"
             alt="SpeachBubble"
             onError={(e) => {
               e.currentTarget.onerror = null; // Prevent infinite loop
-              e.currentTarget.src = localData.ImageNotFound;
+              e.currentTarget.src = images.ImageNotFound;
             }}
           />
           <h3>No Posts yet</h3>
@@ -36,7 +37,7 @@ const PostList = ({ posts }: PostListProps) => {
         Array.isArray(posts) &&
         posts.map((post) => (
           <div key={post.postId}>
-            <Post post={post} />
+            <Post post={post} employee={employees?.[post.employeeUID]} />
             <ActionItemBar postId={post.postId} />
           </div>
         ))

@@ -1,0 +1,87 @@
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
+import { UiConfig } from "./uiConfigTypes";
+
+//Temporary Data -- Ask how to change
+const tenantId = import.meta.env.VITE_TENANT_ID;
+const uId = import.meta.env.VITE_USER_UID;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+const anInitialState: UiConfig = {
+  googleFont: "",
+  appBannerUrl: "",
+  appTitle: "",
+  homeTitle: "",
+  peopleTitle: "",
+  calendarTitle: "",
+  tribesTitle: "",
+  moreTitle: "",
+  titleFontSize: "",
+  headingFontSize: "",
+  textFontSize: "",
+  subTextFontSize: "",
+  smallSpacing: "",
+  mediumSpacing: "",
+  largeSpacing: "",
+  primaryColor: "",
+  secondaryColor: "",
+  tertiaryColor: "",
+  backgroundColor: "",
+  textColor: "",
+  inputsColor: "",
+};
+
+export interface UiConfigState {
+  loading: boolean;
+  uiConfigs: UiConfig;
+  error: string | undefined;
+}
+const initialState: UiConfigState = {
+  loading: false,
+  uiConfigs: anInitialState,
+  error: undefined,
+};
+export const fetchUiConfigs = createAsyncThunk(
+  "uiConfig/fetchUiConfigs",
+  async () => {
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/tenants/${tenantId}/UiConfig`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          tenantid: "tenant1",
+          uid: uId,
+        }),
+      }
+    );
+
+    const data = await response.json();
+    return data["uiConfig"];
+  }
+);
+const uiConfigSlice = createSlice({
+  name: "uiConfigs",
+  initialState,
+  extraReducers: (builder) => {
+    builder.addCase(fetchUiConfigs.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      fetchUiConfigs.fulfilled,
+      (state, action: PayloadAction<UiConfig>) => {
+        state.loading = false;
+        state.uiConfigs = action.payload;
+      }
+    );
+    builder.addCase(fetchUiConfigs.rejected, (state, action) => {
+      state.loading = false;
+      state.uiConfigs = anInitialState;
+      state.error = action.error.message;
+    });
+  },
+  reducers: {},
+});
+export const uiConfigSelector = (state: RootState) => state.ui;
+export default uiConfigSlice.reducer;

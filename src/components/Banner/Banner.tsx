@@ -1,25 +1,22 @@
-import { useSelector } from "react-redux";
-import localData from "../../localData.json";
+import { images } from "../../assets/images";
 
 //Css
 import "./Banner.css";
 
-//Import data
-import { selectAppBannerUrl } from "../../features/uiConfig/uiSelectors";
+type BannarProps = { bannerUrl?: string };
 
-const Banner = () => {
-  const appBannerUrl = useSelector(selectAppBannerUrl);
-  const fallbackImageUrl = localData.ImageNotFound;
+const Banner = ({ bannerUrl }: BannarProps) => {
+  const fallbackImageUrl = images.ImageNotFound;
 
   // Don't render if no image URL is available yet
-  if (!appBannerUrl) {
+  if (!bannerUrl) {
     return <div className="bannerPlaceholder">Loading...</div>;
   }
 
   return (
     <div className="bannerContainer">
       <img
-        src={appBannerUrl}
+        src={bannerUrl}
         alt="Company Banner"
         onError={(e) => {
           e.currentTarget.onerror = null; // Prevent infinite loop

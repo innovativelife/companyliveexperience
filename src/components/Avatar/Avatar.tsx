@@ -1,41 +1,30 @@
-import { useEffect, useState } from "react";
-
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useState } from "react";
 
 //Css
 import "./Avatar.css";
 
 //Data
-import {
-  employeeSelector,
-  fetchEmployee,
-} from "../../features/employees/employeeSlice";
+import { Employee } from "../../features/employees/employeeTypes";
 
-type UserBarProps = { userId: string; size?: string };
+type UserBarProps = { employee?: Employee; size?: string };
 
-const UserBar = ({ userId, size = "large" }: UserBarProps) => {
-  //Get sender information
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchEmployee(userId));
-  }, [dispatch, userId]);
-
-  const sender = useAppSelector(employeeSelector).singleEmployee;
-
+const UserBar = ({ employee, size = "large" }: UserBarProps) => {
   const [imageError, setImageError] = useState(false);
 
-  const initials = sender
-    ? `${sender.firstName.charAt(0)} ${sender.lastName.charAt(0)}`.toUpperCase()
+  const initials = employee
+    ? `${employee.firstName.charAt(0) ?? "U"} ${
+        employee.lastName.charAt(0) ?? "K"
+      }`.toUpperCase()
     : "";
 
-  if (!sender || !sender.avatarURL || imageError) {
+  if (!employee || !employee.avatarURL || imageError) {
     return <div className={`avatarTxt ${size ?? "large"}`}>{initials}</div>;
   }
 
   return (
     <img
-      src={sender.avatarURL}
-      alt={`${sender.firstName} ${sender.lastName}`}
+      src={employee.avatarURL}
+      alt={`${employee.firstName} ${employee.lastName}`}
       className={`avatarImg ${size ?? "large"}`}
       onError={() => setImageError(true)}
     />

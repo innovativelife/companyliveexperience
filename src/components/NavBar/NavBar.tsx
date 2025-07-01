@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useCurrentPage } from "../../hooks/useCurrentPage";
-import localData from "../../localData.json";
+import { svgs } from "../../assets/svgs";
 
 //Css
 import "./NavBar.css";
@@ -22,29 +22,29 @@ const NavBar = () => {
   //Set nav items
   const navItems = [
     {
-      label: homeTitle,
+      label: homeTitle ?? "Home",
       location: `/${homeTitle}`.toLowerCase(),
-      icon: localData.svgPaths.home,
+      icon: svgs.home,
     },
     {
-      label: peopleTitle,
+      label: peopleTitle ?? "People",
       location: `/${peopleTitle}`.toLowerCase(),
-      icon: localData.svgPaths.people,
+      icon: svgs.people,
     },
     {
-      label: calendarTitle,
+      label: calendarTitle ?? "Calendar",
       location: `/${calendarTitle}`.toLowerCase(),
-      icon: localData.svgPaths.calendar,
+      icon: svgs.calendar,
     },
     {
-      label: tribesTitle,
+      label: tribesTitle ?? "Tribes",
       location: `/${tribesTitle}`.toLowerCase(),
-      icon: localData.svgPaths.tribes,
+      icon: svgs.tribes,
     },
     {
-      label: moreTitle,
+      label: moreTitle ?? "More",
       location: `/${moreTitle}`.toLowerCase(),
-      icon: localData.svgPaths.more,
+      icon: svgs.more,
     },
   ];
 

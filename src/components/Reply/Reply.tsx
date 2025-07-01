@@ -1,7 +1,5 @@
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useEffect } from "react";
 import { timeAgo } from "../../hooks/timeAgo";
-import localData from "../../localData.json";
+import { svgs } from "../../assets/svgs";
 
 //Css
 import "./Reply.css";
@@ -9,41 +7,21 @@ import "./Reply.css";
 //Components
 import Avatar from "../Avatar/Avatar";
 
-import {
-  employeeSelector,
-  fetchEmployee,
-} from "../../features/employees/employeeSlice";
+import { Reply as ReplyType } from "../../features/replies/repliesType";
+import { Employee } from "../../features/employees/employeeTypes";
 
-import { Reply as ReplyType } from "../../features/replies/repliesSlice";
+type ReplyProps = { reply: ReplyType; employee?: Employee };
 
-//Data Types
-// import { Post as PostType } from "../../features/posts/postSlice";
-// export interface ReplyType {
-//   // replyId: string;
-//   timeSent: string;
-//   employeeUID: string;
-//   message: string;
-//   // likes: number;
-// }
-
-type ReplyProps = { reply: ReplyType };
-
-const Reply = ({ reply }: ReplyProps) => {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchEmployee(reply.employeeUID));
-  }, [dispatch]);
-  const sender = useAppSelector(employeeSelector).singleEmployee;
-
+const Reply = ({ reply, employee }: ReplyProps) => {
   const time = timeAgo(reply.timeSent);
 
   return (
     <div className="commentContainer">
-      <Avatar userId={reply.employeeUID} size="small" />
+      <Avatar employee={employee} size="small" />
       <div className="commentContent">
         <div className="commentHeader">
           <p className="commentUsername">
-            {sender?.firstName} {sender?.lastName}
+            {employee?.firstName ?? "Unknown"} {employee?.lastName ?? "Unknown"}
           </p>
           <h3>{time}</h3>
         </div>
@@ -58,7 +36,7 @@ const Reply = ({ reply }: ReplyProps) => {
                 fill="currentColor"
                 viewBox="0 0 256 256"
               >
-                <path d={localData.svgPaths.thumbsUp} />
+                <path d={svgs.thumbsUp} />
               </svg>
             </div>
             <h3>3</h3>

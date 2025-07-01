@@ -1,9 +1,7 @@
 //Css
 import "./Spinner.css";
 
-type SpinnerProps = {};
-
-const Spinner = ({}: SpinnerProps) => {
+const Spinner = () => {
   return (
     <div className="spinnerContainer">
       <div className="spinner" />

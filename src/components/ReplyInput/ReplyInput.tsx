@@ -8,12 +8,29 @@ import "./ReplyInput.css";
 
 //Data Types
 type PostProps = { postId: string };
-import localData from "../../localData.json";
-import { useAppDispatch } from "../../app/hooks";
 
-import { fetchReplies, createReply } from "../../features/replies/repliesSlice";
+import { svgs } from "../../assets/svgs";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../../app/store"; // import { useAppDispatch } from "../../app/hooks";
+
+import { useCreateReplyMutation } from "../../features/replies/repliesAPI";
+import { useGetEmployeeByIdQuery } from "../../features/employees/employeeAPI";
 
 const ReplyInput = ({ postId }: PostProps) => {
+  const userUID = import.meta.env.VITE_USER_UID;
+  const user = useGetEmployeeByIdQuery(userUID).data;
+
+  // const user = useSelector((state: RootState) => state.auth.user);
+  //
+  // let userUID = user?.uid;
+  // if (!user?.uid) {
+  //   // throw new Error("User UID is required but not available.");
+  //   console.log("User UID is required but not available.");
+  //   userUID = "d57c6f76-263b-4c1e-a199-f4593a897339";
+  // } else {
+  //   console.log("Working");
+  // }
+
   const [message, setMessage] = useState("");
 
   const handleMessageChange = useCallback(
@@ -23,25 +40,24 @@ const ReplyInput = ({ postId }: PostProps) => {
     []
   );
 
-  const dispatch = useAppDispatch();
+  const [createReply, { isLoading, error }] = useCreateReplyMutation();
 
   const sendMessage = useCallback(
-    (event: React.MouseEvent) => {
+    async (event: React.MouseEvent) => {
       event.preventDefault();
       console.log(`Sending ${message}`);
-      dispatch(createReply({ messageString: message, postId: postId })).then(
-        () => {
-          dispatch(fetchReplies(postId));
-          setMessage(""); // Reset here after dispatching
-        }
-      );
+      try {
+        await createReply({ message, postId }).unwrap(); // Unwrap to handle rejections properly
+        setMessage(""); // Clear input
+      } catch (err) {
+        console.error("Failed to send reply:", err);
+      }
     },
-    [message, dispatch]
+    [message, postId, createReply]
   );
-
   return (
     <div className="replyInputContainer">
-      <Avatar userId={localData.userUID} size="small" />
+      <Avatar employee={user} size="small" />
       <label className="inputLabel">
         <input
           placeholder="Add a reply..."
@@ -59,9 +75,19 @@ const ReplyInput = ({ postId }: PostProps) => {
           viewBox="0 0 256 256"
           type="submit"
         >
-          <path d={localData.svgPaths.paperPlane} />
+          <path d={svgs.paperPlane} />
         </svg>
       </div>
+      {isLoading && (
+        <div className="loading-message">
+          <p>Sending...</p>
+        </div>
+      )}
+      {error && (
+        <div className="error-message">
+          <p>Error while creating reply</p>
+        </div>
+      )}
     </div>
   );
 };

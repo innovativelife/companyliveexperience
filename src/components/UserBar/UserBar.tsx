@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-
 //Css
 import "./UserBar.css";
 
@@ -8,29 +5,19 @@ import "./UserBar.css";
 import Avatar from "../Avatar/Avatar";
 
 //Data
-import {
-  employeeSelector,
-  fetchEmployee,
-} from "../../features/employees/employeeSlice";
+import { Employee } from "../../features/employees/employeeTypes";
 
-type UserBarProps = { userId: string; descriptor: string };
+type UserBarProps = { employee?: Employee; descriptor: string };
 
-const UserBar = ({ userId, descriptor }: UserBarProps) => {
-  //Get sender information
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchEmployee(userId));
-  }, [dispatch]);
-  const sender = useAppSelector(employeeSelector).singleEmployee;
-
+const UserBar = ({ employee, descriptor }: UserBarProps) => {
   return (
     <div className="postHeader">
       {/* <img className="avatar" src={sender?.avatarURL} /> */}
-      <Avatar userId={userId} />
+      <Avatar employee={employee} />
 
       <div className="userInfo">
         <p>
-          {sender?.firstName} {sender?.lastName}
+          {employee?.firstName ?? "Unknown"} {employee?.lastName ?? "Unknown"}
         </p>
         <h3>{descriptor}</h3>
       </div>

@@ -10,7 +10,7 @@ type TopBarProps = {
 };
 
 const TopBar = ({ title, icon, buttonClickLocation }: TopBarProps) => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   function handleClick() {
     navigate(buttonClickLocation);

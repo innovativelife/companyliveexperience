@@ -7,7 +7,7 @@ import "./ActionItemBar.css";
 import ActionItem from "../ActionItem/ActionItem";
 
 //Data
-import localData from "../../localData.json";
+import { svgs } from "../../assets/svgs";
 
 //Data Types
 type ActionItemBarProps = { postId: string };
@@ -26,15 +26,11 @@ const ActionItemBar = ({ postId }: ActionItemBarProps) => {
   return (
     <div className="actionBar">
       <ActionItem
-        icon={localData.svgPaths.addReaction}
+        icon={svgs.addReaction}
         count={23}
         handleClick={likeFunction}
       />
-      <ActionItem
-        icon={localData.svgPaths.chat}
-        count={5}
-        handleClick={repliesFunction}
-      />
+      <ActionItem icon={svgs.chat} count={5} handleClick={repliesFunction} />
     </div>
   );
 };

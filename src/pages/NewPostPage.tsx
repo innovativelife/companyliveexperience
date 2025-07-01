@@ -1,41 +1,27 @@
-import { useEffect } from "react";
-
 //Components
 import TopBar from "../components/TopBar/TopBar";
 import NavBar from "../components/NavBar/NavBar";
-import { useAppDispatch } from "../app/hooks";
 import UserBar from "../components/UserBar/UserBar";
 import Padding from "../components/Padding/Padding";
 import PostWriter from "../components/PostCreation/PostWriter";
+import Spinner from "../components/Spinner/Spinner";
 
 //Data
-import { fetchPosts } from "../features/posts/postSlice";
-import { fetchUiConfigs } from "../features/uiConfig/uiConfigSlice";
-import { fetchEmployees } from "../features/employees/employeeSlice";
-import localData from "../localData.json";
+import { useGetEmployeeByIdQuery } from "../features/employees/employeeAPI";
+import { svgs } from "../assets/svgs";
+const userUID = import.meta.env.VITE_USER_UID;
 
 const NewPostPage = () => {
   //Top bar data
-  const iconPath = localData.svgPaths.back;
+  const iconPath = svgs.back;
   const topBarButtonLocation = "/home";
 
   //Chanel data
-  const dispatch = useAppDispatch();
-
-  //All post Data
-  useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
-
-  //All employee Data
-  useEffect(() => {
-    dispatch(fetchEmployees());
-  }, [dispatch]);
-
-  //All graphic data
-  useEffect(() => {
-    dispatch(fetchUiConfigs());
-  }, [dispatch]);
+  const {
+    data: user,
+    isFetching: userIsFetching,
+    isError: userIsError,
+  } = useGetEmployeeByIdQuery(userUID ?? "");
 
   return (
     <>
@@ -44,10 +30,9 @@ const NewPostPage = () => {
         icon={iconPath}
         buttonClickLocation={topBarButtonLocation}
       />
-      <UserBar
-        userId={localData.userUID}
-        descriptor="@AddTagToUsersInBackend"
-      />
+      <UserBar employee={user} descriptor="@AddTagToUsersInBackend" />
+      {userIsFetching && <Spinner />}
+      {userIsError && <p>Error fetching user</p>}
       <PostWriter />
       <NavBar />
       <Padding />

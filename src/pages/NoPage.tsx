@@ -3,24 +3,19 @@ import Banner from "../components/Banner/Banner";
 import Padding from "../components/Padding/Padding";
 import LargeButton from "../components/LargeButton/LargeButton";
 
-import localData from "../localData.json";
-import { fetchUiConfigs } from "../features/uiConfig/uiConfigSlice";
-import { useEffect } from "react";
-import { useAppDispatch } from "../app/hooks";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import { svgs } from "../assets/svgs";
+import { images } from "../assets/images";
+import { selectAppBannerUrl } from "../features/uiConfig/uiSelectors";
+
 const NoPage = () => {
-  //Chanel data
-  const dispatch = useAppDispatch();
-
-  //All graphic data
-  useEffect(() => {
-    dispatch(fetchUiConfigs());
-  }, [dispatch]);
+  const appBannerUrl =
+    useSelector(selectAppBannerUrl).appBannerUrl ?? images.ImageNotFound;
 
   //Navigation
-  //Navigation
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   function handleClick() {
     navigate("/home");
@@ -54,10 +49,10 @@ const NoPage = () => {
     <>
       <TopBar
         title="Page Not Found"
-        icon={localData.svgPaths.back}
+        icon={svgs.back}
         buttonClickLocation="/home"
       />
-      <Banner />
+      <Banner bannerUrl={appBannerUrl} />
       <Padding />
       <div style={containerStyle}>
         <h2 style={headingStyle}>Oops! Page not found</h2>
