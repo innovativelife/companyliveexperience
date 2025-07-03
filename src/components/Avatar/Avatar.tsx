@@ -18,7 +18,15 @@ const UserBar = ({ employee, size = "large" }: UserBarProps) => {
     : "";
 
   if (!employee || !employee.avatarURL || imageError) {
-    return <div className={`avatarTxt ${size ?? "large"}`}>{initials}</div>;
+    return (
+      <div
+        className={`bg-red-500 text-white rounded-full flex items-center justify-center font-bold uppercase ${
+          size === "small" ? "w-10 h-10 text-sm" : "w-14 h-14 text-base"
+        }`}
+      >
+        {initials}
+      </div>
+    );
   }
 
   return (
