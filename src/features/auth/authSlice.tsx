@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { signInWithPopup, signOut, User } from "firebase/auth";
 import { auth, googleProvider } from "../../../firebaseConfig"; // Import your auth and provider instances
 import { AuthType } from "./authTypes";
+import { useNavigate } from "react-router-dom";
 
 // Define the shape of our auth state
 // interface AuthType {
@@ -14,11 +15,13 @@ import { AuthType } from "./authTypes";
 // Set the initial state
 const initialState: AuthType = {
   user: null,
-  empolyeeUID: null,
+  employeeUID: null,
   tenantId: null,
   isLoading: false,
   error: null,
 };
+
+const navigate = useNavigate();
 
 // --- Async Thunks for Authentication ---
 
@@ -105,8 +108,9 @@ const authSlice = createSlice({
         state.user = action.payload; // payload is the User object returned by the thunk
 
         //Cant really test if this works
-        state.empolyeeUID = state.user.uid;
+        state.employeeUID = state.user.uid;
         state.tenantId = state.user.tenantId;
+        navigate('/home');
       })
       .addCase(signInWithGoogle.rejected, (state, action) => {
         state.isLoading = false;
