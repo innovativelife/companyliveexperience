@@ -18,13 +18,14 @@ export const postsApi = createApi({
   tagTypes: ["Post"],
   baseQuery: fetchBaseQuery({
     baseUrl: `${API_BASE_URL}/api/v1/tenants/`,
-    prepareHeaders: (headers) => {
+    prepareHeaders: (headers, { getState }) => {
+      const state = getState() as RootState;
       headers.set("Content-Type", "application/json");
       headers.set("tenantid", tenantId);
       headers.set("uid", userUID);
 
       console.log(`Auth Token: ${user?.getIdToken()}`)
-      headers.set("Authorization", `Bearer ${user?.getIdToken()}`);
+      headers.set("Authorization", `Bearer ${state.auth.user?.getIdToken()}`);
       return headers;
     },
   }),
