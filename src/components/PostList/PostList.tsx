@@ -1,5 +1,5 @@
 //Css
-import "./PostList.css";
+// import "./PostList.css";
 
 //Components
 import Post from "../Post/Post";
@@ -24,21 +24,31 @@ const PostList = ({ posts, employees }: PostListProps) => {
         <>
           <img
             src={images.speachBubble}
-            className="speachBubble"
+            className="w-full h-auto p-4 box-border rounded-5"
             alt="SpeachBubble"
             onError={(e) => {
               e.currentTarget.onerror = null; // Prevent infinite loop
               e.currentTarget.src = images.ImageNotFound;
             }}
+            data-oid="post-list-no-replies-image"
           />
-          <h3>No Posts yet</h3>
+
+          <h3 data-oid="post-list-no-replies-title">No Posts yet</h3>
         </>
       ) : (
         Array.isArray(posts) &&
         posts.map((post) => (
-          <div key={post.postId}>
-            <Post post={post} employee={employees?.[post.employeeUID]} />
-            <ActionItemBar postId={post.postId} />
+          <div key={post.postId} data-oid="post-list-container">
+            <Post
+              post={post}
+              employee={employees?.[post.employeeUID]}
+              data-oid="post-list-post"
+            />
+
+            <ActionItemBar
+              postId={post.postId}
+              data-oid="post-list-post-action-item-bar"
+            />
           </div>
         ))
       )}

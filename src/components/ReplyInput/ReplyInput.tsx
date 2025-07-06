@@ -37,7 +37,7 @@ const ReplyInput = ({ postId }: PostProps) => {
     (event: ChangeEvent<HTMLInputElement>) => {
       setMessage(event.target.value);
     },
-    []
+    [],
   );
 
   const [createReply, { isLoading, error }] = useCreateReplyMutation();
@@ -53,40 +53,44 @@ const ReplyInput = ({ postId }: PostProps) => {
         console.error("Failed to send reply:", err);
       }
     },
-    [message, postId, createReply]
+    [message, postId, createReply],
   );
   return (
-    <div className="replyInputContainer">
-      <Avatar employee={user} size="small" />
-      <label className="inputLabel">
+    <div
+      className="flex items-center py-3 px-4 gap-3 container inline-size"
+      data-oid="reply-input-container"
+    >
+      <Avatar employee={user} size="small" data-oid="reply-input-avatar" />
+      <label
+        className="flex flex-col min-w-40 flex-1 h-12"
+        data-oid="reply-input-label"
+      >
         <input
           placeholder="Add a reply..."
-          className="replyInput"
+          className="min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none outline-none bg-inputs text-text px-4 h-full text-base font-normal leading-normal placeholder:text-secondary w-full"
           value={message}
           onChange={handleMessageChange}
+          data-oid="reply-input-input"
         />
       </label>
-      <div className={"svgButton"} onClick={sendMessage}>
+      <div onClick={sendMessage} data-oid="reply-input-send-butong">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="currentColor"
+          className="w-6 h-6"
           viewBox="0 0 256 256"
           type="submit"
+          data-oid="reply-input-send-svg"
         >
-          <path d={svgs.paperPlane} />
+          <path
+            d={svgs.paperPlane}
+            className="fill-text border-0"
+            data-oid="reply-input-send-svg-path"
+          />
         </svg>
       </div>
-      {isLoading && (
-        <div className="loading-message">
-          <p>Sending...</p>
-        </div>
-      )}
+      {isLoading && <p data-oid="reply-input-loading-message">Sending...</p>}
       {error && (
-        <div className="error-message">
-          <p>Error while creating reply</p>
-        </div>
+        <p data-oid="reply-input-error-message">Error while creating reply</p>
       )}
     </div>
   );

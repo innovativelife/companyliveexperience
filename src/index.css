@@ -2,7 +2,7 @@
 
 * {
   margin: 0px;
-  padding: 0px;
+  /* padding: 0px; */
 }
 
 html,
@@ -29,6 +29,24 @@ body {
   --size-subtext: 14px;
 }
 
+@theme inline {
+  --spacing-large: var(--spacing-large);
+  --spacing-medium: var(--spacing-medium);
+  --spacing-small: var(--spacing-small);
+
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-tertiary: var(--color-tertiary);
+  --color-background: var(--color-background);
+  --color-text: var(--color-text);
+  --color-inputs: var(--color-inputs);
+
+  --size-title: var(--size-title);
+  --size-heading: var(--size-heading);
+  --size-text: var(--size-text);
+  --size-subtext: var(--size-subtext);
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -49,11 +67,13 @@ code {
 
 h1 {
   color: var(--color-text);
+  font-weight: bold;
   font-size: var(--size-title);
 }
 
 h2 {
   color: var(--color-text);
+  font-weight: bold;
   font-size: var(--size-heading);
 }
 

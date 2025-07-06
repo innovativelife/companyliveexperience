@@ -50,7 +50,7 @@ const HomePage = () => {
 
   const employeeMap = useMemo(() => {
     return Object.fromEntries(
-      (employees ?? []).map((employee) => [employee.employeeUID, employee])
+      (employees ?? []).map((employee) => [employee.employeeUID, employee]),
     );
   }, [employees]);
 
@@ -63,19 +63,35 @@ const HomePage = () => {
       <PullToRefresh
         onRefresh={() => refetchAll().then(() => {})}
         style={{ minHeight: "100vh" }}
+        data-oid="home-page-refresh-container"
       >
         <TopBar
           title={homeTitle}
           icon={iconPath}
           buttonClickLocation={topBarButtonLocation}
+          data-oid="home-page-top-bar"
         />
-        {(postsIsFetching || employeesIsFetching) && <Spinner />}
-        <Banner bannerUrl={appBannerUrl} />
-        {postsIsError && <p>Error fetching posts</p>}
-        {employeesIsError && <p>Error fetching employees</p>}
-        <PostList posts={posts} employees={employeeMap} />
-        <NavBar />
-        <Padding />
+
+        {(postsIsFetching || employeesIsFetching) && (
+          <Spinner data-oid="home-page-spinner" />
+        )}
+        <Banner bannerUrl={appBannerUrl} data-oid="home-page-banner" />
+        {postsIsError && (
+          <p data-oid="home-page-error-message-post">Error fetching posts</p>
+        )}
+        {employeesIsError && (
+          <p data-oid="home-page-error-message-employee">
+            Error fetching employees
+          </p>
+        )}
+        <PostList
+          posts={posts}
+          employees={employeeMap}
+          data-oid="home-page-post-list"
+        />
+
+        <NavBar data-oid="home-page-nav-bar" />
+        <Padding data-oid="home-page-padding" />
       </PullToRefresh>
     </>
   );

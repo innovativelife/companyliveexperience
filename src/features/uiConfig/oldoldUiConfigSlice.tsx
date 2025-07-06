@@ -54,12 +54,12 @@ export const fetchUiConfigs = createAsyncThunk(
           tenantid: "tenant1",
           uid: uId,
         }),
-      }
+      },
     );
 
     const data = await response.json();
     return data["uiConfig"];
-  }
+  },
 );
 const uiConfigSlice = createSlice({
   name: "uiConfigs",
@@ -73,7 +73,7 @@ const uiConfigSlice = createSlice({
       (state, action: PayloadAction<UiConfig>) => {
         state.loading = false;
         state.uiConfigs = action.payload;
-      }
+      },
     );
     builder.addCase(fetchUiConfigs.rejected, (state, action) => {
       state.loading = false;

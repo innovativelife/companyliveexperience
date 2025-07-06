@@ -30,7 +30,7 @@ export const fetchTenants = createAsyncThunk(
 
     const data = await response.json();
     return data["tenants"];
-  }
+  },
 );
 const tenantSlice = createSlice({
   name: "tenants",
@@ -44,7 +44,7 @@ const tenantSlice = createSlice({
       (state, action: PayloadAction<Array<Tenant>>) => {
         state.loading = false;
         state.tenants = action.payload;
-      }
+      },
     );
     builder.addCase(fetchTenants.rejected, (state, action) => {
       state.loading = false;

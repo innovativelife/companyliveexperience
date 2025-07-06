@@ -12,19 +12,26 @@ const SvgButton = ({ onHandleClick, imgSrc }: SvgButtonProps) => {
     (event: React.MouseEvent<HTMLDivElement>) => {
       onHandleClick(event);
     },
-    [onHandleClick]
+    [onHandleClick],
   );
 
   return (
-    <div className={"svgButton"} onClick={handleClick}>
+    <div
+      className="display-flex items-center justify-center h-8"
+      onClick={handleClick}
+      data-oid="svg-button-container"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="currentColor"
+        className="w-6 h-6"
         viewBox="0 0 256 256"
+        data-oid="svg-button-svg"
       >
-        <path d={imgSrc} />
+        <path
+          d={imgSrc}
+          className="fill-text border-0"
+          data-oid="svg-button-svg-path"
+        />
       </svg>
     </div>
   );

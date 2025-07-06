@@ -1,5 +1,5 @@
 //Css
-import "./ReplyList.css";
+// import "./ReplyList.css";
 
 //Components
 // import { useAppSelector } from "../../app/hooks";
@@ -17,23 +17,27 @@ type ReplyListProps = {
 };
 
 const ReplyList = ({ replies, employees }: ReplyListProps) => {
-  // All post Data
-
   return (
-    <div className="replyList">
-      <h2>Replies</h2>
+    <div data-oid="reply-list-container">
+      <h2 className=" p-4" data-oid="reply-list-title">
+        Replies
+      </h2>
       {replies?.length === 0 ? (
         <>
           <img
             src={images.speachBubble}
-            className="speachBubble"
+            className="ws-full p-4 box-border rounded-5"
             alt="SpeachBubble"
             onError={(e) => {
               e.currentTarget.onerror = null; // Prevent infinite loop
               e.currentTarget.src = images.ImageNotFound;
             }}
+            data-oid="reply-list-no-replies-image"
           />
-          <h3>No replies yet</h3>
+
+          <h3 className="p-4 pt-0" data-oid="reply-list-no-replies-title">
+            No replies yet
+          </h3>
         </>
       ) : (
         Array.isArray(replies) &&
@@ -42,8 +46,9 @@ const ReplyList = ({ replies, employees }: ReplyListProps) => {
             key={index}
             reply={reply}
             employee={employees?.[reply.employeeUID]}
+            data-oid="reply-list-reply"
           />
-        )) //Add a UID for each reply
+        ))
       )}
     </div>
   );

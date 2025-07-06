@@ -51,17 +51,21 @@ const NoPage = () => {
         title="Page Not Found"
         icon={svgs.back}
         buttonClickLocation="/home"
+        data-oid="9upi6dp"
       />
-      <Banner bannerUrl={appBannerUrl} />
-      <Padding />
-      <div style={containerStyle}>
-        <h2 style={headingStyle}>Oops! Page not found</h2>
-        <p style={paragraphStyle}>
+
+      <Banner bannerUrl={appBannerUrl} data-oid="hjt4xer" />
+      <Padding data-oid="8lgb242" />
+      <div style={containerStyle} data-oid="xaa2pr8">
+        <h2 style={headingStyle} data-oid="9:3a8_l">
+          Oops! Page not found
+        </h2>
+        <p style={paragraphStyle} data-oid="74lc.t_">
           The page you're looking for doesn't seem to exist. Please check the
           URL or try navigating back to the main site.
         </p>
       </div>
-      <LargeButton onClick={handleClick} label="Go Back" />
+      <LargeButton onClick={handleClick} label="Go Back" data-oid="y-n3wpt" />
     </>
   );
 };

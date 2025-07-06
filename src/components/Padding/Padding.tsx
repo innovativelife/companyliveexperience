@@ -2,7 +2,7 @@
 import "./Padding.css";
 
 const Padding = () => {
-  return <div className="bottomPadding"></div>;
+  return <div className="pt-[70px]" data-oid="padding-padding"></div>;
 };
 
 export default Padding;

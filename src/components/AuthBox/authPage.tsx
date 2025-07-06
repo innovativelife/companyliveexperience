@@ -28,7 +28,7 @@ function AuthPage() {
       // This will update the Redux state based on the Firebase auth state
       console.log(
         "Firebase Auth State Changed:",
-        currentUser ? "Signed In" : "Signed Out"
+        currentUser ? "Signed In" : "Signed Out",
       );
     });
 
@@ -45,50 +45,60 @@ function AuthPage() {
   };
 
   if (isLoading) {
-    return <p>Loading auth status...</p>;
+    return <p data-oid="auth-loading-message">Loading auth status...</p>;
   }
 
   if (error) {
     return (
-      <div>
-        <p style={{ color: "red" }}>Error: {error}</p>
+      <div data-oid="auth-error">
+        <p style={{ color: "red" }} data-oid="auth-error-message">
+          Error: {error}
+        </p>
         {/* Optionally add a retry button or clear error action */}
       </div>
     );
   }
 
   return (
-    <div className="auth-page-container">
+    <div className="auth-page-container" data-oid="auth-page-container">
       {/* --- Loading State --- */}
       {isLoading && (
-        <div className="loading-message">
-          <p>Loading...</p>
+        <div className="loading-message" data-oid="auth-page-loading">
+          <p data-oid="auth-page-loading-message">Loading...</p>
           {/* You could add a spinner icon here */}
         </div>
       )}
 
       {/* --- Error State --- */}
       {error && (
-        <div className="error-message">
-          <p>Authentication Error:</p>
-          <p>{error}</p>
+        <div className="error-message" data-oid="auth-page-error">
+          <p data-oid="auth-page-error-title">Authentication Error:</p>
+          <p data-oid="auth-page-error-message">{error}</p>
           {/* Optionally add a button to clear the error or retry */}
         </div>
       )}
 
       {/* --- Authenticated State (User is logged in) --- */}
       {!isLoading && !error && user ? (
-        <div className="user-info">
-          <h2>Welcome!</h2>
+        <div className="user-info" data-oid="auth-page-user-info">
+          <h2 data-oid="auth-page-welcome">Welcome!</h2>
           {user.photoURL && (
-            <img src={user.photoURL} alt="Profile" className="profile-pic" />
+            <img
+              src={user.photoURL}
+              alt="Profile"
+              className="profile-pic"
+              data-oid="auth-page-profile-pic"
+            />
           )}
-          <p className="display-name">{user.displayName || user.email}</p>{" "}
+          <p className="display-name" data-oid="auth-page-display-name">
+            {user.displayName || user.email}
+          </p>{" "}
           {/* Display name or email */}
           <button
             className="sign-out-button"
             onClick={handleSignOut}
             disabled={isLoading} // Disable button while signing out
+            data-oid="auth-page-sign-out-button"
           >
             Sign Out
           </button>
@@ -97,10 +107,16 @@ function AuthPage() {
         /* --- Unauthenticated State (User is logged out) --- */
         !isLoading &&
         !error && (
-          <div className="sign-in-prompt">
-            <h2>Please Sign In</h2>
-            <p>Access awesome features by signing in.</p>
-            <LargeButton onClick={handleSignIn} label="Sign in" />
+          <div className="sign-in-prompt" data-oid="auth-page-sign-in">
+            <h2 data-oid="auth-page-sign-in-title">Please Sign In</h2>
+            <p data-oid="auth-page-sign-in-message">
+              Access awesome features by signing in.
+            </p>
+            <LargeButton
+              onClick={handleSignIn}
+              label="Sign in"
+              data-oid="auth-page-sign-in-button"
+            />
           </div>
         )
       )}

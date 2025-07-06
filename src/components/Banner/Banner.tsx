@@ -1,7 +1,7 @@
 import { images } from "../../assets/images";
 
 //Css
-import "./Banner.css";
+// import "./Banner.css";
 
 type BannarProps = { bannerUrl?: string };
 
@@ -10,20 +10,24 @@ const Banner = ({ bannerUrl }: BannarProps) => {
 
   // Don't render if no image URL is available yet
   if (!bannerUrl) {
-    return <div className="bannerPlaceholder">Loading...</div>;
+    return (
+      <div className="flex items-center py-2 px-4" data-oid="bannar-loading">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="bannerContainer">
-      <img
-        src={bannerUrl}
-        alt="Company Banner"
-        onError={(e) => {
-          e.currentTarget.onerror = null; // Prevent infinite loop
-          e.currentTarget.src = fallbackImageUrl;
-        }}
-      />
-    </div>
+    <img
+      src={bannerUrl}
+      className="w-full h-auto object-cover rounded-none flex-1"
+      alt="Company Banner"
+      onError={(e) => {
+        e.currentTarget.onerror = null; // Prevent infinite loop
+        e.currentTarget.src = fallbackImageUrl;
+      }}
+      data-oid="bannar-image"
+    />
   );
 };
 

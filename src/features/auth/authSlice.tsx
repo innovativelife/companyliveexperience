@@ -50,7 +50,7 @@ export const signInWithGoogle = createAsyncThunk<
       console.error("Google Sign-In Error:", errorCode, errorMessage);
       return rejectWithValue(errorMessage); // Return the error message on failure
     }
-  }
+  },
 );
 
 // Thunk for signing out

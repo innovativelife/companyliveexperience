@@ -47,12 +47,12 @@ export const fetchEmployees = createAsyncThunk(
           tenantid: tenantId,
           uid: uId,
         }),
-      }
+      },
     );
 
     const data = await response.json();
     return data["employees"];
-  }
+  },
 );
 
 export const fetchEmployee = createAsyncThunk(
@@ -68,11 +68,11 @@ export const fetchEmployee = createAsyncThunk(
           tenantid: tenantId,
           uid: uId,
         }),
-      }
+      },
     );
     const data = await response.json();
     return data["employee"];
-  }
+  },
 );
 
 const employeeSlice = createSlice({

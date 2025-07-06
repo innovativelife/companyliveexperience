@@ -54,7 +54,7 @@ const PostPage = () => {
 
   const employeeMap = useMemo(() => {
     return Object.fromEntries(
-      (employees ?? []).map((employee) => [employee.employeeUID, employee])
+      (employees ?? []).map((employee) => [employee.employeeUID, employee]),
     );
   }, [employees]);
 
@@ -66,28 +66,35 @@ const PostPage = () => {
     <PullToRefresh
       onRefresh={() => refetchAll().then(() => {})}
       style={{ minHeight: "100vh" }}
+      data-oid="7eprzru"
     >
       <TopBar
         title="Post"
         icon={iconPath}
         buttonClickLocation={topBarButtonLocation}
+        data-oid="3h_kbqw"
       />
-      {post ? (
-        <Post post={post} employee={employeeMap[post.employeeUID]} />
-      ) : (
-        <p>Loading Post...</p>
-      )}
-      {postIsError && <p>Error fetching post</p>}
-      {(repliesIsFetching || employeesIsFetching || postIsFetching) && (
-        <Spinner />
-      )}
-      {repliesIsError && <p>Error fetching replies</p>}
-      {employeesIsError && <p>Error fetching employees</p>}
-      <ReplyList replies={replies} employees={employeeMap} />
-      <PostInput postId={postId ?? ""} />
-      <NavBar />
 
-      <Padding />
+      {post ? (
+        <Post
+          post={post}
+          employee={employeeMap[post.employeeUID]}
+          data-oid="wd6jzrt"
+        />
+      ) : (
+        <p data-oid="..88_op">Loading Post...</p>
+      )}
+      {postIsError && <p data-oid="cc4f600">Error fetching post</p>}
+      {(repliesIsFetching || employeesIsFetching || postIsFetching) && (
+        <Spinner data-oid="17_gqwv" />
+      )}
+      {repliesIsError && <p data-oid="w-qvpg_">Error fetching replies</p>}
+      {employeesIsError && <p data-oid="lkx8xs1">Error fetching employees</p>}
+      <ReplyList replies={replies} employees={employeeMap} data-oid="5a_2sf." />
+      <PostInput postId={postId ?? ""} data-oid="ku3481y" />
+      <NavBar data-oid="t60npmm" />
+
+      <Padding data-oid="uwlq-su" />
     </PullToRefresh>
   );
 };

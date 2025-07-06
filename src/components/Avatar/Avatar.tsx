@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 //Css
-import "./Avatar.css";
+// import "./Avatar.css";
 
 //Data
 import { Employee } from "../../features/employees/employeeTypes";
@@ -20,21 +20,26 @@ const UserBar = ({ employee, size = "large" }: UserBarProps) => {
   if (!employee || !employee.avatarURL || imageError) {
     return (
       <div
-        className={`bg-red-500 text-white rounded-full flex items-center justify-center font-bold uppercase ${
+        className={`bg-secondary text-white rounded-full flex items-center justify-center font-bold uppercase ${
           size === "small" ? "w-10 h-10 text-sm" : "w-14 h-14 text-base"
         }`}
+        data-oid="avatar-initials"
       >
         {initials}
       </div>
     );
   }
 
+  //`avatarImg ${size ?? "large"}`
   return (
     <img
       src={employee.avatarURL}
       alt={`${employee.firstName} ${employee.lastName}`}
-      className={`avatarImg ${size ?? "large"}`}
+      className={`bg-center bg-no-repeat bg-cover rounded-full ${
+        size === "small" ? "w-10 h-10 text-sm" : "w-14 h-14 text-base"
+      }`}
       onError={() => setImageError(true)}
+      data-oid="avatar-image"
     />
   );
 };

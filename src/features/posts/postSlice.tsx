@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
 export interface PostState {
- selectedPostId: string | null;
+  selectedPostId: string | null;
 }
 
 const initialState: PostState = {
-  selectedPostId: null
+  selectedPostId: null,
 };
 
 const postSlice = createSlice({
@@ -18,7 +18,7 @@ const postSlice = createSlice({
     },
     clearSelectedPost(state) {
       state.selectedPostId = null;
-    }
+    },
   },
 });
 

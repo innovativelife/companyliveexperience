@@ -3,7 +3,7 @@ import { useCurrentPage } from "../../hooks/useCurrentPage";
 import { svgs } from "../../assets/svgs";
 
 //Css
-import "./NavBar.css";
+// import "./NavBar.css";
 
 //Components
 import NavItem from "../NavItem/NavItem";
@@ -49,18 +49,20 @@ const NavBar = () => {
   ];
 
   return (
-    <div className="navBarContainer">
-      <div className="navBar">
-        {navItems.map((item, index) => (
-          <NavItem
-            key={index}
-            label={item.label}
-            iconPath={item.icon}
-            location={item.location}
-            active={item.label === currentPage ? true : false}
-          />
-        ))}
-      </div>
+    <div
+      className="bg-tertiary w-full fixed box-border bottom-0 flex gap-2 border-t border-[#f3f0e7] px-4 pb-3 pt-2"
+      data-oid="nav-bar-container"
+    >
+      {navItems.map((item, index) => (
+        <NavItem
+          key={index}
+          label={item.label}
+          iconPath={item.icon}
+          location={item.location}
+          active={item.label === currentPage ? true : false}
+          data-oid="nav-bar-item"
+        />
+      ))}
     </div>
   );
 };

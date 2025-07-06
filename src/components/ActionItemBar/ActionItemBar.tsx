@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 //Css
-import "./ActionItemBar.css";
+// import "./ActionItemBar.css";
 
 //Components
 import ActionItem from "../ActionItem/ActionItem";
@@ -23,14 +23,26 @@ const ActionItemBar = ({ postId }: ActionItemBarProps) => {
     navigate(`post/${postId}`);
   }
 
+  //flex flex-wrap justify-between gap-4 py-2 px-4
+
   return (
-    <div className="actionBar">
+    <div
+      className="flex flex-wrap justify-between gap-4 pl-[20px] pr-[20px] pb-[18px] pt-[6px]"
+      data-oid="action-item-bar-container"
+    >
       <ActionItem
         icon={svgs.addReaction}
         count={23}
         handleClick={likeFunction}
+        data-oid="action-item-bar-like"
       />
-      <ActionItem icon={svgs.chat} count={5} handleClick={repliesFunction} />
+
+      <ActionItem
+        icon={svgs.chat}
+        count={5}
+        handleClick={repliesFunction}
+        data-oid="action-item-bar-replies"
+      />
     </div>
   );
 };

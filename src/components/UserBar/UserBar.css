@@ -1,13 +1,13 @@
-.postHeader {
+/* .postHeader {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 0.5rem 1rem;
   min-height: 72px;
-}
+} */
 
-.postHeader .userInfo {
+/* .postHeader .userInfo {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
+} */

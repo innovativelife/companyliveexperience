@@ -43,11 +43,11 @@ export const fetchReplies = createAsyncThunk(
           tenantid: "tenant1",
           uid: uId,
         }),
-      }
+      },
     );
     const data = await response.json();
     return data["replies"];
-  }
+  },
 );
 
 export const createReply = createAsyncThunk(
@@ -73,7 +73,7 @@ export const createReply = createAsyncThunk(
           employeeUID: userUID,
           message: messageString,
         }),
-      }
+      },
     );
 
     const data = await response.json();
@@ -82,7 +82,7 @@ export const createReply = createAsyncThunk(
       console.log(data.desc);
       return;
     }
-  }
+  },
 );
 
 const replySlice = createSlice({
@@ -97,7 +97,7 @@ const replySlice = createSlice({
       (state, action: PayloadAction<Array<Reply>>) => {
         state.loading = false;
         state.replies = action.payload;
-      }
+      },
     );
     builder.addCase(fetchReplies.rejected, (state, action) => {
       state.loading = false;
