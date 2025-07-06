@@ -35,7 +35,8 @@ export const tenantApi = createApi({
     getTenantById: builder.query<Tenant, string>({
       query: (tenantRequested) => `tenants/${tenantRequested}`,
       transformResponse: (response: { tenant: Tenant }) => response.tenant,
-      providesTags: (result, error, tenantId) => [
+      providesTags: (_, __, tenantId) => [
+        //result, error
         { type: "Tenant", id: tenantId },
       ],
     }),

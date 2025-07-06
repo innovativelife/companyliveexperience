@@ -37,7 +37,7 @@ export const employeesApi = createApi({
       query: (employeeUID) => `${tenantId}/Employees/${employeeUID}`,
       transformResponse: (response: { employee: Employee }) =>
         response.employee,
-      providesTags: (result, error, employeeUID) => [
+      providesTags: (_, __, employeeUID) => [
         { type: "Employee", id: employeeUID },
       ],
     }),

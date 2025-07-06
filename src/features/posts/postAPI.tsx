@@ -39,7 +39,7 @@ export const postsApi = createApi({
     getPostById: builder.query<PostType, string>({
       query: (postId) => `${tenantId}/post?postId=${postId}`,
       transformResponse: (response: { posts: PostType[] }) => response.posts[0],
-      providesTags: (result, error, postId) => [{ type: "Post", id: postId }],
+      providesTags: (_, __, postId) => [{ type: "Post", id: postId }],
     }),
     createPost: builder.mutation<void, string>({
       query: (message) => ({
