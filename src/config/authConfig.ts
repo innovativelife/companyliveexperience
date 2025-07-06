@@ -10,7 +10,7 @@ export const getAuthInfo = (getState: () => unknown) => {
     return {
         //Why not state.auth.user.tenantId???
       tenantId: state.auth.tenantId,
-      userId: state.auth.empolyeeUID,
+      userId: state.auth.employeeUID,
     };
   } else {
     return {
