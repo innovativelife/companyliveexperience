@@ -1,7 +1,6 @@
 // services/postsApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { PostType } from "./postTypes";
-import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -10,7 +9,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL;
 //------------------------------HOW can these be set dynamically
 const tenantId = import.meta.env.VITE_TENANT_ID;
 const userUID = import.meta.env.VITE_USER_UID;
-const user = useSelector((state: RootState) => state.auth.user);
 
 export const postsApi = createApi({
   
@@ -24,7 +22,7 @@ export const postsApi = createApi({
       headers.set("tenantid", tenantId);
       headers.set("uid", userUID);
 
-      console.log(`Auth Token: ${user?.getIdToken()}`)
+      console.log(`Auth Token: ${state.auth.user?.getIdToken()}}`)
       headers.set("Authorization", `Bearer ${state.auth.user?.getIdToken()}`);
       return headers;
     },
