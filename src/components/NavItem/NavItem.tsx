@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 //Css
-import "./NavItem.css";
+// import "./NavItem.css";
 
 type TopBarProps = {
   label: string;
@@ -19,22 +19,40 @@ const TopBar = ({ label, iconPath, active, location }: TopBarProps) => {
   }
 
   //Determine color
-  const itemClass = `navItem ${active ? "active" : ""}`;
+  // const itemClass = `navItem ${active ? "active" : ""}`;
+  // ${active ? "rounded-full text-text" : "text-secondary"}
 
   return (
-    <div className={itemClass} onClick={handleClick}>
-      <div className="icon">
+    <div
+      className={`flex flex-col items-center justify-end gap-1 flex-1 `}
+      onClick={handleClick}
+      data-oid="nav-item-container"
+    >
+      <div
+        className={"flex items-center justify-center h-8"}
+        data-oid="nav-item-svg-container"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="currentColor"
+          className="w-6 h-6"
           viewBox="0 0 256 256"
+          data-oid="nav-item-svg"
         >
-          <path d={iconPath} />
+          <path
+            d={iconPath}
+            className={`border-0 ${active ? "fill-text" : "fill-secondary"}`}
+            data-oid="nav-item-svg-path"
+          />
         </svg>
       </div>
-      <h3 className={itemClass}>{label}</h3>
+      <h3
+        className={`font-medium leading-none tracking-[0.015em] ${
+          active ? "text-text" : "text-secondary"
+        }`}
+        data-oid="nav-item-label"
+      >
+        {label}
+      </h3>
     </div>
   );
 };

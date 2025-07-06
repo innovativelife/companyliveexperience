@@ -1,43 +1,45 @@
-import { useEffect, useState } from "react";
-
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useState } from "react";
 
 //Css
-import "./Avatar.css";
+// import "./Avatar.css";
 
 //Data
-import {
-  employeeSelector,
-  fetchEmployee,
-} from "../../features/employees/employeeSlice";
+import { Employee } from "../../features/employees/employeeTypes";
 
-type UserBarProps = { userId: string; size?: string };
+type UserBarProps = { employee?: Employee; size?: string };
 
-const UserBar = ({ userId, size = "large" }: UserBarProps) => {
-  //Get sender information
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchEmployee(userId));
-  }, [dispatch, userId]);
-
-  const sender = useAppSelector(employeeSelector).singleEmployee;
-
+const UserBar = ({ employee, size = "large" }: UserBarProps) => {
   const [imageError, setImageError] = useState(false);
 
-  const initials = sender
-    ? `${sender.firstName.charAt(0)} ${sender.lastName.charAt(0)}`.toUpperCase()
+  const initials = employee
+    ? `${employee.firstName.charAt(0) ?? "U"} ${
+        employee.lastName.charAt(0) ?? "K"
+      }`.toUpperCase()
     : "";
 
-  if (!sender || !sender.avatarURL || imageError) {
-    return <div className={`avatarTxt ${size ?? "large"}`}>{initials}</div>;
+  if (!employee || !employee.avatarURL || imageError) {
+    return (
+      <div
+        className={`bg-secondary text-white rounded-full flex items-center justify-center font-bold uppercase ${
+          size === "small" ? "w-10 h-10 text-sm" : "w-14 h-14 text-base"
+        }`}
+        data-oid="avatar-initials"
+      >
+        {initials}
+      </div>
+    );
   }
 
+  //`avatarImg ${size ?? "large"}`
   return (
     <img
-      src={sender.avatarURL}
-      alt={`${sender.firstName} ${sender.lastName}`}
-      className={`avatarImg ${size ?? "large"}`}
+      src={employee.avatarURL}
+      alt={`${employee.firstName} ${employee.lastName}`}
+      className={`bg-center bg-no-repeat bg-cover rounded-full ${
+        size === "small" ? "w-10 h-10 text-sm" : "w-14 h-14 text-base"
+      }`}
       onError={() => setImageError(true)}
+      data-oid="avatar-image"
     />
   );
 };

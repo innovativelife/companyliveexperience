@@ -1,13 +1,20 @@
-import AuthPage from '../features/auth/authPage'; // Import the component
-
+import TopBar from "../components/TopBar/TopBar";
+import AuthPage from "../components/AuthBox/authPage"; // Import the component
+import Bannar from "../components/Banner/Banner";
+import { images } from "../assets/images";
+import { svgs } from "../assets/svgs";
 function SignInPage() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>My Firebase Auth App</h1>
-      </header>
-      <main>
-        <AuthPage />
+    <div className="SignIn" data-oid="r_u3voe">
+      <TopBar
+        title="Sign In"
+        icon={svgs.back}
+        buttonClickLocation="/"
+        data-oid="r..q6k:"
+      />
+      <Bannar bannerUrl={images.loginBanner} data-oid="mk-aged" />
+      <main data-oid="f_m5vgt">
+        <AuthPage data-oid="vlp7dy-" />
       </main>
     </div>
   );

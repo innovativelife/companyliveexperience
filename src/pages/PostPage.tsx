@@ -1,66 +1,101 @@
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
+import PullToRefresh from "react-pull-to-refresh";
 
 //Components
 import TopBar from "../components/TopBar/TopBar";
 import NavBar from "../components/NavBar/NavBar";
 import Post from "../components/Post/Post";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Padding from "../components/Padding/Padding";
 import ReplyList from "../components/ReplyList/ReplyList";
 import PostInput from "../components/ReplyInput/ReplyInput";
+import Spinner from "../components/Spinner/Spinner";
 
 //Data
-import { fetchPost, postSelector } from "../features/posts/postSlice";
-import { fetchUiConfigs } from "../features/uiConfig/uiConfigSlice";
-import { fetchEmployees } from "../features/employees/employeeSlice";
-import { fetchReplies } from "../features/replies/repliesSlice";
-import localData from "../localData.json";
+import { svgs } from "../assets/svgs";
+import { useGetRepliesQuery } from "../features/replies/repliesAPI";
+import { useGetPostByIdQuery } from "../features/posts/postAPI";
+import { useGetEmployeesQuery } from "../features/employees/employeeAPI";
 
 const PostPage = () => {
   //Top bar data
-  const iconPath = localData.svgPaths.back;
+  const iconPath = svgs.back;
   const topBarButtonLocation = "/home";
 
   //Chanel data
-  const dispatch = useAppDispatch();
   const { postId } = useParams();
-  const post = useAppSelector(postSelector).singlePost;
+  const {
+    data: post,
+    isFetching: postIsFetching,
+    isError: postIsError,
+    refetch: postRefetch,
+  } = useGetPostByIdQuery(postId ?? ""); //{ data: post, isLoading, error }
 
-  //All post Data
-  useEffect(() => {
-    dispatch(fetchPost(postId ?? ""));
-  }, [dispatch]);
+  const {
+    data: replies,
+    isFetching: repliesIsFetching,
+    isError: repliesIsError,
+    refetch: repliesRefetch,
+  } = useGetRepliesQuery(postId ?? "", {
+    pollingInterval: 30000,
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+  });
 
-  //All replies data
-  useEffect(() => {
-    dispatch(fetchReplies(postId ?? ""));
-  }, [dispatch]);
+  const {
+    data: employees,
+    isFetching: employeesIsFetching,
+    isError: employeesIsError,
+    refetch: employeesRefetch,
+  } = useGetEmployeesQuery(undefined, {
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+  });
 
-  //All employee Data
-  useEffect(() => {
-    dispatch(fetchEmployees());
-  }, [dispatch]);
+  const employeeMap = useMemo(() => {
+    return Object.fromEntries(
+      (employees ?? []).map((employee) => [employee.employeeUID, employee]),
+    );
+  }, [employees]);
 
-  //All graphic data
-  useEffect(() => {
-    dispatch(fetchUiConfigs());
-  }, [dispatch]);
+  const refetchAll = async () => {
+    await Promise.all([employeesRefetch(), postRefetch(), repliesRefetch()]);
+  };
 
   return (
-    <>
+    <PullToRefresh
+      onRefresh={() => refetchAll().then(() => {})}
+      style={{ minHeight: "100vh" }}
+      data-oid="7eprzru"
+    >
       <TopBar
         title="Post"
         icon={iconPath}
         buttonClickLocation={topBarButtonLocation}
+        data-oid="3h_kbqw"
       />
-      <Post post={post} />
-      <ReplyList />
-      <PostInput postId={postId ?? ""} />
-      <NavBar />
 
-      <Padding />
-    </>
+      {post ? (
+        <Post
+          post={post}
+          employee={employeeMap[post.employeeUID]}
+          data-oid="wd6jzrt"
+        />
+      ) : (
+        <p data-oid="..88_op">Loading Post...</p>
+      )}
+      {postIsError && <p data-oid="cc4f600">Error fetching post</p>}
+      {(repliesIsFetching || employeesIsFetching || postIsFetching) && (
+        <Spinner data-oid="17_gqwv" />
+      )}
+      {repliesIsError && <p data-oid="w-qvpg_">Error fetching replies</p>}
+      {employeesIsError && <p data-oid="lkx8xs1">Error fetching employees</p>}
+      <ReplyList replies={replies} employees={employeeMap} data-oid="5a_2sf." />
+      <PostInput postId={postId ?? ""} data-oid="ku3481y" />
+      <NavBar data-oid="t60npmm" />
+
+      <Padding data-oid="uwlq-su" />
+    </PullToRefresh>
   );
 };
 

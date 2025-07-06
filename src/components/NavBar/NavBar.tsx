@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 import { useCurrentPage } from "../../hooks/useCurrentPage";
-import localData from "../../localData.json";
+import { svgs } from "../../assets/svgs";
 
 //Css
-import "./NavBar.css";
+// import "./NavBar.css";
 
 //Components
 import NavItem from "../NavItem/NavItem";
@@ -22,45 +22,47 @@ const NavBar = () => {
   //Set nav items
   const navItems = [
     {
-      label: homeTitle,
+      label: homeTitle ?? "Home",
       location: `/${homeTitle}`.toLowerCase(),
-      icon: localData.svgPaths.home,
+      icon: svgs.home,
     },
     {
-      label: peopleTitle,
+      label: peopleTitle ?? "People",
       location: `/${peopleTitle}`.toLowerCase(),
-      icon: localData.svgPaths.people,
+      icon: svgs.people,
     },
     {
-      label: calendarTitle,
+      label: calendarTitle ?? "Calendar",
       location: `/${calendarTitle}`.toLowerCase(),
-      icon: localData.svgPaths.calendar,
+      icon: svgs.calendar,
     },
     {
-      label: tribesTitle,
+      label: tribesTitle ?? "Tribes",
       location: `/${tribesTitle}`.toLowerCase(),
-      icon: localData.svgPaths.tribes,
+      icon: svgs.tribes,
     },
     {
-      label: moreTitle,
+      label: moreTitle ?? "More",
       location: `/${moreTitle}`.toLowerCase(),
-      icon: localData.svgPaths.more,
+      icon: svgs.more,
     },
   ];
 
   return (
-    <div className="navBarContainer">
-      <div className="navBar">
-        {navItems.map((item, index) => (
-          <NavItem
-            key={index}
-            label={item.label}
-            iconPath={item.icon}
-            location={item.location}
-            active={item.label === currentPage ? true : false}
-          />
-        ))}
-      </div>
+    <div
+      className="bg-tertiary w-full fixed box-border bottom-0 flex gap-2 border-t border-[#f3f0e7] px-4 pb-3 pt-2"
+      data-oid="nav-bar-container"
+    >
+      {navItems.map((item, index) => (
+        <NavItem
+          key={index}
+          label={item.label}
+          iconPath={item.icon}
+          location={item.location}
+          active={item.label === currentPage ? true : false}
+          data-oid="nav-bar-item"
+        />
+      ))}
     </div>
   );
 };

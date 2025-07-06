@@ -1,41 +1,27 @@
-import { useEffect } from "react";
-
 //Components
 import TopBar from "../components/TopBar/TopBar";
 import NavBar from "../components/NavBar/NavBar";
-import { useAppDispatch } from "../app/hooks";
 import UserBar from "../components/UserBar/UserBar";
 import Padding from "../components/Padding/Padding";
-import PostWriter from "../components/PostCreation/PostWriter";
+import PostWriter from "../components/PostWriter/PostWriter";
+import Spinner from "../components/Spinner/Spinner";
 
 //Data
-import { fetchPosts } from "../features/posts/postSlice";
-import { fetchUiConfigs } from "../features/uiConfig/uiConfigSlice";
-import { fetchEmployees } from "../features/employees/employeeSlice";
-import localData from "../localData.json";
+import { useGetEmployeeByIdQuery } from "../features/employees/employeeAPI";
+import { svgs } from "../assets/svgs";
+const userUID = import.meta.env.VITE_USER_UID;
 
 const NewPostPage = () => {
   //Top bar data
-  const iconPath = localData.svgPaths.back;
+  const iconPath = svgs.back;
   const topBarButtonLocation = "/home";
 
   //Chanel data
-  const dispatch = useAppDispatch();
-
-  //All post Data
-  useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
-
-  //All employee Data
-  useEffect(() => {
-    dispatch(fetchEmployees());
-  }, [dispatch]);
-
-  //All graphic data
-  useEffect(() => {
-    dispatch(fetchUiConfigs());
-  }, [dispatch]);
+  const {
+    data: user,
+    isFetching: userIsFetching,
+    isError: userIsError,
+  } = useGetEmployeeByIdQuery(userUID ?? "");
 
   return (
     <>
@@ -43,14 +29,20 @@ const NewPostPage = () => {
         title="New Post"
         icon={iconPath}
         buttonClickLocation={topBarButtonLocation}
+        data-oid="new-post-top-bar"
       />
+
       <UserBar
-        userId={localData.userUID}
+        employee={user}
         descriptor="@AddTagToUsersInBackend"
+        data-oid="new-post-user-bar"
       />
-      <PostWriter />
-      <NavBar />
-      <Padding />
+
+      {userIsFetching && <Spinner data-oid="new-post-spinner" />}
+      {userIsError && <p data-oid="new-post-error">Error fetching user</p>}
+      <PostWriter data-oid="new-post-post-writer" />
+      <NavBar data-oid="new-post-nav-bar" />
+      <Padding data-oid="new-post-padding" />
     </>
   );
 };

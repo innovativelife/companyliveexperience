@@ -1,68 +1,56 @@
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useEffect } from "react";
 import { timeAgo } from "../../hooks/timeAgo";
-import localData from "../../localData.json";
+import { svgs } from "../../assets/svgs";
 
 //Css
-import "./Reply.css";
+// import "./Reply.css";
 
 //Components
 import Avatar from "../Avatar/Avatar";
+import ActionItem from "../ActionItem/ActionItem";
 
-import {
-  employeeSelector,
-  fetchEmployee,
-} from "../../features/employees/employeeSlice";
+import { Reply as ReplyType } from "../../features/replies/repliesType";
+import { Employee } from "../../features/employees/employeeTypes";
 
-import { Reply as ReplyType } from "../../features/replies/repliesSlice";
+type ReplyProps = { reply: ReplyType; employee?: Employee };
 
-//Data Types
-// import { Post as PostType } from "../../features/posts/postSlice";
-// export interface ReplyType {
-//   // replyId: string;
-//   timeSent: string;
-//   employeeUID: string;
-//   message: string;
-//   // likes: number;
-// }
-
-type ReplyProps = { reply: ReplyType };
-
-const Reply = ({ reply }: ReplyProps) => {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchEmployee(reply.employeeUID));
-  }, [dispatch]);
-  const sender = useAppSelector(employeeSelector).singleEmployee;
-
+const Reply = ({ reply, employee }: ReplyProps) => {
   const time = timeAgo(reply.timeSent);
 
+  function likeFunction() {
+    console.log("You liked a post");
+  }
+
   return (
-    <div className="commentContainer">
-      <Avatar userId={reply.employeeUID} size="small" />
-      <div className="commentContent">
-        <div className="commentHeader">
-          <p className="commentUsername">
-            {sender?.firstName} {sender?.lastName}
+    <div
+      className="flex w-full flex-row box-border flex-row items-start justify-star gap-3 p-4"
+      data-oid="reply-container"
+    >
+      <Avatar employee={employee} size="small" data-oid="reply-avatar" />
+      <div data-oid="reply-content">
+        {/* User name and time sent */}
+        <div
+          className="flex w-full flex-row items-start justify-start gap-x-3"
+          data-oid="reply-user-time-container"
+        >
+          <p className="font-bold leading-none" data-oid="reply-user">
+            {employee?.firstName ?? "Unknown"} {employee?.lastName ?? "Unknown"}
           </p>
-          <h3>{time}</h3>
+          <h3 data-oid="reply-time" className="p-0">
+            {time}
+          </h3>
         </div>
-        <p>{reply.message}</p>
-        <div className="commentActions">
-          <div className="commentReactGroup">
-            <div className="commentReactIcon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20px"
-                height="20px"
-                fill="currentColor"
-                viewBox="0 0 256 256"
-              >
-                <path d={localData.svgPaths.thumbsUp} />
-              </svg>
-            </div>
-            <h3>3</h3>
-          </div>
+        {/* message */}
+        <p data-oid="reply-message">{reply.message}</p>
+        <div
+          className="flex w-full flex-row items-center justify-start gap-9 pt-2"
+          data-oid="reply-actions-container"
+        >
+          <ActionItem
+            icon={svgs.addReaction}
+            count={23}
+            handleClick={likeFunction}
+            data-oid="reply-reaction"
+          />
         </div>
       </div>
     </div>

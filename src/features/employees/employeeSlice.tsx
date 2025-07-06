@@ -1,115 +1,42 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
-//Temporary Data -- Ask how to change
-import temporaryData from "../../localData.json";
-const tenantid = temporaryData.tenantid;
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-
-export interface Employee {
-  employeeNumber: string;
-  firstName: string;
-  lastName: string;
-  PreferredName: string;
-  email: string;
-  phoneNumber: string;
-  positionTitle: string;
-  personalDescription: string;
-  avatarURL: string;
+interface EmployeesState {
+  selectedEmployeeId: string | null;
+  showEmployeeEditor: boolean;
 }
 
-const anInitialState: Employee = {
-  employeeNumber: "",
-  firstName: "",
-  lastName: "",
-  PreferredName: "",
-  email: "",
-  phoneNumber: "",
-  positionTitle: "",
-  personalDescription: "",
-  avatarURL: "",
+const initialState: EmployeesState = {
+  selectedEmployeeId: null,
+  showEmployeeEditor: false,
 };
 
-export interface EmployeeState {
-  loading: boolean;
-  employees: Array<Employee>;
-  singleEmployee: Employee;
-  error: string | undefined;
-}
-
-const initialState: EmployeeState = {
-  loading: false,
-  employees: [],
-  singleEmployee: anInitialState,
-  error: undefined,
-};
-
-export const fetchEmployees = createAsyncThunk(
-  "employees/fetchEmployees",
-  async () => {
-    const response = await fetch(
-      `${API_BASE_URL}/api/v1/tenants/${tenantid}/Employees`,
-      {
-        method: "GET",
-        mode: "cors",
-        headers: new Headers({
-          "Content-Type": "application/json",
-          tenantid: tenantid,
-          uid: "tester",
-        }),
-      }
-    );
-
-    const data = await response.json();
-    return data["employees"];
-  }
-);
-
-export const fetchEmployee = createAsyncThunk(
-  "employees/fetchEmployee",
-  async (employeeUID: string) => {
-    const response = await fetch(
-      `${API_BASE_URL}/api/v1/tenants/${tenantid}/Employees/${employeeUID}`,
-      {
-        method: "GET",
-        mode: "cors",
-        headers: new Headers({
-          "Content-Type": "application/json",
-          tenantid: tenantid,
-          uid: "tester",
-        }),
-      }
-    );
-    const data = await response.json();
-    return data["employee"];
-  }
-);
-
-const employeeSlice = createSlice({
-  name: "employees",
+const employeesSlice = createSlice({
+  name: "employeesUI",
   initialState,
-  extraReducers: (builder) => {
-    builder.addCase(fetchEmployees.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(fetchEmployees.fulfilled, (state, action) => {
-      state.employees = action.payload;
-      state.loading = false;
-    });
-    builder.addCase(fetchEmployee.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(fetchEmployee.fulfilled, (state, action) => {
-      state.singleEmployee = action.payload;
-      state.loading = false;
-    });
-    builder.addCase(fetchEmployee.rejected, (state, action) => {
-      state.loading = false;
-      state.singleEmployee = anInitialState;
-      state.error = action.error.message;
-    });
+  reducers: {
+    setSelectedEmployee(state, action: PayloadAction<string>) {
+      state.selectedEmployeeId = action.payload;
+    },
+    clearSelectedEmployee(state) {
+      state.selectedEmployeeId = null;
+    },
+    toggleEmployeeEditor(state) {
+      state.showEmployeeEditor = !state.showEmployeeEditor;
+    },
+    setEmployeeEditorVisible(state, action: PayloadAction<boolean>) {
+      state.showEmployeeEditor = action.payload;
+    },
   },
-  reducers: {},
 });
-export const employeeSelector = (state: RootState) => state.employee;
-export default employeeSlice.reducer;
+
+export const {
+  setSelectedEmployee,
+  clearSelectedEmployee,
+  toggleEmployeeEditor,
+  setEmployeeEditorVisible,
+} = employeesSlice.actions;
+
+export const employeesUISelector = (state: RootState) => state.employee;
+
+export default employeesSlice.reducer;

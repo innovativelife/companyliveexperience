@@ -1,26 +1,32 @@
-.actionItem {
+/* .actionItem {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem; /* equivalent to Tailwind's gap-2 */
-  padding: 0.5rem 0.75rem; /* equivalent to px-3 py-2 */
+  gap: 0.5rem; 
+  padding: 0.5rem 0.75rem;
 }
 
 .actionItem .actionIconContainer{
   color: var(--color-secondary);
 }
 
-/* .actionItem .actionIcon {
+.actionItem .actionIcon {
   width: 24px;
   height: 24px;
-} */
-/* 
+} 
+
 .actionItem path{
   width: 24px;
   height: 24px;
-} */
+}
 
 .actionItem svg{
   width: 24px;
   height: 24px;
-}
+} */
+
+/* .actionItem {
+  fill: var(--color-secondary);
+  width: 24px;
+  height: 24px;
+} */

@@ -1,12 +1,13 @@
 //Css
-import "./Spinner.css";
+// import "./Spinner.css";
 
-type SpinnerProps = {};
-
-const Spinner = ({}: SpinnerProps) => {
+const Spinner = () => {
   return (
-    <div className="spinnerContainer">
-      <div className="spinner" />
+    <div className="flex justify-center p-1" data-oid="spinner-container">
+      <div
+        className="w-6 h-6 border-4 border-secondary border-t-transparent rounded-full animate-spin"
+        data-oid="spinner-spinner"
+      />
     </div>
   );
 };

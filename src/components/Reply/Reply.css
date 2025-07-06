@@ -1,45 +1,41 @@
-.commentContainer {
+/* .commentContainer {
   display: flex;
-  max-width: 100%; /* prevents exceeding parent width */
-  box-sizing: border-box; /* ensures padding doesn't add to width */
+  max-width: 100%; 
+  box-sizing: border-box;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.75rem; /* gap-3 */
-  padding: 1rem; /* p-4 */
-  overflow-x: auto; /* optional: handles content overflow gracefully */
-}
+  gap: 0.75rem; 
+  padding: 1rem; 
+  overflow-x: auto; 
+} */ /* optional: handles content overflow gracefully */ /* p-4 */ /* gap-3 */ /* prevents exceeding parent width */ /* ensures padding doesn't add to width */
 
-.commentContainer .commentHeader {
+/* .commentContainer .commentHeader {
   display: flex;
   width: 100%;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.75rem; /* gap-x-3 */
-}
+  gap: 0.75rem;
+} */ /* gap-x-3 */
 
-.commentContainer .commentUsername {
+/* .commentContainer .commentUsername {
   font-weight: bold;
   line-height: normal;
-}
+} */
 
-.commentContainer .commentActions {
+/* .commentContainer .commentActions {
   display: flex;
   width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 2.25rem; /* gap-9 */
-  padding-top: 0.5rem; /* pt-2 */
-}
-
+  gap: 2.25rem;
+  padding-top: 0.5rem;
+} */
+/* 
 .commentContainer .commentReactGroup {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* gap-2 */
-}
-
-.commentContainer .commentReactIcon {
-  color: var(--color-secondary);
-}
+  gap: 0.5rem; 
+} */ /* gap-2 */

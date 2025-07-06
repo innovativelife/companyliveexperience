@@ -1,0 +1,54 @@
+/* Basic container for the whole page */
+.auth-page-container {
+    display: flex; /* Use flexbox for centering */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
+    padding: 20px; /* Add some padding around content */
+    text-align: center; /* Center text within elements */
+    font-family: sans-serif; /* Readable font */
+  }
+  
+  /* Styling for the main content area (user info or sign-in prompt) */
+  .auth-page-container > div {
+    background-color: #fff; /* White background for the content box */
+    padding: 30px; /* Inner padding */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    max-width: 300px; /* Max width for phone screen */
+    width: 100%; /* Make it fill width up to max-width */
+  }
+  
+  /* Styling for profile picture */
+  .profile-pic {
+    width: 80px; /* Size */
+    height: 80px; /* Size */
+    border-radius: 50%; /* Make it round */
+    margin-bottom: 15px; /* Space below picture */
+    border: 2px solid #ddd; /* Subtle border */
+  }
+  
+  /* Styling for display name */
+  .display-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Styling for messages (loading, error, sign-in prompt text) */
+  .loading-message,
+  .error-message,
+  .sign-in-prompt p {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .error-message {
+    color: #d9534f; /* Red color for errors */
+    font-weight: bold;
+  }
+
+  

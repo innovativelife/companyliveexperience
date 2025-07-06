@@ -3,24 +3,19 @@ import Banner from "../components/Banner/Banner";
 import Padding from "../components/Padding/Padding";
 import LargeButton from "../components/LargeButton/LargeButton";
 
-import localData from "../localData.json";
-import { fetchUiConfigs } from "../features/uiConfig/uiConfigSlice";
-import { useEffect } from "react";
-import { useAppDispatch } from "../app/hooks";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import { svgs } from "../assets/svgs";
+import { images } from "../assets/images";
+import { selectAppBannerUrl } from "../features/uiConfig/uiSelectors";
+
 const NoPage = () => {
-  //Chanel data
-  const dispatch = useAppDispatch();
-
-  //All graphic data
-  useEffect(() => {
-    dispatch(fetchUiConfigs());
-  }, [dispatch]);
+  const appBannerUrl =
+    useSelector(selectAppBannerUrl).appBannerUrl ?? images.ImageNotFound;
 
   //Navigation
-  //Navigation
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   function handleClick() {
     navigate("/home");
@@ -54,19 +49,23 @@ const NoPage = () => {
     <>
       <TopBar
         title="Page Not Found"
-        icon={localData.svgPaths.back}
+        icon={svgs.back}
         buttonClickLocation="/home"
+        data-oid="9upi6dp"
       />
-      <Banner />
-      <Padding />
-      <div style={containerStyle}>
-        <h2 style={headingStyle}>Oops! Page not found</h2>
-        <p style={paragraphStyle}>
+
+      <Banner bannerUrl={appBannerUrl} data-oid="hjt4xer" />
+      <Padding data-oid="8lgb242" />
+      <div style={containerStyle} data-oid="xaa2pr8">
+        <h2 style={headingStyle} data-oid="9:3a8_l">
+          Oops! Page not found
+        </h2>
+        <p style={paragraphStyle} data-oid="74lc.t_">
           The page you're looking for doesn't seem to exist. Please check the
           URL or try navigating back to the main site.
         </p>
       </div>
-      <LargeButton onClick={handleClick} label="Go Back" />
+      <LargeButton onClick={handleClick} label="Go Back" data-oid="y-n3wpt" />
     </>
   );
 };

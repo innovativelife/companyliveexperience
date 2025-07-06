@@ -1,11 +1,8 @@
 //Css
 import "./Padding.css";
 
-type PaddingProps = { paddingSize?: string };
-
-const Padding = ({ paddingSize }: PaddingProps) => {
-  console.log(paddingSize);
-  return <div className="bottomPadding"></div>;
+const Padding = () => {
+  return <div className="pt-[70px]" data-oid="padding-padding"></div>;
 };
 
 export default Padding;

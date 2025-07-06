@@ -1,38 +1,54 @@
 //Css
-import "./ReplyList.css";
+// import "./ReplyList.css";
 
 //Components
-import { useAppSelector } from "../../app/hooks";
+// import { useAppSelector } from "../../app/hooks";
 import Reply from "../Reply/Reply";
 
 //Data
-import { ReplySelector } from "../../features/replies/repliesSlice";
-import localData from "../../localData.json";
+// import { ReplySelector } from "../../features/replies/repliesSlice";
+import { Reply as ReplyType } from "../../features/replies/repliesType";
+import { Employee } from "../../features/employees/employeeTypes";
+import { images } from "../../assets/images";
 
-type ReplyListProps = {};
+type ReplyListProps = {
+  replies?: ReplyType[];
+  employees?: Record<string, Employee>;
+};
 
-const ReplyList = ({}: ReplyListProps) => {
-  // All post Data
-  const replies = useAppSelector(ReplySelector).replies;
-
+const ReplyList = ({ replies, employees }: ReplyListProps) => {
   return (
-    <div className="replyList">
-      <h2>Replies</h2>
-      {replies.length === 0 ? (
+    <div data-oid="reply-list-container">
+      <h2 className=" p-4" data-oid="reply-list-title">
+        Replies
+      </h2>
+      {replies?.length === 0 ? (
         <>
           <img
-            src={localData.speachBubble}
-            className="speachBubble"
+            src={images.speachBubble}
+            className="ws-full p-4 box-border rounded-5"
             alt="SpeachBubble"
             onError={(e) => {
               e.currentTarget.onerror = null; // Prevent infinite loop
-              e.currentTarget.src = localData.ImageNotFound;
+              e.currentTarget.src = images.ImageNotFound;
             }}
+            data-oid="reply-list-no-replies-image"
           />
-          <h3>No replies yet</h3>
+
+          <h3 className="p-4 pt-0" data-oid="reply-list-no-replies-title">
+            No replies yet
+          </h3>
         </>
       ) : (
-        replies.map((reply, index) => <Reply key={index} reply={reply} />) //Add a UID for each reply
+        Array.isArray(replies) &&
+        replies.map((reply, index) => (
+          <Reply
+            key={index}
+            reply={reply}
+            employee={employees?.[reply.employeeUID]}
+            data-oid="reply-list-reply"
+          />
+        ))
       )}
     </div>
   );

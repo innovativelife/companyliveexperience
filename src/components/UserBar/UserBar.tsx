@@ -1,38 +1,28 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-
 //Css
-import "./UserBar.css";
+// import "./UserBar.css";
 
 //Components
 import Avatar from "../Avatar/Avatar";
 
 //Data
-import {
-  employeeSelector,
-  fetchEmployee,
-} from "../../features/employees/employeeSlice";
+import { Employee } from "../../features/employees/employeeTypes";
 
-type UserBarProps = { userId: string; descriptor: string };
+type UserBarProps = { employee?: Employee; descriptor: string };
 
-const UserBar = ({ userId, descriptor }: UserBarProps) => {
-  //Get sender information
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchEmployee(userId));
-  }, [dispatch]);
-  const sender = useAppSelector(employeeSelector).singleEmployee;
-
+const UserBar = ({ employee, descriptor }: UserBarProps) => {
   return (
-    <div className="postHeader">
+    <div
+      className="flex items-center gap-4 py-2 px-4 min-h-[72px]"
+      data-oid="user-bar-container"
+    >
       {/* <img className="avatar" src={sender?.avatarURL} /> */}
-      <Avatar userId={userId} />
+      <Avatar employee={employee} data-oid="user-bar-avatar" />
 
-      <div className="userInfo">
-        <p>
-          {sender?.firstName} {sender?.lastName}
+      <div className="flex flex-col justify-center" data-oid="user-bar-content">
+        <p data-oid="user-bar-name">
+          {employee?.firstName ?? "Unknown"} {employee?.lastName ?? "Unknown"}
         </p>
-        <h3>{descriptor}</h3>
+        <h3 data-oid="user-bar-descriptor">{descriptor}</h3>
       </div>
     </div>
   );

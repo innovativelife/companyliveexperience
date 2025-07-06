@@ -1,5 +1,5 @@
 //Css
-import "./ColoredSvgButtonList.css";
+// import "./ColoredSvgButtonList.css";
 
 //Components
 import ColoredSvgButton from "../ColoredSvgButton/ColoredSvgButton";
@@ -12,14 +12,17 @@ export interface uploadOptionsType {
 type ColoredSvgButtonListProps = { uploadOptions: uploadOptionsType[] };
 
 const ColoredSvgButtonList = ({ uploadOptions }: ColoredSvgButtonListProps) => {
-  //All post Data
   return (
-    <div className="coloredSvgButtonList">
+    <div
+      className="flex flex-wrap justify-start gap-2 px-4"
+      data-oid="colored-svg-button-list-container"
+    >
       {uploadOptions.map((option) => (
         <ColoredSvgButton
           key={option.label}
           imgSrc={option.svg}
           label={option.label}
+          data-oid="colored-svg-button-list-item"
         />
       ))}
     </div>
