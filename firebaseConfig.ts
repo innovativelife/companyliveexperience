@@ -1,20 +1,13 @@
-// src/firebaseConfig.ts (or src/firebase.ts)
-
 // Import the functions you need from the SDKs you need
 import { initializeApp, FirebaseApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getAnalytics, Analytics } from "firebase/analytics"; // Also import the Analytics type
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth, GoogleAuthProvider, User } from 'firebase/auth';
+import { getAnalytics, Analytics, logEvent } from "firebase/analytics"; // Also import the Analytics type
 
 // Import the type for Firebase configuration options
 import { FirebaseOptions } from "firebase/app"; // Import the FirebaseOptions type
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Web app's Firebase configuration
 const firebaseConfig: FirebaseOptions = {
-  // Explicitly type the config object
   apiKey: "AIzaSyCF00k7MPryL89I-FqQ4SlijW7i_8WriIw",
   authDomain: "companylive-c3879.firebaseapp.com",
   projectId: "companylive-c3879",
@@ -28,12 +21,28 @@ const firebaseConfig: FirebaseOptions = {
 // Specify the return type explicitly (though often inferred)
 const app: FirebaseApp = initializeApp(firebaseConfig);
 
+// Get the Auth service instance
+const auth = getAuth(app);
+
+// Initialize Google Auth Provider
+const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
+googleProvider.addScope('profile'); // Request access to profile information
+googleProvider.addScope('email');   // Request access to email
+
 // Initialize Analytics and get a reference to the service
 // Specify the return type explicitly (though often inferred)
-export const analytics: Analytics = getAnalytics(app);
+// export const analytics: Analytics = getAnalytics(app);
+// Initialize Firebase Analytics (client-side only)
+let analytics: Analytics | null = null;
+if (typeof window !== 'undefined') {
+  try {
+    analytics = getAnalytics(app);
+    console.log("Firebase Analytics initialized successfully.");
+  } catch (error) {
+    console.error("Failed to initialize Firebase Analytics:", error);
+    analytics = null;
+  }
+}
 
-// Get the Auth service instance
-export const auth = getAuth(app);
-
-// Create a Google Auth Provider instance
-export const googleProvider = new GoogleAuthProvider();
+export { analytics, app, auth, googleProvider, logEvent }
+export type {  User }
