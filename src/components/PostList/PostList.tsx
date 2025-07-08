@@ -30,25 +30,22 @@ const PostList = ({ posts, employees }: PostListProps) => {
               e.currentTarget.onerror = null; // Prevent infinite loop
               e.currentTarget.src = images.ImageNotFound;
             }}
-            data-oid="post-list-no-replies-image"
+            data-oid="pnm.ur0"
           />
 
-          <h3 data-oid="post-list-no-replies-title">No Posts yet</h3>
+          <h3 data-oid="18g7.55">No Posts yet</h3>
         </>
       ) : (
         Array.isArray(posts) &&
         posts.map((post) => (
-          <div key={post.postId} data-oid="post-list-container">
+          <div key={post.postId} data-oid="xy0cp0m">
             <Post
               post={post}
               employee={employees?.[post.employeeUID]}
-              data-oid="post-list-post"
+              data-oid="dpa:rd8"
             />
 
-            <ActionItemBar
-              postId={post.postId}
-              data-oid="post-list-post-action-item-bar"
-            />
+            <ActionItemBar postId={post.postId} data-oid="4p1cl7k" />
           </div>
         ))
       )}

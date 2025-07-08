@@ -29,20 +29,15 @@ const NewPostPage = () => {
         title="New Post"
         icon={iconPath}
         buttonClickLocation={topBarButtonLocation}
-        data-oid="new-post-top-bar"
       />
 
-      <UserBar
-        employee={user}
-        descriptor="@AddTagToUsersInBackend"
-        data-oid="new-post-user-bar"
-      />
+      <UserBar employee={user} descriptor="@AddTagToUsersInBackend" />
 
-      {userIsFetching && <Spinner data-oid="new-post-spinner" />}
-      {userIsError && <p data-oid="new-post-error">Error fetching user</p>}
-      <PostWriter data-oid="new-post-post-writer" />
-      <NavBar data-oid="new-post-nav-bar" />
-      <Padding data-oid="new-post-padding" />
+      {userIsFetching && <Spinner />}
+      {userIsError && <p className="errorMessage">Error fetching user</p>}
+      <PostWriter />
+      <NavBar />
+      <Padding />
     </>
   );
 };

@@ -59,24 +59,19 @@ const PostWriter = () => {
       <LargeInputField
         value={postText}
         onChange={setPostText}
-        data-oid="post-writer-input-field"
+        data-oid="tw:ji2u"
       />
 
-      <ColoredSvgButtonList
-        uploadOptions={uploadOptions}
-        data-oid="post-writer-button-list"
-      />
+      <ColoredSvgButtonList uploadOptions={uploadOptions} data-oid="jk202er" />
 
-      {isLoading && <p data-oid="post-writer-loading-message">Sending...</p>}
+      {isLoading && <p data-oid="65sus59">Sending...</p>}
       {error && (
-        <p data-oid="post-writer-error-message">Error while creating post</p>
+        <p className="errorMessage" data-oid="vag0:ao">
+          Error while creating post
+        </p>
       )}
-      {isSuccess && <p data-oid="post-writer-success-message">Message Sent</p>}
-      <LargeButton
-        onClick={sendMessage}
-        label="Post"
-        data-oid="post-writer-button"
-      />
+      {isSuccess && <p data-oid="xm5x86x">Message Sent</p>}
+      <LargeButton onClick={sendMessage} label="Post" data-oid="vnna-a." />
     </>
   );
 };

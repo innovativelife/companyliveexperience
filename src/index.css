@@ -46,43 +46,50 @@ body {
   --size-text: var(--size-text);
   --size-subtext: var(--size-subtext);
 }
+@layer base {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-background);
+  }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-background);
+  html {
+    background-color: var(--color-background);
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+      monospace;
+  }
+
+  h1 {
+    color: var(--color-text);
+    font-weight: bold;
+    font-size: var(--size-title);
+  }
+
+  h2 {
+    color: var(--color-text);
+    font-weight: bold;
+    font-size: var(--size-heading);
+  }
+
+  h3 {
+    color: var(--color-secondary);
+    font-size: var(--size-subtext);
+  }
+
+  p {
+    color: var(--color-text);
+    font-size: var(--size-text);
+  }
 }
 
-html {
-  background-color: var(--color-background);
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
-h1 {
-  color: var(--color-text);
-  font-weight: bold;
-  font-size: var(--size-title);
-}
-
-h2 {
-  color: var(--color-text);
-  font-weight: bold;
-  font-size: var(--size-heading);
-}
-
-h3 {
-  color: var(--color-secondary);
-  font-size: var(--size-subtext);
-}
-
-p {
-  color: var(--color-text);
-  font-size: var(--size-text);
+@layer components {
+  .errorMessage {
+    @apply text-red-700 bg-red-100 p-2 rounded;
+  }
 }

@@ -23,7 +23,7 @@ const UserBar = ({ employee, size = "large" }: UserBarProps) => {
         className={`bg-secondary text-white rounded-full flex items-center justify-center font-bold uppercase ${
           size === "small" ? "w-10 h-10 text-sm" : "w-14 h-14 text-base"
         }`}
-        data-oid="avatar-initials"
+        data-oid="j9ex96c"
       >
         {initials}
       </div>
@@ -39,7 +39,7 @@ const UserBar = ({ employee, size = "large" }: UserBarProps) => {
         size === "small" ? "w-10 h-10 text-sm" : "w-14 h-14 text-base"
       }`}
       onError={() => setImageError(true)}
-      data-oid="avatar-image"
+      data-oid="o_-jwm7"
     />
   );
 };

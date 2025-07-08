@@ -36,62 +36,65 @@ export default function App() {
     }
   }, [uiConfig, dispatch]);
 
-  if (isLoading)
-    return <div data-oid="app-loading-message">Loading UI config...</div>;
+  if (isLoading) return <div data-oid="j2seb4j">Loading UI config...</div>;
   if (isError || !uiConfig)
-    return <div data-oid="app-error-message">Error loading UI config</div>;
+    return (
+      <p className="errorMessage" data-oid="3z9a46p">
+        Error loading UI config
+      </p>
+    );
 
   return (
-    <BrowserRouter data-oid="app-container">
-      <CssTokenSetter uiConfig={uiConfig} data-oid="app-css-token-setter" />
+    <BrowserRouter data-oid="y2i.foh">
+      <CssTokenSetter uiConfig={uiConfig} data-oid="5ivtcak" />
       <Suspense
         fallback={
-          <div className="container" data-oid="app-suspense-loading-message">
+          <div className="container" data-oid="ps2dwyw">
             Loading...
           </div>
         }
-        data-oid="app-suspense"
+        data-oid=":-174ol"
       >
-        <Routes data-oid="app-routes">
+        <Routes data-oid="8825.9:">
           <Route
             path="/"
-            element={<Layout data-oid="app-layout" />}
-            data-oid="app-layout-route"
+            element={<Layout data-oid="md:f0xa" />}
+            data-oid="u-xjy-k"
           >
             <Route
               index
-              element={<Login data-oid="app-login" />}
-              data-oid="app-login-route"
+              element={<Login data-oid="4bu2gsx" />}
+              data-oid="3.x5lw2"
             />
 
             <Route
               path="login"
-              element={<Login data-oid="app-login-2" />}
-              data-oid="app-login-route-2"
+              element={<Login data-oid="hytk3cc" />}
+              data-oid="8tq-p8t"
             />
 
             <Route
               path="home"
-              element={<Home data-oid="app-home" />}
-              data-oid="app-home-route"
+              element={<Home data-oid="p0zk6-g" />}
+              data-oid="sk-uspw"
             />
 
             <Route
               path="home/post/:postId"
-              element={<Post data-oid="app-post" />}
-              data-oid="app-post-route"
+              element={<Post data-oid="r9kb8k8" />}
+              data-oid="2wozfo6"
             />
 
             <Route
               path="home/newpost"
-              element={<NewPost data-oid="app-new-post" />}
-              data-oid="app-new-post-route"
+              element={<NewPost data-oid=".4ak2po" />}
+              data-oid="u4eoaqg"
             />
 
             <Route
               path="*"
-              element={<NoPage data-oid="app-no-page" />}
-              data-oid="app-no-page-route"
+              element={<NoPage data-oid="uh:qw8l" />}
+              data-oid="hi81gl5"
             />
           </Route>
         </Routes>

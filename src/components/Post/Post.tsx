@@ -17,28 +17,30 @@ const Post = ({ post, employee }: PostProps) => {
   const hasMessage = Boolean(post.message);
 
   return (
-    <div data-oid="post-container">
+    <div data-oid="jq6nef6">
       <UserBar
         employee={employee}
         descriptor={timeAgo(post.timeSent)}
-        data-oid="post-userbar"
+        data-oid="-iqoz1:"
       />
 
       {/* Message (conditionally rendered) */}
       {hasMessage && (
-        <p className="pt-1 pr-4 pb-3 pl-4" data-oid="post-message">
+        <p className="pt-1 pr-4 pb-3 pl-4" data-oid="7r3ilvz">
           {post.message}
         </p>
       )}
 
       {/* Image Block (conditionally rendered) */}
       {hasImage && (
-        <div className="flex py-3 px-0" data-oid="post-image-container">
+        <div className="flex py-3 px-0" data-oid="i6jsra-">
           <img
-            className="w-full object-cover object-center aspect-[3/2] flex-1"
+            //w-full object-cover object-center aspect-[3/2] flex-1
+            //max-w-full h-auto block mx-auto my-6
+            className="max-w-full h-auto block mx-auto my-6"
             src={post.imageURL}
             alt="Post content"
-            data-oid="post-image"
+            data-oid="8:c9a7."
           />
         </div>
       )}

@@ -13,16 +13,16 @@ const ActionItem = ({ icon, count, handleClick }: ActionItemProps) => {
     <div
       className="flex items-center justify-center gap-2 cursor-pointer"
       onClick={handleClick}
-      data-oid="action-item-container"
+      data-oid="3:0_7k9"
     >
-      <svg className="w-6 h-6" viewBox="0 0 256 256" data-oid="action-item-svg">
+      <svg className="w-6 h-6" viewBox="0 0 256 256" data-oid="fjh8c62">
         <path
           d={icon}
           className="fill-secondary border-0"
-          data-oid="action-item-svg-path"
+          data-oid="v7nwobv"
         ></path>
       </svg>
-      <h3 data-oid="action-item-count">{count}</h3>
+      <h3 data-oid="ze_-p83">{count}</h3>
     </div>
   );
 };

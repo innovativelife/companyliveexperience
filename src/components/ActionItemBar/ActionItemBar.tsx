@@ -28,20 +28,20 @@ const ActionItemBar = ({ postId }: ActionItemBarProps) => {
   return (
     <div
       className="flex flex-wrap justify-between gap-4 pl-[20px] pr-[20px] pb-[18px] pt-[6px]"
-      data-oid="action-item-bar-container"
+      data-oid="tbkgi8h"
     >
       <ActionItem
         icon={svgs.addReaction}
         count={23}
         handleClick={likeFunction}
-        data-oid="action-item-bar-like"
+        data-oid="d5i_x6x"
       />
 
       <ActionItem
         icon={svgs.chat}
         count={5}
         handleClick={repliesFunction}
-        data-oid="action-item-bar-replies"
+        data-oid="2c-t9pl"
       />
     </div>
   );

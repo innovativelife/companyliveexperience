@@ -9,25 +9,21 @@ const ColoredSvgButtonProps = ({ imgSrc, label }: ColoredSvgButtonProps) => {
   return (
     <div
       className="flex flex-col items-center gap-2 bg-background py-2.5 w-20 text-center"
-      data-oid="colored-svg-button-container"
+      data-oid="hs-i9jg"
     >
       <div
         className="bg-inputs rounded-full p-2.5 fill-secondary"
-        data-oid="colored-svg-button-svg-container"
+        data-oid="5pzkrmf"
       >
-        <svg
-          className="w-6 h-6"
-          viewBox="0 0 256 256"
-          data-oid="colored-svg-button-svg"
-        >
+        <svg className="w-6 h-6" viewBox="0 0 256 256" data-oid="2k.kjr6">
           <path
             d={imgSrc}
             className="fill-text border-0"
-            data-oid="colore-svg-button-svg-path"
+            data-oid=":4l8kke"
           ></path>
         </svg>
       </div>
-      <p data-oid="colored-svg-button-label">{label}</p>
+      <p data-oid="2mwoy34">{label}</p>
     </div>
   );
 };

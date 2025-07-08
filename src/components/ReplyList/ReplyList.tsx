@@ -18,8 +18,8 @@ type ReplyListProps = {
 
 const ReplyList = ({ replies, employees }: ReplyListProps) => {
   return (
-    <div data-oid="reply-list-container">
-      <h2 className=" p-4" data-oid="reply-list-title">
+    <div data-oid="kn-a8.7">
+      <h2 className=" p-4" data-oid="bsaatb8">
         Replies
       </h2>
       {replies?.length === 0 ? (
@@ -32,10 +32,10 @@ const ReplyList = ({ replies, employees }: ReplyListProps) => {
               e.currentTarget.onerror = null; // Prevent infinite loop
               e.currentTarget.src = images.ImageNotFound;
             }}
-            data-oid="reply-list-no-replies-image"
+            data-oid="d-r:5i2"
           />
 
-          <h3 className="p-4 pt-0" data-oid="reply-list-no-replies-title">
+          <h3 className="p-4 pt-0" data-oid="e1fa47w">
             No replies yet
           </h3>
         </>
@@ -46,7 +46,7 @@ const ReplyList = ({ replies, employees }: ReplyListProps) => {
             key={index}
             reply={reply}
             employee={employees?.[reply.employeeUID]}
-            data-oid="reply-list-reply"
+            data-oid="dx8n7.u"
           />
         ))
       )}
