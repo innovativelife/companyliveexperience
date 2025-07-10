@@ -20,15 +20,21 @@ const baseQuery = fetchBaseQuery({
 
       const state = getState() as RootState;
       const token = state.auth.token;
+      const isAuthenticated = state.auth.isAuthenticated;
+      const displayName = state.auth.user?.displayName;
+
+      console.log("Setting up header - Auth state is:");
+      console.log("  - token: " + token);
+      console.log("  - isAuthenticated: " + isAuthenticated);
+      console.log("  - displayName: " + displayName);
+
       if (token)
       {
+        console.log("Adding Authorization header");
         headers.set('Authorization', `Bearer ${token}`)
       }
 
       headers.set("Content-Type", "application/json");
-
-      // Todo - Delete - not needed
-      // headers.set("tenantid", tenantId);
 
       // ToDo - Set the user id in state from this environment variable
       if (import.meta.env.DEV)

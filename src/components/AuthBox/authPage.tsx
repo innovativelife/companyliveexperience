@@ -13,12 +13,18 @@ import "./authPage.css"; // Import the CSS file
 const AuthPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated, user, status, error } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, user, status, error, token } = useSelector((state: RootState) => state.auth);
 
   // Redirect if already authenticated
   useEffect(() => {
+    console.log("UseEffect to check if user is authenticated in AuthPage:");
+    console.log("  - token: " + token);
+    console.log("  - isAuthenticated: " + isAuthenticated);
+    console.log("  - displayName: " + user?.displayName);
+
     if (isAuthenticated) {
-      navigate('/home'); // Redirect to home page
+      console.log("Authenticated - Redirect home");
+      // navigate('/home'); // Redirect to home page
     }
   }, [isAuthenticated, navigate]);
 
