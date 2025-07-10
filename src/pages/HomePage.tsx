@@ -33,7 +33,7 @@ const HomePage = () => {
     isError: postsIsError,
     refetch: postsRefetch,
   } = useGetPostsQuery(undefined, {
-    pollingInterval: 30000,
+    pollingInterval: 30000000,
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
