@@ -24,12 +24,15 @@ interface AuthState {
 
 // Load initial state from localStorage
 const loadInitialState = (): AuthState => {
+  console.log("LoadInitial State:")
   const storedToken = localStorage.getItem('authToken');
   const storedUser = localStorage.getItem('authUser');
   let user: UserData | null = null;
 
   if (storedUser) {
     try {
+      console.log("Loaded user from localStorage: " + storedUser)
+      console.log("Loaded token from localStorage: " + storedToken)
       user = JSON.parse(storedUser);
     } catch (e) {
       console.error("Failed to parse stored user data:", e);
@@ -59,12 +62,21 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.isAuthenticated = true;
+
+        console.log("setCredentials/reducer - check if user is authenticated in AuthPage:");
+        console.log("  - token: " + state.token);
+        console.log("  - displayName: " + state.user?.displayName);
+
         state.status = 'succeeded';
         state.error = null;
         localStorage.setItem('authToken', action.payload.token);
         localStorage.setItem('authUser', JSON.stringify(action.payload.user)); // Store serializable user data
       },
       prepare: (payload: { token: string; user: User }) => {
+        console.log("setCredentials/prepare - check if user is authenticated in AuthPage:");
+        console.log("  - token: " + payload.token);
+        console.log("  - displayName: " + payload.user?.displayName);
+
         // Transform the non-serializable Firebase User object into a serializable UserData
         const serializableUser: UserData = {
           uid: payload.user.uid,
@@ -89,6 +101,10 @@ const authSlice = createSlice({
         } else {
           localStorage.removeItem('authUser');
         }
+
+        console.log("setUser - check if user is authenticated in AuthPage:");
+        console.log("  - token: " + state.token);
+        console.log("  - displayName: " + state.user?.displayName);
       },
       prepare: (firebaseUser: User | null) => {
         let serializableUser: UserData | null = null;
