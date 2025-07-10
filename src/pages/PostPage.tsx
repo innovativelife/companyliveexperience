@@ -37,7 +37,7 @@ const PostPage = () => {
     isError: repliesIsError,
     refetch: repliesRefetch,
   } = useGetRepliesQuery(postId ?? "", {
-    pollingInterval: 30000,
+    pollingInterval: 30000000,
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
