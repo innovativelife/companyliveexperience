@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider, signOut } from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig'; // Import auth and googleProvider
 import { app } from '../../../firebaseConfig';
 import { setCredentials, logout, setAuthLoading, setAuthError } from '../../features/auth/authSlice';
