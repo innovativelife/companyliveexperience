@@ -1,14 +1,18 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { signInWithPopup, signOut } from 'firebase/auth';
-import { auth, googleProvider } from '../../../firebaseConfig'; // Import auth and googleProvider
+import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider, signOut } from 'firebase/auth';
+import { auth } from '../../../firebaseConfig'; // Import auth and googleProvider
+import { app } from '../../../firebaseConfig';
 import { setCredentials, logout, setAuthLoading, setAuthError } from '../../features/auth/authSlice';
 import type { RootState } from '../../app/store'; // Import RootState for useSelector
 
 // import LargeButton from "../LargeButton/LargeButton";
 
 import "./authPage.css"; // Import the CSS file
+
+// Initialize Firebase Auth
+const authenticator = getAuth(app);
 
 const AuthPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +35,13 @@ const AuthPage: React.FC = () => {
   const handleGoogleSignIn = async () => {
     dispatch(setAuthLoading());
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      // ToDo: Need to fix this - get tenantId from the URL and store in state
+      auth.tenantId = 'New-Tenant-999-rybgj';
+      console.log(`Attempting to sign in with tenant: ${auth.tenantId}`);
+
+      let googleProvider= new GoogleAuthProvider();
+
+      const result = await signInWithPopup(authenticator, googleProvider);
       const firebaseUser = result.user;
       const idToken = await firebaseUser.getIdToken();
 
@@ -158,7 +168,7 @@ const AuthPage: React.FC = () => {
   //     )}
   //   </div>
   // );
-  
+
 }
 
 export default AuthPage;
