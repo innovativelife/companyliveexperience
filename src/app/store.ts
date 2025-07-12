@@ -15,6 +15,8 @@ import { postsApi } from '../features/posts/postAPI';
 import repliesReducer from '../features/replies/repliesSlice';
 import { repliesApi } from '../features/replies/repliesAPI';
 
+import { publicTenantApi } from '../features/tenants/publicTenantApi';
+
 import authReducer from '../features/auth/authSlice';
 
 export const store = configureStore({
@@ -30,6 +32,7 @@ export const store = configureStore({
     replies: repliesReducer,
     [repliesApi.reducerPath]: repliesApi.reducer,
     auth: authReducer,
+    [publicTenantApi.reducerPath]: publicTenantApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -37,7 +40,8 @@ export const store = configureStore({
       uiConfigApi.middleware,
       employeesApi.middleware,
       postsApi.middleware,
-      repliesApi.middleware
+      repliesApi.middleware,
+      publicTenantApi.middleware,
     ),
 });
 

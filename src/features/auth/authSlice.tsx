@@ -1,7 +1,7 @@
 // src/features/auth/authSlice.ts
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from 'firebase/auth'; // Import Firebase User type
+import { User } from 'firebase/auth'; 
 
 // Define the serializable user data shape
 export interface UserData {
