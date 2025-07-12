@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Tenant, CreateTenantPayload } from "./tenantTypes";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
-const tenantId = import.meta.env.VITE_TENANT_ID;
 const userUID = import.meta.env.VITE_USER_UID;
 
 export const tenantApi = createApi({
@@ -12,7 +11,6 @@ export const tenantApi = createApi({
     baseUrl: `${API_BASE_URL}/api/v1/`,
     prepareHeaders: (headers) => {
       headers.set("Content-Type", "application/json");
-      headers.set("tenantid", tenantId);
       headers.set("uid", userUID);
       return headers;
     },

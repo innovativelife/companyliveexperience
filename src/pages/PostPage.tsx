@@ -13,7 +13,6 @@ import Spinner from "../components/Spinner/Spinner";
 
 import { useNavigate } from 'react-router-dom';
 
-
 //Data
 import { svgs } from "../assets/svgs";
 import { useGetRepliesQuery } from "../features/replies/repliesAPI";
@@ -21,6 +20,7 @@ import { useGetPostByIdQuery } from "../features/posts/postAPI";
 import { useGetEmployeesQuery } from "../features/employees/employeeAPI";
 
 const PostPage = () => {
+  const { tenantId } = useParams();
   //Top bar data
   const iconPath = svgs.back;
   
@@ -36,14 +36,14 @@ const PostPage = () => {
     isFetching: postIsFetching,
     isError: postIsError,
     refetch: postRefetch,
-  } = useGetPostByIdQuery(postId ?? ""); //{ data: post, isLoading, error }
+  } = useGetPostByIdQuery({tenantId: tenantId ?? "", postId: postId ?? ""});
 
   const {
     data: replies,
     isFetching: repliesIsFetching,
     isError: repliesIsError,
     refetch: repliesRefetch,
-  } = useGetRepliesQuery(postId ?? "", {
+  } = useGetRepliesQuery({tenantId: tenantId ?? "", postId: postId ?? ""}, {
     pollingInterval: 30000000,
     refetchOnFocus: true,
     refetchOnReconnect: true,
@@ -54,7 +54,7 @@ const PostPage = () => {
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
-  } = useGetEmployeesQuery(undefined, {
+  } = useGetEmployeesQuery({tenantId: tenantId ?? ""}, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });

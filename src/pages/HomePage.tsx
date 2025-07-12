@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import PullToRefresh from "react-pull-to-refresh";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 //Components
 import TopBar from "../components/TopBar/TopBar";
@@ -24,6 +24,8 @@ const HomePage = () => {
   const homeTitle = useSelector(selectPages).homeTitle ?? "Home";
   const iconPath = svgs.plus;
 
+  const { tenantId } = useParams<{ tenantId?: string }>();
+
   const navigate = useNavigate();
   const handleNavigation = () => {
     navigate('newpost')
@@ -38,7 +40,7 @@ const HomePage = () => {
     isFetching: postsIsFetching,
     isError: postsIsError,
     refetch: postsRefetch,
-  } = useGetPostsQuery(undefined, {
+  } = useGetPostsQuery({tenantId: tenantId ?? ""}, {
     pollingInterval: 30000000,
     refetchOnFocus: true,
     refetchOnReconnect: true,
@@ -49,7 +51,7 @@ const HomePage = () => {
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
-  } = useGetEmployeesQuery(undefined, {
+  } = useGetEmployeesQuery({tenantId: tenantId ?? ""}, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
