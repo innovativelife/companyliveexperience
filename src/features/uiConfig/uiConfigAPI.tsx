@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UiConfig } from "./uiConfigTypes";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
-const userUID = import.meta.env.VITE_USER_UID;
 
 export const uiConfigApi = createApi({
   reducerPath: "uiConfigApi",
@@ -11,7 +10,6 @@ export const uiConfigApi = createApi({
     baseUrl: `${API_BASE_URL}/api/v1/tenants/`,
     prepareHeaders: (headers) => {
       headers.set("Content-Type", "application/json");
-      headers.set("uid", userUID);
       return headers;
     },
   }),

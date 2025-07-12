@@ -1,20 +1,11 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { Tenant, CreateTenantPayload } from "./tenantTypes";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-const userUID = import.meta.env.VITE_USER_UID;
+import { baseQueryWithReauth } from "../common/baseQuery";
 
 export const tenantApi = createApi({
   reducerPath: "tenantApi",
   tagTypes: ["Tenant"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${API_BASE_URL}/api/v1/`,
-    prepareHeaders: (headers) => {
-      headers.set("Content-Type", "application/json");
-      headers.set("uid", userUID);
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     getTenants: builder.query<Tenant[], void>({
       query: () => `tenants/`,

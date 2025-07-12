@@ -1,21 +1,14 @@
 // services/postsApi.ts
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { Reply } from "./repliesType";
+import { baseQueryWithReauth } from "../common/baseQuery";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
 const userUID = import.meta.env.VITE_USER_UID;
 
 export const repliesApi = createApi({
   reducerPath: "repliesApi",
   tagTypes: ["Reply"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${API_BASE_URL}/api/v1/tenants/`,
-    prepareHeaders: (headers) => {
-      headers.set("Content-Type", "application/json");
-      headers.set("uid", userUID);
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     getReplies: builder.query<Reply[], {tenantId: string, postId: string} >({
       query: (query) => `${query.tenantId}/${query.postId}/replies`,
