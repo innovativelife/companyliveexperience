@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import PullToRefresh from "react-pull-to-refresh";
+import { useParams, useNavigate } from "react-router-dom";
 
 //Components
 import TopBar from "../components/TopBar/TopBar";
@@ -22,7 +23,14 @@ const HomePage = () => {
   //Top bar data
   const homeTitle = useSelector(selectPages).homeTitle ?? "Home";
   const iconPath = svgs.plus;
-  const topBarButtonLocation = "/home/newpost";
+
+  const { tenantId } = useParams<{ tenantId?: string }>();
+
+  const navigate = useNavigate();
+  const handleNavigation = () => {
+    navigate('newpost')
+  };
+
   const appBannerUrl =
     useSelector(selectAppBannerUrl).appBannerUrl ?? images.ImageNotFound;
 
@@ -32,7 +40,7 @@ const HomePage = () => {
     isFetching: postsIsFetching,
     isError: postsIsError,
     refetch: postsRefetch,
-  } = useGetPostsQuery(undefined, {
+  } = useGetPostsQuery({tenantId: tenantId ?? ""}, {
     pollingInterval: 30000000,
     refetchOnFocus: true,
     refetchOnReconnect: true,
@@ -43,7 +51,7 @@ const HomePage = () => {
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
-  } = useGetEmployeesQuery(undefined, {
+  } = useGetEmployeesQuery({tenantId: tenantId ?? ""}, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
@@ -68,7 +76,7 @@ const HomePage = () => {
         <TopBar
           title={homeTitle}
           icon={iconPath}
-          buttonClickLocation={topBarButtonLocation}
+          onClick={handleNavigation}
           data-oid="home-page-top-bar"
         />
 

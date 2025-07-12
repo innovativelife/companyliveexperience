@@ -28,7 +28,13 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  const { data: uiConfig, isLoading, isError } = useGetUiConfigByTenantQuery();
+  const pathSegments = window.location.pathname.split('/');
+
+  // ToDo: Need to add error handling.  ie. Tenant not included in URL.  Probably render an error page?
+  let tenantId = pathSegments[1];
+
+  console.log("TenantId from URL: " + tenantId);
+  const { data: uiConfig, isLoading, isError } = useGetUiConfigByTenantQuery({tenantId: tenantId});
 
   useEffect(() => {
     if (uiConfig) {
@@ -54,7 +60,7 @@ export default function App() {
       >
         <Routes data-oid="app-routes">
           <Route
-            path="/"
+            path="/:tenantId/"
             element={<Layout data-oid="app-layout" />}
             data-oid="app-layout-route"
           >

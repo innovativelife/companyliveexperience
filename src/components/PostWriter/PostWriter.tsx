@@ -1,6 +1,6 @@
 // import "./LargeButton.css";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { uploadOptionsType } from "../ColoredSvgButtonList/ColoredSvgButtonList";
 
@@ -47,7 +47,9 @@ const PostWriter = () => {
 
   const sendMessage = async () => {
     try {
-      await createPost(postText).unwrap(); // unwrap gives you the raw response or throws
+      const { tenantId } = useParams();
+
+      await createPost({ tenantId: tenantId ?? "", message: postText }).unwrap(); // unwrap gives you the raw response or throws
       navigate("/home"); // Navigate on success
     } catch (err) {
       console.error("Failed to create post:", err);

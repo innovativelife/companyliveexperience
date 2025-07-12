@@ -71,6 +71,7 @@ const authSlice = createSlice({
         state.error = null;
         localStorage.setItem('authToken', action.payload.token);
         localStorage.setItem('authUser', JSON.stringify(action.payload.user)); // Store serializable user data
+        
       },
       prepare: (payload: { token: string; user: User }) => {
         console.log("setCredentials/prepare - check if user is authenticated in AuthPage:");

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 //Css
 // import "./TopBar.css";
@@ -6,15 +6,16 @@ import { useNavigate } from "react-router-dom";
 type TopBarProps = {
   title: string;
   icon: string;
-  buttonClickLocation: string;
+  // buttonClickLocation: string;
+  onClick: () => void;
 };
 
-const TopBar = ({ title, icon, buttonClickLocation }: TopBarProps) => {
-  const navigate = useNavigate();
+const TopBar = ({ title, icon, onClick }: TopBarProps) => {
+  // const navigate = useNavigate();
 
-  function handleClick() {
-    navigate(buttonClickLocation);
-  }
+  // function handleClick() {
+  //   navigate(buttonClickLocation);
+  // }
 
   return (
     <div
@@ -22,7 +23,7 @@ const TopBar = ({ title, icon, buttonClickLocation }: TopBarProps) => {
       data-oid="top-bar-container"
     >
       <div
-        onClick={handleClick}
+        onClick={onClick}
         className="text-text flex h-12 w-12 items-center shrink-0"
         data-weight="regular"
         data-oid="top-bar-svg-container"

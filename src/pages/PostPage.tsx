@@ -11,6 +11,8 @@ import ReplyList from "../components/ReplyList/ReplyList";
 import PostInput from "../components/ReplyInput/ReplyInput";
 import Spinner from "../components/Spinner/Spinner";
 
+import { useNavigate } from 'react-router-dom';
+
 //Data
 import { svgs } from "../assets/svgs";
 import { useGetRepliesQuery } from "../features/replies/repliesAPI";
@@ -18,9 +20,14 @@ import { useGetPostByIdQuery } from "../features/posts/postAPI";
 import { useGetEmployeesQuery } from "../features/employees/employeeAPI";
 
 const PostPage = () => {
+  const { tenantId } = useParams();
   //Top bar data
   const iconPath = svgs.back;
-  const topBarButtonLocation = "/home";
+  
+  const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate(-1); // This is the recommended way to go back!
+  };
 
   //Chanel data
   const { postId } = useParams();
@@ -29,14 +36,14 @@ const PostPage = () => {
     isFetching: postIsFetching,
     isError: postIsError,
     refetch: postRefetch,
-  } = useGetPostByIdQuery(postId ?? ""); //{ data: post, isLoading, error }
+  } = useGetPostByIdQuery({tenantId: tenantId ?? "", postId: postId ?? ""});
 
   const {
     data: replies,
     isFetching: repliesIsFetching,
     isError: repliesIsError,
     refetch: repliesRefetch,
-  } = useGetRepliesQuery(postId ?? "", {
+  } = useGetRepliesQuery({tenantId: tenantId ?? "", postId: postId ?? ""}, {
     pollingInterval: 30000000,
     refetchOnFocus: true,
     refetchOnReconnect: true,
@@ -47,7 +54,7 @@ const PostPage = () => {
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
-  } = useGetEmployeesQuery(undefined, {
+  } = useGetEmployeesQuery({tenantId: tenantId ?? ""}, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
   });
@@ -71,7 +78,7 @@ const PostPage = () => {
       <TopBar
         title="Post"
         icon={iconPath}
-        buttonClickLocation={topBarButtonLocation}
+        onClick={handleGoBack}
         data-oid="3h_kbqw"
       />
 

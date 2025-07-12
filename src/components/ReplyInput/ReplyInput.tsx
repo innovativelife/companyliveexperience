@@ -1,4 +1,5 @@
 import React, { useState, useCallback, ChangeEvent } from "react";
+import { useParams } from "react-router-dom";
 
 //Components
 import Avatar from "../Avatar/Avatar";
@@ -16,9 +17,12 @@ import { svgs } from "../../assets/svgs";
 import { useCreateReplyMutation } from "../../features/replies/repliesAPI";
 import { useGetEmployeeByIdQuery } from "../../features/employees/employeeAPI";
 
+
 const ReplyInput = ({ postId }: PostProps) => {
   const userUID = import.meta.env.VITE_USER_UID;
-  const user = useGetEmployeeByIdQuery(userUID).data;
+  const { tenantId } = useParams<{ tenantId: string }>();
+  
+  const user = useGetEmployeeByIdQuery({tenantId: tenantId ?? "", employeeUID: userUID ?? ""}).data;
 
   // const user = useSelector((state: RootState) => state.auth.user);
   //
@@ -47,7 +51,7 @@ const ReplyInput = ({ postId }: PostProps) => {
       event.preventDefault();
       console.log(`Sending ${message}`);
       try {
-        await createReply({ message, postId }).unwrap(); // Unwrap to handle rejections properly
+        await createReply({tenantId: tenantId ?? "", message, postId }).unwrap(); // Unwrap to handle rejections properly
         setMessage(""); // Clear input
       } catch (err) {
         console.error("Failed to send reply:", err);
