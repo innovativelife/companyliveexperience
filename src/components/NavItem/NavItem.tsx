@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useResolvedPath } from "react-router-dom";
 
 //Css
 // import "./NavItem.css";
@@ -13,9 +13,11 @@ type TopBarProps = {
 const TopBar = ({ label, iconPath, active, location }: TopBarProps) => {
   //Navigation
   const navigate = useNavigate();
+  const toPath = "../"+ location;
+  const resolved = useResolvedPath(toPath);
 
   function handleClick() {
-    navigate(location);
+    navigate(resolved);
   }
 
   //Determine color

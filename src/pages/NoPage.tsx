@@ -4,7 +4,7 @@ import Padding from "../components/Padding/Padding";
 import LargeButton from "../components/LargeButton/LargeButton";
 
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useResolvedPath } from "react-router-dom";
 
 import { svgs } from "../assets/svgs";
 import { images } from "../assets/images";
@@ -17,9 +17,16 @@ const NoPage = () => {
   //Navigation
   const navigate = useNavigate();
 
-  function handleClick() {
-    navigate("/home");
+  const toPath = "../home";
+  const resolved = useResolvedPath(toPath);
+
+  function handleGoHome() {
+    navigate(resolved);
   }
+
+  const handleGoBack = () => {
+    navigate(-1); // This is the recommended way to go back!
+  };
 
   //Styles
   const containerStyle: React.CSSProperties = {
@@ -50,7 +57,7 @@ const NoPage = () => {
       <TopBar
         title="Page Not Found"
         icon={svgs.back}
-        buttonClickLocation="/home"
+        onClick={handleGoBack}
         data-oid="9upi6dp"
       />
 
@@ -65,7 +72,7 @@ const NoPage = () => {
           URL or try navigating back to the main site.
         </p>
       </div>
-      <LargeButton onClick={handleClick} label="Go Back" data-oid="y-n3wpt" />
+      <LargeButton onClick={handleGoHome} label="Go Back" data-oid="y-n3wpt" />
     </>
   );
 };

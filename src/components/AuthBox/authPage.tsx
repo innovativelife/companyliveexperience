@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig'; // Import auth and googleProvider
 import { app } from '../../../firebaseConfig';
@@ -18,6 +18,7 @@ const AuthPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, user, status, error, token } = useSelector((state: RootState) => state.auth);
+  const { tenantId } = useParams();
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -28,7 +29,11 @@ const AuthPage: React.FC = () => {
 
     if (isAuthenticated) {
       console.log("Authenticated - Redirect home");
-      // navigate('/home'); // Redirect to home page
+      if (tenantId) {
+        navigate(`/${tenantId}/home`); // Redirect to the tenant's home page
+      } else {
+        navigate('/'); // Or handle the case where tenantId is not available
+      }
     }
   }, [isAuthenticated, navigate]);
 

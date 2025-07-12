@@ -54,7 +54,7 @@ export default function App() {
       >
         <Routes data-oid="app-routes">
           <Route
-            path="/"
+            path="/:tenantId/"
             element={<Layout data-oid="app-layout" />}
             data-oid="app-layout-route"
           >

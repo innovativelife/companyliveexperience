@@ -11,6 +11,9 @@ import ReplyList from "../components/ReplyList/ReplyList";
 import PostInput from "../components/ReplyInput/ReplyInput";
 import Spinner from "../components/Spinner/Spinner";
 
+import { useNavigate } from 'react-router-dom';
+
+
 //Data
 import { svgs } from "../assets/svgs";
 import { useGetRepliesQuery } from "../features/replies/repliesAPI";
@@ -20,7 +23,11 @@ import { useGetEmployeesQuery } from "../features/employees/employeeAPI";
 const PostPage = () => {
   //Top bar data
   const iconPath = svgs.back;
-  const topBarButtonLocation = "/home";
+  
+  const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate(-1); // This is the recommended way to go back!
+  };
 
   //Chanel data
   const { postId } = useParams();
@@ -71,7 +78,7 @@ const PostPage = () => {
       <TopBar
         title="Post"
         icon={iconPath}
-        buttonClickLocation={topBarButtonLocation}
+        onClick={handleGoBack}
         data-oid="3h_kbqw"
       />
 

@@ -6,6 +6,8 @@ import Padding from "../components/Padding/Padding";
 import PostWriter from "../components/PostWriter/PostWriter";
 import Spinner from "../components/Spinner/Spinner";
 
+import { useNavigate } from 'react-router-dom';
+
 //Data
 import { useGetEmployeeByIdQuery } from "../features/employees/employeeAPI";
 import { svgs } from "../assets/svgs";
@@ -14,7 +16,11 @@ const userUID = import.meta.env.VITE_USER_UID;
 const NewPostPage = () => {
   //Top bar data
   const iconPath = svgs.back;
-  const topBarButtonLocation = "/home";
+
+  const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate(-1); // This is the recommended way to go back!
+  };
 
   //Chanel data
   const {
@@ -28,7 +34,7 @@ const NewPostPage = () => {
       <TopBar
         title="New Post"
         icon={iconPath}
-        buttonClickLocation={topBarButtonLocation}
+        onClick={handleGoBack}
         data-oid="new-post-top-bar"
       />
 

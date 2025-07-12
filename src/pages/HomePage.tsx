@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import PullToRefresh from "react-pull-to-refresh";
+import { useNavigate } from "react-router-dom";
 
 //Components
 import TopBar from "../components/TopBar/TopBar";
@@ -22,7 +23,12 @@ const HomePage = () => {
   //Top bar data
   const homeTitle = useSelector(selectPages).homeTitle ?? "Home";
   const iconPath = svgs.plus;
-  const topBarButtonLocation = "/home/newpost";
+
+  const navigate = useNavigate();
+  const handleNavigation = () => {
+    navigate('newpost')
+  };
+
   const appBannerUrl =
     useSelector(selectAppBannerUrl).appBannerUrl ?? images.ImageNotFound;
 
@@ -68,7 +74,7 @@ const HomePage = () => {
         <TopBar
           title={homeTitle}
           icon={iconPath}
-          buttonClickLocation={topBarButtonLocation}
+          onClick={handleNavigation}
           data-oid="home-page-top-bar"
         />
 
