@@ -27,7 +27,7 @@ const AuthPage: React.FC = () => {
     console.log("  - isAuthenticated: " + isAuthenticated);
     console.log("  - displayName: " + user?.displayName);
 
-    if (isAuthenticated) {
+    if (isAuthenticated && token) {
       console.log("Authenticated - Redirect home");
       if (tenantId) {
         navigate(`/${tenantId}/home`); // Redirect to the tenant's home page
