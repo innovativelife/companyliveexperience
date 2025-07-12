@@ -6,14 +6,14 @@ import { auth } from '../../../firebaseConfig'; // Import auth and googleProvide
 import { app } from '../../../firebaseConfig';
 import { setCredentials, logout, setAuthLoading, setAuthError } from '../../features/auth/authSlice';
 import type { RootState } from '../../app/store'; // Import RootState for useSelector
-
-// import LargeButton from "../LargeButton/LargeButton";
+import { useGetTenantByIdQuery } from "../../features/tenants/publicTenantApi";
 
 import "./authPage.css"; // Import the CSS file
 
 // Initialize Firebase Auth
 const authenticator = getAuth(app);
 
+// Get tenant details from URL
 const AuthPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,24 +37,73 @@ const AuthPage: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  // const { data: tenantDetails, error: apiError, isLoading } = useGetTenantByIdQuery(tenantId ?? "");
+
+  // const handleGoogleSignIn = async () => {
+  //   dispatch(setAuthLoading());
+  //   try {
+  //     // Check if the query is still loading
+  //     if (isLoading) {
+  //       throw new Error("Still loading tenant details. Please wait...");
+  //     }
+
+  //     if (apiError || !tenantDetails) {
+  //       // Handle API error (e.g., tenant not found, network error)
+  //       if (apiError) {
+  //         console.error("Error fetching tenant details:", apiError);
+  //       }
+
+  //       if (!tenantDetails) {
+  //         console.error("tenantDetails is null or empty:", tenantDetails);
+  //       }
+
+  //       throw new Error(`Failed to fetch tenant details for ID: ${tenantId}. Please check the URL.`);
+  //     }
+
+  //     console.log(`Successfully fetched tenant details:`, tenantDetails);
+
+  //     auth.tenantId = tenantDetails.identityManagerTenantIdTenantId;
+  //     console.log(`Attempting to sign in with tenant: ${auth.tenantId}`);
+
+  //     let googleProvider = new GoogleAuthProvider();
+
+  //     const result = await signInWithPopup(authenticator, googleProvider);
+  //     const firebaseUser = result.user;
+  //     const idToken = await firebaseUser.getIdToken();
+
+  //     dispatch(setCredentials({ token: idToken, user: firebaseUser }));
+
+  //   } catch (err: any) {
+  //     console.error("Google sign-in error:", err);
+  //     dispatch(setAuthError(err.message || "Failed to sign in with Google."));
+  //   }
+  // };
+  const { data: tenantDetails, error: apiError, isLoading } = useGetTenantByIdQuery(tenantId ?? "");
+
+  useEffect(() => {
+    console.log('Query result:', { tenantDetails, apiError, isLoading });
+  }, [tenantDetails, apiError, isLoading]);
+
   const handleGoogleSignIn = async () => {
     dispatch(setAuthLoading());
     try {
-      // ToDo: Need to fix this - get tenantId from the URL and store in state
-      auth.tenantId = 'New-Tenant-999-rybgj';
+      // At this point, tenantDetails should be available because button was disabled
+      if (!tenantDetails) {
+        throw new Error(`Tenant details not available for ID: ${tenantId}. Please refresh the page.`);
+      }
+
+      console.log(`Successfully using tenant details:`, tenantDetails);
+      auth.tenantId = tenantDetails.identityManagerTenantIdTenantId;
       console.log(`Attempting to sign in with tenant: ${auth.tenantId}`);
 
-      let googleProvider= new GoogleAuthProvider();
+      let googleProvider = new GoogleAuthProvider();
 
       const result = await signInWithPopup(authenticator, googleProvider);
       const firebaseUser = result.user;
       const idToken = await firebaseUser.getIdToken();
 
-      // Dispatch setCredentials with token and the Firebase User object
-      // The prepare callback in authSlice will handle serialization
       dispatch(setCredentials({ token: idToken, user: firebaseUser }));
 
-      // Redirection handled by useEffect above
     } catch (err: any) {
       console.error("Google sign-in error:", err);
       dispatch(setAuthError(err.message || "Failed to sign in with Google."));
@@ -101,6 +150,7 @@ const AuthPage: React.FC = () => {
         ) : (
           <button
             onClick={handleGoogleSignIn}
+            disabled={ !tenantDetails }
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center space-x-2"
           >
             Sign in with Google

@@ -30,10 +30,13 @@ export default function App() {
 
   const pathSegments = window.location.pathname.split('/');
 
-  // ToDo: Need to add error handling.  ie. Tenant not included in URL.  Probably render an error page?
+  // Get tenant details from URL
   let tenantId = pathSegments[1];
-
   console.log("TenantId from URL: " + tenantId);
+
+  // Get Identity Manager Tenant Id
+
+  // Get config
   const { data: uiConfig, isLoading, isError } = useGetUiConfigByTenantQuery({tenantId: tenantId});
 
   useEffect(() => {
