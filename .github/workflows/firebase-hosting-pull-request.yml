@@ -70,15 +70,15 @@ jobs:
          expires: 7d # channel expires after 7 days
          
       # Step 5b: Deploy to a Preview Channel (triggered by PR or manual dispatch)
-      # On PR trigger, the action automatically generates a channel ID.
-      - name: Deploy to Firebase Hosting PR Channel
+      # On PR trigger, deploy to staging channel.
+      - name: Deploy to Firebase Hosting Staging Channel
         if: github.event_name == 'pull_request'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
          repoToken: '${{secrets.GITHUB_TOKEN }}'
          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
          projectId: companylive-c3879
-         channelId: preview
+         channelId: staging
          expires: 7d # channel expires after 7 days
          
       # Step 5c: Deploy to the Live Channel (triggered by push to main or manual trigger)
