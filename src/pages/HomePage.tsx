@@ -24,6 +24,7 @@ const HomePage = () => {
   const homeTitle = useSelector(selectPages).homeTitle ?? "Home";
   const iconPath = svgs.plus;
 
+  // Get reqired state data
   const { tenantId } = useParams<{ tenantId?: string }>();
 
   const navigate = useNavigate();
