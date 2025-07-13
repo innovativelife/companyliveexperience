@@ -1,4 +1,4 @@
-# This workflow automatically builds and deploys your React app
+# This workflow automatically builds and deploys the companyliveexperience React app
 # to Firebase Hosting on PRs and pushes to the main branch.
 # It also allows manual triggering with a specified channel ID.
 
@@ -25,7 +25,6 @@ on:
         type: string
       # You could add other inputs here, like a branch name to checkout if needed,
       # but for a typical build from the currently checked out commit, channel_id is key.
-
 
 jobs:
   build_and_deploy:
@@ -55,24 +54,30 @@ jobs:
         run: npm run build
 
       # Step 5a: Deploy to a Preview Channel (triggered by PR or manual dispatch)
-      # We use an 'if' condition to run this step ONLY on pull_request or manual trigger.
       # On PR trigger, the action automatically generates a channel ID.
-      # - name: Deploy to Firebase Hosting Preview Channel
-      #  if: github.event_name == 'pull_request'
-      #  uses: FirebaseExtended/action-hosting-deploy@v0
-      #  with:
-      #    repoToken: '${{ secrets.GITHUB_TOKEN }}'
-      #    firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
-      #    projectId: companylive-c3879
-      #    public: dist
-          # Pass the channelId input ONLY when manually triggered.
-          # The action automatically handles channel IDs for PRs.
-          # We check if the input exists because it won't on a PR trigger.
-      #    channelId: ${{ github.event.inputs.channel_id }}
-          # You might also want an expiration for manual preview channels
-      #    expires: 7d # Example: channel expires after 7 days
-
-      # Step 5b: Deploy to the Live Channel (triggered by push to main or manual trigger)
+      - name: Deploy to Firebase Hosting PR Channel
+        if: github.event_name == 'pull_request'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+         repoToken: '${{secrets.GITHUB_TOKEN }}'
+         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
+         projectId: companylive-c3879
+         public: dist
+         expires: 7d # Example: channel expires after 7 days
+         
+      # Step 5b: Deploy to a Preview Channel (triggered by PR or manual dispatch)
+      # On PR trigger, the action automatically generates a channel ID.
+      - name: Deploy to Firebase Hosting PR Channel
+        if: github.event_name == 'pull_request'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+         repoToken: '${{secrets.GITHUB_TOKEN }}'
+         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
+         projectId: companylive-c3879
+         public: dist
+         channelId: 7d # Example: channel expires after 7 days
+         
+      # Step 5c: Deploy to the Live Channel (triggered by push to main or manual trigger)
       - name: Deploy to Firebase Hosting Live Channel
         if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
         uses: FirebaseExtended/action-hosting-deploy@v0
