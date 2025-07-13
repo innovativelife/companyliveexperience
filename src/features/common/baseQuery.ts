@@ -1,13 +1,12 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import type { RootState } from '../../app/store'; // Import your RootState type
-// import { logout } from '../../features/auth/authSlice';
+import type { RootState } from '../../app/store';
 
 // Define base URL
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 const baseUrl = `${API_BASE_URL}/api/v1/tenants/`;
 
-// Create a base query that injects the authorization header
+// Create a base query that injects the authorization header.  Used by all API's that require Authentication.
 const baseQueryWithAuth = fetchBaseQuery({
   baseUrl: baseUrl,
   prepareHeaders: (headers, { getState }) => {
@@ -25,9 +24,8 @@ const baseQueryWithAuth = fetchBaseQuery({
       console.log("Adding Authorization header");
       headers.set('Authorization', `Bearer ${token}`)
     }
-    else
-    {
-      console.log("Error - Token empty");
+    else {
+      console.error("Error - Token empty");
     }
 
     headers.set("Content-Type", "application/json");
@@ -53,24 +51,24 @@ export const baseQueryWithReauth: BaseQueryFn<
     const refreshResult = await baseQueryWithAuth('/refresh-token', api, extraOptions);
 
     if (refreshResult.data) {
-        // To do - Implement Re-auth
-        console.log("Reauth not implmented");
-    //   // If refresh successful, update the token in your Redux store
-    //   api.dispatch(setCredentials(refreshResult.data));
-    //   // Retry the original request
-    //   result = await baseQueryWithAuth(args, api, extraOptions);
-    // } else {
-    //   // If refresh fails, log out the user
-    //   api.dispatch(clearCredentials());
-    
+      // To do - Implement Re-auth
+      console.log("Reauth not implmented");
+      //   // If refresh successful, update the token in your Redux store
+      //   api.dispatch(setCredentials(refreshResult.data));
+      //   // Retry the original request
+      //   result = await baseQueryWithAuth(args, api, extraOptions);
+      // } else {
+      //   // If refresh fails, log out the user
+      //   api.dispatch(clearCredentials());
 
-    //   if (result.error && (result.error.status === 401 || result.error.status === 403)) {
-    //     console.warn('Unauthorized or Forbidden: Logging out user.');
-    //     api.dispatch(logout()); // Dispatch logout action
-    //     // ToDo: Add a global redirect here if not handled by a PrivateRoute
-    //     // For example: window.location.href = '/login';
-    //   }
-    //   return result;
+
+      //   if (result.error && (result.error.status === 401 || result.error.status === 403)) {
+      //     console.warn('Unauthorized or Forbidden: Logging out user.');
+      //     api.dispatch(logout()); // Dispatch logout action
+      //     // ToDo: Add a global redirect here if not handled by a PrivateRoute
+      //     // For example: window.location.href = '/login';
+      //   }
+      //   return result;
     }
   }
   return result;

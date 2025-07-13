@@ -10,7 +10,7 @@ export interface UserData {
   displayName: string | null;
   photoURL: string | null;
   emailVerified: boolean;
-  // Add any other user properties you explicitly need and are serializable
+  // ToDo: Add any other user properties you explicitly need and are serializable
 }
 
 // Define the shape of the authentication state

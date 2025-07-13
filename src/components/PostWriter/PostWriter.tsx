@@ -48,8 +48,9 @@ const PostWriter = () => {
   const sendMessage = async () => {
     try {
       const { tenantId } = useParams();
+      const { userUID } = useParams<{ userUID?: string }>();
 
-      await createPost({ tenantId: tenantId ?? "", message: postText }).unwrap(); // unwrap gives you the raw response or throws
+      await createPost({ tenantId: tenantId ?? "", userUid: userUID ?? "", message: postText }).unwrap(); // unwrap gives you the raw response or throws
       navigate("/home"); // Navigate on success
     } catch (err) {
       console.error("Failed to create post:", err);
