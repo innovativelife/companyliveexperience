@@ -62,8 +62,8 @@ jobs:
          repoToken: '${{secrets.GITHUB_TOKEN }}'
          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
          projectId: companylive-c3879
-         public: dist
-         expires: 7d # Example: channel expires after 7 days
+         channelId: pr
+         expires: 7d # channel expires after 7 days
          
       # Step 5b: Deploy to a Preview Channel (triggered by PR or manual dispatch)
       # On PR trigger, the action automatically generates a channel ID.
@@ -74,8 +74,8 @@ jobs:
          repoToken: '${{secrets.GITHUB_TOKEN }}'
          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
          projectId: companylive-c3879
-         public: dist
-         channelId: 7d # Example: channel expires after 7 days
+         channelId: preview
+         expires: 7d # channel expires after 7 days
          
       # Step 5c: Deploy to the Live Channel (triggered by push to main or manual trigger)
       - name: Deploy to Firebase Hosting Live Channel
