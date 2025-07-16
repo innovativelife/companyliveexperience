@@ -19,15 +19,13 @@ const SvgButton = ({ onHandleClick, imgSrc }: SvgButtonProps) => {
     <div
       className="display-flex items-center justify-center h-8"
       onClick={handleClick}
-      data-oid="lk-htck"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="w-6 h-6"
         viewBox="0 0 256 256"
-        data-oid=".pnat5x"
       >
-        <path d={imgSrc} className="fill-text border-0" data-oid="6tibmcg" />
+        <path d={imgSrc} className="fill-text border-0" />
       </svg>
     </div>
   );

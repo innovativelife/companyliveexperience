@@ -8,8 +8,9 @@ import NavBar from "../components/NavBar/NavBar";
 import Post from "../components/Post/Post";
 import Padding from "../components/Padding/Padding";
 import ReplyList from "../components/ReplyList/ReplyList";
-import PostInput from "../components/ReplyInput/ReplyInput";
+import ReplyInput from "../components/ReplyInput/ReplyInput";
 import Spinner from "../components/Spinner/Spinner";
+import PostSkeleton from "../components/Post/PostSkeleton";
 
 //Data
 import { svgs } from "../assets/svgs";
@@ -26,6 +27,7 @@ const PostPage = () => {
   const { postId } = useParams();
   const {
     data: post,
+    isLoading: postsIsLoading,
     isFetching: postIsFetching,
     isError: postIsError,
     refetch: postRefetch,
@@ -33,6 +35,7 @@ const PostPage = () => {
 
   const {
     data: replies,
+    isLoading: repliesIsLoading,
     isFetching: repliesIsFetching,
     isError: repliesIsError,
     refetch: repliesRefetch,
@@ -44,6 +47,7 @@ const PostPage = () => {
 
   const {
     data: employees,
+    isLoading: employeesIsLoading,
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
@@ -58,8 +62,29 @@ const PostPage = () => {
     );
   }, [employees]);
 
+  // Determine if background fetching is happening for spinner
+  const isBackgroundFetching =
+    (postIsFetching && !postsIsLoading) ||
+    (employeesIsFetching && !employeesIsLoading) ||
+    (repliesIsFetching && !repliesIsLoading);
+
   const refetchAll = async () => {
     await Promise.all([employeesRefetch(), postRefetch(), repliesRefetch()]);
+  };
+
+  const renderPost = () => {
+    if (postsIsLoading) return <PostSkeleton />;
+    else if (!post || postIsError)
+      return <p className="errorMessage">Error fetching post</p>;
+    else
+      return (
+        <Post
+          post={post}
+          postLoading={postsIsLoading}
+          employee={employeeMap[post.employeeUID]}
+          employeeLoading={employeesIsLoading}
+        />
+      );
   };
 
   return (
@@ -73,21 +98,27 @@ const PostPage = () => {
         buttonClickLocation={topBarButtonLocation}
       />
 
-      {post ? (
-        <Post post={post} employee={employeeMap[post.employeeUID]} />
-      ) : (
-        <p>Loading Post...</p>
-      )}
-      {postIsError && <p className="errorMessage">Error fetching post</p>}
-      {(repliesIsFetching || employeesIsFetching || postIsFetching) && (
-        <Spinner />
-      )}
+      {/* Render post as a skeleton, error or post */}
+      {renderPost()}
+
+      {/* Apply Spinner for background  reload*/}
+      {isBackgroundFetching && <Spinner />}
+
+      {/* Show error messages if their are problems fetchinreplies or employees*/}
       {repliesIsError && <p className="errorMessage">Error fetching replies</p>}
       {employeesIsError && (
         <p className="errorMessage">Error fetching employees</p>
       )}
-      <ReplyList replies={replies} employees={employeeMap} />
-      <PostInput postId={postId ?? ""} />
+
+      <ReplyList
+        replies={replies}
+        replyLoading={repliesIsLoading}
+        employees={employeeMap}
+        employeeLoading={employeesIsLoading}
+      />
+
+      <ReplyInput postId={postId ?? ""} employeeLoading={employeesIsLoading} />
+
       <NavBar />
 
       <Padding />

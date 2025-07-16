@@ -29,6 +29,7 @@ const HomePage = () => {
   //All post Data
   const {
     data: posts,
+    isLoading: postsIsLoading,
     isFetching: postsIsFetching,
     isError: postsIsError,
     refetch: postsRefetch,
@@ -40,6 +41,7 @@ const HomePage = () => {
 
   const {
     data: employees,
+    isLoading: employeesIsLoading,
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
@@ -54,6 +56,15 @@ const HomePage = () => {
     );
   }, [employees]);
 
+  // Determine if initial load is happening for skeletons
+  // const isInitialLoading = postsIsLoading || employeesIsLoading;
+  // console.log(isInitialLoading);
+
+  // Determine if background fetching is happening for spinner
+  const isBackgroundFetching =
+    (postsIsFetching && !postsIsLoading) ||
+    (employeesIsFetching && !employeesIsLoading);
+
   const refetchAll = async () => {
     await Promise.all([employeesRefetch(), postsRefetch()]);
   };
@@ -63,33 +74,36 @@ const HomePage = () => {
       <PullToRefresh
         onRefresh={() => refetchAll().then(() => {})}
         style={{ minHeight: "100vh" }}
-        data-oid="vrmj79g"
       >
         <TopBar
           title={homeTitle}
           icon={iconPath}
           buttonClickLocation={topBarButtonLocation}
-          data-oid="tt9kc3p"
         />
 
-        {(postsIsFetching || employeesIsFetching) && (
-          <Spinner data-oid="-dmueko" />
-        )}
-        <Banner bannerUrl={appBannerUrl} data-oid="2lx0xjk" />
-        {postsIsError && (
-          <p className="errorMessage" data-oid="nb_jthl">
-            Error fetching posts
-          </p>
-        )}
-        {employeesIsError && (
-          <p className="errorMessage" data-oid="efbr:o:">
-            Error fetching employees
-          </p>
-        )}
-        <PostList posts={posts} employees={employeeMap} data-oid="vj:po-y" />
+        {/* Apply Spinner for background  reload*/}
+        {isBackgroundFetching && <Spinner />}
 
-        <NavBar data-oid="xramyi5" />
-        <Padding data-oid="lpnnmom" />
+        <Banner
+          bannerUrl={appBannerUrl}
+          fallbackImageUrl={images.ImageNotFound}
+        />
+
+        {/* Show error messages if their are problems fetching posts or employees*/}
+        {postsIsError && <p className="errorMessage">Error fetching posts</p>}
+        {employeesIsError && (
+          <p className="errorMessage">Error fetching employees</p>
+        )}
+
+        <PostList
+          posts={posts}
+          postLoading={postsIsLoading}
+          employees={employeeMap}
+          employeeLoading={employeesIsLoading}
+        />
+
+        <NavBar />
+        <Padding />
       </PullToRefresh>
     </>
   );

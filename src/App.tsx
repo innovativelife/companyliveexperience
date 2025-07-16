@@ -10,6 +10,13 @@ import { auth } from "../firebaseConfig";
 import { useEffect } from "react";
 import { setUiConfig } from "./features/uiConfig/uiConfigSlice";
 
+import HomePageSkeleton from "./components/PageSkeletons/HomePageSkeleton";
+import PostPageSkeleton from "./components/PageSkeletons/PostPageSkeleton";
+import NewPostPageSkeleton from "./components/PageSkeletons/NewPostPageSkeleton";
+import NoPageSkeleton from "./components/PageSkeletons/NoPageSkeleton";
+
+import Spinner from "./components/Spinner/Spinner";
+
 const Layout = lazy(() => import("./pages/Layout"));
 const Home = lazy(() => import("./pages/HomePage"));
 const Post = lazy(() => import("./pages/PostPage"));
@@ -20,14 +27,16 @@ const Login = lazy(() => import("./pages/SignInPage"));
 // Create Routes for all the pages
 export default function App() {
   const dispatch = useDispatch();
+
+  // Auth setup
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      dispatch(setUser(user)); // <- This ensures state.auth.user gets set
+      dispatch(setUser(user));
     });
-
     return () => unsubscribe();
   }, []);
 
+  // UI Config
   const { data: uiConfig, isLoading, isError } = useGetUiConfigByTenantQuery();
 
   useEffect(() => {
@@ -36,69 +45,88 @@ export default function App() {
     }
   }, [uiConfig, dispatch]);
 
-  if (isLoading) return <div data-oid="j2seb4j">Loading UI config...</div>;
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   if (isError || !uiConfig)
     return (
-      <p className="errorMessage" data-oid="3z9a46p">
+      <p className="errorMessage" data-oid="7a3q_j2">
         Error loading UI config
       </p>
     );
 
   return (
-    <BrowserRouter data-oid="y2i.foh">
-      <CssTokenSetter uiConfig={uiConfig} data-oid="5ivtcak" />
-      <Suspense
-        fallback={
-          <div className="container" data-oid="ps2dwyw">
-            Loading...
-          </div>
-        }
-        data-oid=":-174ol"
-      >
-        <Routes data-oid="8825.9:">
+    <BrowserRouter data-oid="z21o2cr">
+      <CssTokenSetter uiConfig={uiConfig} data-oid=":5c6uxo" />
+
+      <Routes data-oid="r01at4u">
+        <Route
+          path="/"
+          element={<Layout data-oid="orlgny3" />}
+          data-oid="objg-jn"
+        >
           <Route
-            path="/"
-            element={<Layout data-oid="md:f0xa" />}
-            data-oid="u-xjy-k"
-          >
-            <Route
-              index
-              element={<Login data-oid="4bu2gsx" />}
-              data-oid="3.x5lw2"
-            />
+            index
+            element={
+              <Suspense fallback={<div>Loading login...</div>}>
+                <Login data-oid="ehdazux" />
+              </Suspense>
+            }
+            data-oid="u-m6rhi"
+          />
 
-            <Route
-              path="login"
-              element={<Login data-oid="hytk3cc" />}
-              data-oid="8tq-p8t"
-            />
+          <Route
+            path="login"
+            element={
+              <Suspense fallback={<div>Loading login...</div>}>
+                <Login data-oid="x710.m3" />
+              </Suspense>
+            }
+            data-oid="cw6ld.h"
+          />
 
-            <Route
-              path="home"
-              element={<Home data-oid="p0zk6-g" />}
-              data-oid="sk-uspw"
-            />
+          <Route
+            path="home"
+            element={
+              <Suspense fallback={<HomePageSkeleton />}>
+                <Home data-oid="_ntgjou" />
+              </Suspense>
+            }
+            data-oid=".:wxfzt"
+          />
 
-            <Route
-              path="home/post/:postId"
-              element={<Post data-oid="r9kb8k8" />}
-              data-oid="2wozfo6"
-            />
+          <Route
+            path="home/post/:postId"
+            element={
+              <Suspense fallback={<PostPageSkeleton />}>
+                <Post data-oid="13fe448" />
+              </Suspense>
+            }
+            data-oid="_vuwhm3"
+          />
 
-            <Route
-              path="home/newpost"
-              element={<NewPost data-oid=".4ak2po" />}
-              data-oid="u4eoaqg"
-            />
+          <Route
+            path="home/newpost"
+            element={
+              <Suspense fallback={<NewPostPageSkeleton />}>
+                <NewPost data-oid="k8p056z" />
+              </Suspense>
+            }
+            data-oid="usifg-u"
+          />
 
-            <Route
-              path="*"
-              element={<NoPage data-oid="uh:qw8l" />}
-              data-oid="hi81gl5"
-            />
-          </Route>
-        </Routes>
-      </Suspense>
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={<NoPageSkeleton />}>
+                <NoPage data-oid="jfzmy13" />
+              </Suspense>
+            }
+            data-oid="5v7m:s3"
+          />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

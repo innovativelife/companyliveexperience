@@ -3,33 +3,16 @@ import React, { useState, useCallback, ChangeEvent } from "react";
 //Components
 import Avatar from "../Avatar/Avatar";
 
-//Css
-import "./ReplyInput.css";
-
-//Data Types
-type PostProps = { postId: string };
-
+//Data
+type PostProps = { postId: string; employeeLoading: boolean };
 import { svgs } from "../../assets/svgs";
-// import { useSelector } from "react-redux";
-// import { RootState } from "../../app/store"; // import { useAppDispatch } from "../../app/hooks";
 
 import { useCreateReplyMutation } from "../../features/replies/repliesAPI";
 import { useGetEmployeeByIdQuery } from "../../features/employees/employeeAPI";
 
-const ReplyInput = ({ postId }: PostProps) => {
+const ReplyInput = ({ postId, employeeLoading }: PostProps) => {
   const userUID = import.meta.env.VITE_USER_UID;
   const user = useGetEmployeeByIdQuery(userUID).data;
-
-  // const user = useSelector((state: RootState) => state.auth.user);
-  //
-  // let userUID = user?.uid;
-  // if (!user?.uid) {
-  //   // throw new Error("User UID is required but not available.");
-  //   console.log("User UID is required but not available.");
-  //   userUID = "d57c6f76-263b-4c1e-a199-f4593a897339";
-  // } else {
-  //   console.log("Working");
-  // }
 
   const [message, setMessage] = useState("");
 
@@ -60,7 +43,13 @@ const ReplyInput = ({ postId }: PostProps) => {
       className="flex items-center py-3 px-4 gap-3 container inline-size"
       data-oid="qa3ilgz"
     >
-      <Avatar employee={user} size="small" data-oid="s.q2zem" />
+      <Avatar
+        employee={user}
+        size="small"
+        employeeLoading={employeeLoading}
+        data-oid="s.q2zem"
+      />
+
       <label className="flex flex-col min-w-40 flex-1 h-12" data-oid="p4oki:d">
         <input
           placeholder="Add a reply..."

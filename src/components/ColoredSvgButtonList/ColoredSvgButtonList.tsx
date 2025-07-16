@@ -13,13 +13,12 @@ type ColoredSvgButtonListProps = { uploadOptions: uploadOptionsType[] };
 
 const ColoredSvgButtonList = ({ uploadOptions }: ColoredSvgButtonListProps) => {
   return (
-    <div className="flex flex-wrap justify-start gap-2 px-4" data-oid="6kx57fy">
+    <div className="flex flex-wrap justify-start gap-2 px-4">
       {uploadOptions.map((option) => (
         <ColoredSvgButton
           key={option.label}
           imgSrc={option.svg}
           label={option.label}
-          data-oid="t9xhuz4"
         />
       ))}
     </div>

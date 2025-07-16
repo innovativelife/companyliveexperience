@@ -1,5 +1,3 @@
-// import "./ColoredSvgButton.css";
-
 type ColoredSvgButtonProps = {
   imgSrc: string;
   label: string;
@@ -7,23 +5,13 @@ type ColoredSvgButtonProps = {
 
 const ColoredSvgButtonProps = ({ imgSrc, label }: ColoredSvgButtonProps) => {
   return (
-    <div
-      className="flex flex-col items-center gap-2 bg-background py-2.5 w-20 text-center"
-      data-oid="hs-i9jg"
-    >
-      <div
-        className="bg-inputs rounded-full p-2.5 fill-secondary"
-        data-oid="5pzkrmf"
-      >
-        <svg className="w-6 h-6" viewBox="0 0 256 256" data-oid="2k.kjr6">
-          <path
-            d={imgSrc}
-            className="fill-text border-0"
-            data-oid=":4l8kke"
-          ></path>
+    <div className="flex flex-col items-center gap-2 bg-background py-2.5 w-20 text-center">
+      <div className="bg-inputs rounded-full p-2.5 fill-secondary">
+        <svg className="w-6 h-6" viewBox="0 0 256 256">
+          <path d={imgSrc} className="fill-text border-0"></path>
         </svg>
       </div>
-      <p data-oid="2mwoy34">{label}</p>
+      <p>{label}</p>
     </div>
   );
 };

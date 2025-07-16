@@ -53,7 +53,10 @@ const NoPage = () => {
         buttonClickLocation="/home"
       />
 
-      <Banner bannerUrl={appBannerUrl} />
+      <Banner
+        bannerUrl={appBannerUrl}
+        fallbackImageUrl={images.ImageNotFound}
+      />
       <Padding />
       <div style={containerStyle}>
         <h2 style={headingStyle}>Oops! Page not found</h2>

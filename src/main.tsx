@@ -3,13 +3,16 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 import App from "./App";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode data-oid="dmqt:9f">
-    <Provider store={store} data-oid="w.40383">
-      <App data-oid="hiq8dtb" />
+  <React.StrictMode>
+    <Provider store={store}>
+      <SkeletonTheme baseColor="#313131" highlightColor="#525252">
+        <App />
+      </SkeletonTheme>
     </Provider>
   </React.StrictMode>,
 );

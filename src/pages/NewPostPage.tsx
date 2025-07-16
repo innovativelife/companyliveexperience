@@ -19,9 +19,13 @@ const NewPostPage = () => {
   //Chanel data
   const {
     data: user,
+    isLoading: userIsLoading,
     isFetching: userIsFetching,
     isError: userIsError,
   } = useGetEmployeeByIdQuery(userUID ?? "");
+
+  // Determine if background fetching is happening for spinner
+  const isBackgroundFetching = userIsFetching && !userIsLoading;
 
   return (
     <>
@@ -30,11 +34,16 @@ const NewPostPage = () => {
         icon={iconPath}
         buttonClickLocation={topBarButtonLocation}
       />
+      <UserBar
+        employee={user}
+        employeeLoading={userIsLoading}
+        descriptor="@AddTagToUsersInBackend"
+      />
 
-      <UserBar employee={user} descriptor="@AddTagToUsersInBackend" />
-
-      {userIsFetching && <Spinner />}
+      {/* Apply Spinner for background  reload*/}
+      {isBackgroundFetching && <Spinner />}
       {userIsError && <p className="errorMessage">Error fetching user</p>}
+
       <PostWriter />
       <NavBar />
       <Padding />
