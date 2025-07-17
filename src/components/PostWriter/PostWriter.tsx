@@ -35,6 +35,7 @@ const PostWriter = () => {
 
   //Get the tenantId and userUID
   const { tenantId } = useParams();
+  //TODO: Get the userUID dynamically
   const userUID = import.meta.env.VITE_USER_UID;
   //const { userUID } = useParams<{ userUID?: string }>();
 

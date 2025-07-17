@@ -4,8 +4,6 @@ const ReplyListRepliesSkeleton = () => {
   return (
     <>
       <ReplySkeleton />
-      <ReplySkeleton />
-      <ReplySkeleton />
     </>
   );
 };

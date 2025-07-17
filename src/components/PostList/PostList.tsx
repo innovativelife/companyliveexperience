@@ -1,6 +1,5 @@
 //Components
 import Post from "../Post/Post";
-import ActionItemBar from "../ActionItemBar/ActionItemBar";
 import PostListSkeleton from "./PostListSkeleton";
 
 //Data
@@ -47,11 +46,9 @@ const PostList = ({
           <Post
             post={post}
             postLoading={postLoading}
-            employee={employees?.[post.employeeUID]}
+            employees={employees}
             employeeLoading={employeeLoading}
           />
-
-          <ActionItemBar postId={post.postId} />
         </div>
       ))
     );

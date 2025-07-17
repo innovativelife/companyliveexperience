@@ -46,7 +46,7 @@ const ReplyInput = ({ postId, employeeLoading }: PostProps) => {
         console.error("Failed to send reply:", err);
       }
     },
-    [message, postId, createReply]
+    [message, postId, tenantId, createReply]
   );
   return (
     <div

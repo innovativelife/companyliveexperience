@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { setUiConfig } from "./features/uiConfig/uiConfigSlice";
 
 import HomePageSkeleton from "./components/PageSkeletons/HomePageSkeleton";
-import PostPageSkeleton from "./components/PageSkeletons/PostPageSkeleton";
 import NewPostPageSkeleton from "./components/PageSkeletons/NewPostPageSkeleton";
 import NoPageSkeleton from "./components/PageSkeletons/NoPageSkeleton";
 
@@ -19,7 +18,6 @@ import Spinner from "./components/Spinner/Spinner";
 
 const Layout = lazy(() => import("./pages/Layout"));
 const Home = lazy(() => import("./pages/HomePage"));
-const Post = lazy(() => import("./pages/PostPage"));
 const NewPost = lazy(() => import("./pages/NewPostPage"));
 const NoPage = lazy(() => import("./pages/NoPage"));
 const Login = lazy(() => import("./pages/SignInPage"));
@@ -37,7 +35,7 @@ export default function App() {
       dispatch(setUser(user));
     });
     return () => unsubscribe();
-  }, []);
+  }, [dispatch]);
 
   // Get tenant details from URL
   const pathSegments = window.location.pathname.split("/");
@@ -104,16 +102,6 @@ export default function App() {
               </Suspense>
             }
             data-oid=".:wxfzt"
-          />
-
-          <Route
-            path="home/post/:postId"
-            element={
-              <Suspense fallback={<PostPageSkeleton />}>
-                <Post data-oid="13fe448" />
-              </Suspense>
-            }
-            data-oid="_vuwhm3"
           />
 
           <Route

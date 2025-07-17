@@ -71,10 +71,6 @@ const HomePage = () => {
     );
   }, [employees]);
 
-  // Determine if initial load is happening for skeletons
-  // const isInitialLoading = postsIsLoading || employeesIsLoading;
-  // console.log(isInitialLoading);
-
   // Determine if background fetching is happening for spinner
   const isBackgroundFetching =
     (postsIsFetching && !postsIsLoading) ||

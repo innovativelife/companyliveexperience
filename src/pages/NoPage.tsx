@@ -36,6 +36,7 @@ const NoPage = () => {
     gap: "0.5rem", // gap-2
     maxWidth: "480px",
     margin: "0 auto",
+    padding: "0 1rem",
   };
 
   const headingStyle: React.CSSProperties = {
@@ -73,7 +74,11 @@ const NoPage = () => {
           URL or try navigating back to the main site.
         </p>
       </div>
-      <LargeButton onClick={handleGoHome} label="Go Back" data-oid="y-n3wpt" />
+      <LargeButton
+        onClick={handleGoHome}
+        label="Return to Home"
+        data-oid="y-n3wpt"
+      />
     </>
   );
 };
