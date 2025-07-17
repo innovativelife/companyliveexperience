@@ -10,7 +10,7 @@ export const repliesApi = createApi({
   tagTypes: ["Reply"],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    getReplies: builder.query<Reply[], {tenantId: string, postId: string} >({
+    getReplies: builder.query<Reply[], { tenantId: string; postId: string }>({
       query: (query) => `${query.tenantId}/${query.postId}/replies`,
       transformResponse: (response: { replies: Reply[] }) => response.replies,
       providesTags: (result, _error, { postId }) =>
@@ -24,7 +24,10 @@ export const repliesApi = createApi({
             ]
           : [{ type: "Reply", id: postId }],
     }),
-    createReply: builder.mutation<void, { tenantId: string, message: string; postId: string }>({
+    createReply: builder.mutation<
+      void,
+      { tenantId: string; message: string; postId: string }
+    >({
       query: ({ tenantId, message, postId }) => ({
         url: `${tenantId}/${postId}/reply`,
         method: "POST",

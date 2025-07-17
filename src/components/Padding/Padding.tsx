@@ -1,8 +1,8 @@
 //Css
-import "./Padding.css";
+// import "./Padding.css";
 
 const Padding = () => {
-  return <div className="pt-[70px]" data-oid="padding-padding"></div>;
+  return <div className="pt-[70px]"></div>;
 };
 
 export default Padding;

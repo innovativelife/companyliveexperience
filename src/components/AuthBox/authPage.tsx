@@ -1,11 +1,22 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from 'react-router-dom';
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, User } from 'firebase/auth';
-import { auth } from '../../../firebaseConfig'; // Import auth and googleProvider
-import { app } from '../../../firebaseConfig';
-import { setCredentials, logout, setAuthLoading, setAuthError } from '../../features/auth/authSlice';
-import type { RootState } from '../../app/store'; // Import RootState for useSelector
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  User,
+} from "firebase/auth";
+import { auth } from "../../../firebaseConfig"; // Import auth and googleProvider
+import { app } from "../../../firebaseConfig";
+import {
+  setCredentials,
+  logout,
+  setAuthLoading,
+  setAuthError,
+} from "../../features/auth/authSlice";
+import type { RootState } from "../../app/store"; // Import RootState for useSelector
 import { useGetTenantByIdQuery } from "../../features/tenants/publicTenantApi";
 
 import "./authPage.css"; // Import the CSS file
@@ -22,7 +33,9 @@ const authenticator = getAuth(app);
 const AuthPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated, user, status, error, token } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, user, status, error, token } = useSelector(
+    (state: RootState) => state.auth
+  );
   const { tenantId } = useParams();
 
   const devMode = import.meta.env.DEV;
@@ -40,16 +53,20 @@ const AuthPage: React.FC = () => {
       if (tenantId) {
         navigate(`/${tenantId}/home`); // Redirect to the tenant's home page
       } else {
-        navigate('/'); // Or handle the case where tenantId is not available
+        navigate("/"); // Or handle the case where tenantId is not available
       }
     }
   }, [isAuthenticated, navigate]);
 
   // Call tenant service to get the auth provider if for the tenant (created by GCP when tenant added,but stored in firestore).
   // The provider tenantId is required as part of auth process.  Note that the Google login button is disabled until this completes.
-  const { data: tenantDetails, error: apiError, isLoading } = useGetTenantByIdQuery(tenantId ?? "");
+  const {
+    data: tenantDetails,
+    error: apiError,
+    isLoading,
+  } = useGetTenantByIdQuery(tenantId ?? "");
   useEffect(() => {
-    console.log('Query result:', { tenantDetails, apiError, isLoading });
+    console.log("Query result:", { tenantDetails, apiError, isLoading });
   }, [tenantDetails, apiError, isLoading]);
 
   // Render the Auth component differently, depending upon the state of the Authentication process
@@ -65,9 +82,8 @@ const AuthPage: React.FC = () => {
         >
           Dev Mode Login
         </button>
-      )
-    }
-    else if (isAuthenticated) {
+      );
+    } else if (isAuthenticated) {
       return (
         <button
           onClick={handleLogout}
@@ -75,7 +91,7 @@ const AuthPage: React.FC = () => {
         >
           Logout
         </button>
-      )
+      );
     } else {
       return (
         <button
@@ -85,21 +101,19 @@ const AuthPage: React.FC = () => {
         >
           Sign in with Google
         </button>
-      )
+      );
     }
   };
 
-
   const handleDevModeSignIn = async () => {
     try {
-
       console.log("Using dev mode (determined by env variable: DEV)");
 
       // Create a mock User object for dev mode
       const devUser: User = {
         uid: devUid,
-        email: 'dev@example.com',
-        displayName: 'Dev User',
+        email: "dev@example.com",
+        displayName: "Dev User",
         photoURL: null,
         emailVerified: true,
         isAnonymous: false,
@@ -109,28 +123,27 @@ const AuthPage: React.FC = () => {
         refreshToken: "",
         phoneNumber: "039498484",
         delete: async () => {},
-        getIdToken: async () => 'dev-id-token',
+        getIdToken: async () => "dev-id-token",
         getIdTokenResult: async () => ({
-          authTime: '',
+          authTime: "",
           claims: {},
-          expirationTime: '',
-          issuedAtTime: '',
+          expirationTime: "",
+          issuedAtTime: "",
           signInProvider: null,
           signInSecondFactor: null,
-          token: 'dev-id-token',
+          token: "dev-id-token",
         }),
         reload: async () => {},
         toJSON: () => ({}),
-        providerId: '',
+        providerId: "",
       };
 
       dispatch(setCredentials({ token: "dev-id-token", user: devUser }));
-
     } catch (err: any) {
       console.error("Dev sign-in error:", err);
       dispatch(setAuthError(err.message || "Failed to sign in Dev Mode."));
     }
-  }
+  };
 
   const handleGoogleSignIn = async () => {
     dispatch(setAuthLoading());
@@ -144,14 +157,13 @@ const AuthPage: React.FC = () => {
       auth.tenantId = tenantDetails.identityManagerTenantIdTenantId;
       console.log(`Attempting to sign in with tenant: ${auth.tenantId}`);
 
-      let googleProvider = new GoogleAuthProvider();
+      const googleProvider = new GoogleAuthProvider();
 
       const result = await signInWithPopup(authenticator, googleProvider);
       const firebaseUser = result.user;
       const idToken = await firebaseUser.getIdToken();
 
       dispatch(setCredentials({ token: idToken, user: firebaseUser }));
-
     } catch (err: any) {
       console.error("Google sign-in error:", err);
       dispatch(setAuthError(err.message || "Failed to sign in with Google."));
@@ -163,14 +175,14 @@ const AuthPage: React.FC = () => {
     try {
       await signOut(auth);
       dispatch(logout()); // Clear state and localStorage
-      navigate('/login'); // Redirect to login page
+      navigate("/login"); // Redirect to login page
     } catch (err: any) {
       console.error("Logout error:", err);
       dispatch(setAuthError(err.message || "Failed to log out."));
     }
   };
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div className="text-center text-gray-700">Loading...</div>;
   }
 
@@ -178,11 +190,16 @@ const AuthPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md text-center">
         <h2 className="text-3xl font-extrabold text-gray-900 mb-6">
-          {isAuthenticated ? `Welcome, ${user?.displayName || user?.email || 'User'}!` : ''}
+          {isAuthenticated
+            ? `Welcome, ${user?.displayName || user?.email || "User"}!`
+            : ""}
         </h2>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+            role="alert"
+          >
             <strong className="font-bold">Error:</strong>
             <span className="block sm:inline"> {error}</span>
           </div>
@@ -191,6 +208,6 @@ const AuthPage: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AuthPage;

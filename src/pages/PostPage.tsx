@@ -8,10 +8,11 @@ import NavBar from "../components/NavBar/NavBar";
 import Post from "../components/Post/Post";
 import Padding from "../components/Padding/Padding";
 import ReplyList from "../components/ReplyList/ReplyList";
-import PostInput from "../components/ReplyInput/ReplyInput";
+import ReplyInput from "../components/ReplyInput/ReplyInput";
 import Spinner from "../components/Spinner/Spinner";
+import PostSkeleton from "../components/Post/PostSkeleton";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 //Data
 import { svgs } from "../assets/svgs";
@@ -23,7 +24,7 @@ const PostPage = () => {
   const { tenantId } = useParams();
   //Top bar data
   const iconPath = svgs.back;
-  
+
   const navigate = useNavigate();
   const handleGoBack = () => {
     navigate(-1); // This is the recommended way to go back!
@@ -33,47 +34,76 @@ const PostPage = () => {
   const { postId } = useParams();
   const {
     data: post,
+    isLoading: postsIsLoading,
     isFetching: postIsFetching,
     isError: postIsError,
     refetch: postRefetch,
-  } = useGetPostByIdQuery({tenantId: tenantId ?? "", postId: postId ?? ""});
+  } = useGetPostByIdQuery({ tenantId: tenantId ?? "", postId: postId ?? "" });
 
   const {
     data: replies,
+    isLoading: repliesIsLoading,
     isFetching: repliesIsFetching,
     isError: repliesIsError,
     refetch: repliesRefetch,
-  } = useGetRepliesQuery({tenantId: tenantId ?? "", postId: postId ?? ""}, {
-    pollingInterval: 30000000,
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
+  } = useGetRepliesQuery(
+    { tenantId: tenantId ?? "", postId: postId ?? "" },
+    {
+      pollingInterval: 30000000,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+    }
+  );
 
   const {
     data: employees,
+    isLoading: employeesIsLoading,
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
-  } = useGetEmployeesQuery({tenantId: tenantId ?? ""}, {
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
+  } = useGetEmployeesQuery(
+    { tenantId: tenantId ?? "" },
+    {
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+    }
+  );
 
   const employeeMap = useMemo(() => {
     return Object.fromEntries(
-      (employees ?? []).map((employee) => [employee.employeeUID, employee]),
+      (employees ?? []).map((employee) => [employee.employeeUID, employee])
     );
   }, [employees]);
 
+  // Determine if background fetching is happening for spinner
+  const isBackgroundFetching =
+    (postIsFetching && !postsIsLoading) ||
+    (employeesIsFetching && !employeesIsLoading) ||
+    (repliesIsFetching && !repliesIsLoading);
+
   const refetchAll = async () => {
     await Promise.all([employeesRefetch(), postRefetch(), repliesRefetch()]);
+  };
+
+  const renderPost = () => {
+    if (postsIsLoading) return <PostSkeleton />;
+    else if (!post || postIsError)
+      return <p className="errorMessage">Error fetching post</p>;
+    else
+      return (
+        <Post
+          post={post}
+          postLoading={postsIsLoading}
+          employee={employeeMap[post.employeeUID]}
+          employeeLoading={employeesIsLoading}
+        />
+      );
   };
 
   return (
     <PullToRefresh
       onRefresh={() => refetchAll().then(() => {})}
       style={{ minHeight: "100vh" }}
-      data-oid="7eprzru"
     >
       <TopBar
         title="Post"
@@ -82,26 +112,30 @@ const PostPage = () => {
         data-oid="3h_kbqw"
       />
 
-      {post ? (
-        <Post
-          post={post}
-          employee={employeeMap[post.employeeUID]}
-          data-oid="wd6jzrt"
-        />
-      ) : (
-        <p data-oid="..88_op">Loading Post...</p>
-      )}
-      {postIsError && <p data-oid="cc4f600">Error fetching post</p>}
-      {(repliesIsFetching || employeesIsFetching || postIsFetching) && (
-        <Spinner data-oid="17_gqwv" />
-      )}
-      {repliesIsError && <p data-oid="w-qvpg_">Error fetching replies</p>}
-      {employeesIsError && <p data-oid="lkx8xs1">Error fetching employees</p>}
-      <ReplyList replies={replies} employees={employeeMap} data-oid="5a_2sf." />
-      <PostInput postId={postId ?? ""} data-oid="ku3481y" />
-      <NavBar data-oid="t60npmm" />
+      {/* Render post as a skeleton, error or post */}
+      {renderPost()}
 
-      <Padding data-oid="uwlq-su" />
+      {/* Apply Spinner for background  reload*/}
+      {isBackgroundFetching && <Spinner />}
+
+      {/* Show error messages if their are problems fetchinreplies or employees*/}
+      {repliesIsError && <p className="errorMessage">Error fetching replies</p>}
+      {employeesIsError && (
+        <p className="errorMessage">Error fetching employees</p>
+      )}
+
+      <ReplyList
+        replies={replies}
+        replyLoading={repliesIsLoading}
+        employees={employeeMap}
+        employeeLoading={employeesIsLoading}
+      />
+
+      <ReplyInput postId={postId ?? ""} employeeLoading={employeesIsLoading} />
+
+      <NavBar />
+
+      <Padding />
     </PullToRefresh>
   );
 };

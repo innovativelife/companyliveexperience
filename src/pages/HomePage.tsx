@@ -29,7 +29,7 @@ const HomePage = () => {
 
   const navigate = useNavigate();
   const handleNavigation = () => {
-    navigate('newpost')
+    navigate("newpost");
   };
 
   const appBannerUrl =
@@ -38,30 +38,47 @@ const HomePage = () => {
   //All post Data
   const {
     data: posts,
+    isLoading: postsIsLoading,
     isFetching: postsIsFetching,
     isError: postsIsError,
     refetch: postsRefetch,
-  } = useGetPostsQuery({tenantId: tenantId ?? ""}, {
-    pollingInterval: 30000000,
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
+  } = useGetPostsQuery(
+    { tenantId: tenantId ?? "" },
+    {
+      pollingInterval: 30000000,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+    }
+  );
 
   const {
     data: employees,
+    isLoading: employeesIsLoading,
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
-  } = useGetEmployeesQuery({tenantId: tenantId ?? ""}, {
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
+  } = useGetEmployeesQuery(
+    { tenantId: tenantId ?? "" },
+    {
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+    }
+  );
 
   const employeeMap = useMemo(() => {
     return Object.fromEntries(
-      (employees ?? []).map((employee) => [employee.employeeUID, employee]),
+      (employees ?? []).map((employee) => [employee.employeeUID, employee])
     );
   }, [employees]);
+
+  // Determine if initial load is happening for skeletons
+  // const isInitialLoading = postsIsLoading || employeesIsLoading;
+  // console.log(isInitialLoading);
+
+  // Determine if background fetching is happening for spinner
+  const isBackgroundFetching =
+    (postsIsFetching && !postsIsLoading) ||
+    (employeesIsFetching && !employeesIsLoading);
 
   const refetchAll = async () => {
     await Promise.all([employeesRefetch(), postsRefetch()]);
@@ -72,7 +89,6 @@ const HomePage = () => {
       <PullToRefresh
         onRefresh={() => refetchAll().then(() => {})}
         style={{ minHeight: "100vh" }}
-        data-oid="home-page-refresh-container"
       >
         <TopBar
           title={homeTitle}
@@ -81,26 +97,29 @@ const HomePage = () => {
           data-oid="home-page-top-bar"
         />
 
-        {(postsIsFetching || employeesIsFetching) && (
-          <Spinner data-oid="home-page-spinner" />
-        )}
-        <Banner bannerUrl={appBannerUrl} data-oid="home-page-banner" />
-        {postsIsError && (
-          <p data-oid="home-page-error-message-post">Error fetching posts</p>
-        )}
-        {employeesIsError && (
-          <p data-oid="home-page-error-message-employee">
-            Error fetching employees
-          </p>
-        )}
-        <PostList
-          posts={posts}
-          employees={employeeMap}
-          data-oid="home-page-post-list"
+        {/* Apply Spinner for background  reload*/}
+        {isBackgroundFetching && <Spinner />}
+
+        <Banner
+          bannerUrl={appBannerUrl}
+          fallbackImageUrl={images.ImageNotFound}
         />
 
-        <NavBar data-oid="home-page-nav-bar" />
-        <Padding data-oid="home-page-padding" />
+        {/* Show error messages if their are problems fetching posts or employees*/}
+        {postsIsError && <p className="errorMessage">Error fetching posts</p>}
+        {employeesIsError && (
+          <p className="errorMessage">Error fetching employees</p>
+        )}
+
+        <PostList
+          posts={posts}
+          postLoading={postsIsLoading}
+          employees={employeeMap}
+          employeeLoading={employeesIsLoading}
+        />
+
+        <NavBar />
+        <Padding />
       </PullToRefresh>
     </>
   );

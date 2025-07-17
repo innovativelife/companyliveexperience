@@ -1,29 +1,33 @@
-//Css
-// import "./UserBar.css";
-
 //Components
 import Avatar from "../Avatar/Avatar";
+import UserBarSkeleton from "./UserBarSkeleton";
 
 //Data
 import { Employee } from "../../features/employees/employeeTypes";
 
-type UserBarProps = { employee?: Employee; descriptor: string };
+type UserBarProps = {
+  employee?: Employee;
+  descriptor: string;
+  employeeLoading: boolean;
+};
 
-const UserBar = ({ employee, descriptor }: UserBarProps) => {
+const UserBar = ({ employee, descriptor, employeeLoading }: UserBarProps) => {
   return (
-    <div
-      className="flex items-center gap-4 py-2 px-4 min-h-[72px]"
-      data-oid="user-bar-container"
-    >
-      {/* <img className="avatar" src={sender?.avatarURL} /> */}
-      <Avatar employee={employee} data-oid="user-bar-avatar" />
-
-      <div className="flex flex-col justify-center" data-oid="user-bar-content">
-        <p data-oid="user-bar-name">
-          {employee?.firstName ?? "Unknown"} {employee?.lastName ?? "Unknown"}
-        </p>
-        <h3 data-oid="user-bar-descriptor">{descriptor}</h3>
-      </div>
+    <div className="flex items-center gap-4 py-2 px-4 min-h-[72px]">
+      {employeeLoading ? (
+        <UserBarSkeleton />
+      ) : (
+        <>
+          <Avatar employee={employee} size="large" employeeLoading={false} />
+          <div className="flex flex-col justify-center">
+            <p>
+              {employee?.firstName ?? "Unknown"}{" "}
+              {employee?.lastName ?? "Unknown"}
+            </p>
+            <h3>{descriptor}</h3>
+          </div>
+        </>
+      )}
     </div>
   );
 };

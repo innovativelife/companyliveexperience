@@ -6,30 +6,38 @@ import Padding from "../components/Padding/Padding";
 import PostWriter from "../components/PostWriter/PostWriter";
 import Spinner from "../components/Spinner/Spinner";
 
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
 
 //Data
 import { useGetEmployeeByIdQuery } from "../features/employees/employeeAPI";
 import { svgs } from "../assets/svgs";
 
 const userUID = import.meta.env.VITE_USER_UID;
-const { tenantId } = useParams<{ tenantId?: string }>();
 
 const NewPostPage = () => {
+  const { tenantId } = useParams<{ tenantId?: string }>();
+
   //Top bar data
   const iconPath = svgs.back;
 
   const navigate = useNavigate();
   const handleGoBack = () => {
-    navigate(-1); // This is the recommended way to go back!
+    navigate(-1);
   };
 
   //Chanel data
   const {
     data: user,
+    isLoading: userIsLoading,
     isFetching: userIsFetching,
     isError: userIsError,
-  } = useGetEmployeeByIdQuery( { tenantId: tenantId ?? "", employeeUID: userUID ?? "" });
+  } = useGetEmployeeByIdQuery({
+    tenantId: tenantId ?? "",
+    employeeUID: userUID ?? "",
+  });
+
+  // Determine if background fetching is happening for spinner
+  const isBackgroundFetching = userIsFetching && !userIsLoading;
 
   return (
     <>
@@ -39,18 +47,19 @@ const NewPostPage = () => {
         onClick={handleGoBack}
         data-oid="new-post-top-bar"
       />
-
       <UserBar
         employee={user}
+        employeeLoading={userIsLoading}
         descriptor="@AddTagToUsersInBackend"
-        data-oid="new-post-user-bar"
       />
 
-      {userIsFetching && <Spinner data-oid="new-post-spinner" />}
-      {userIsError && <p data-oid="new-post-error">Error fetching user</p>}
-      <PostWriter data-oid="new-post-post-writer" />
-      <NavBar data-oid="new-post-nav-bar" />
-      <Padding data-oid="new-post-padding" />
+      {/* Apply Spinner for background  reload*/}
+      {isBackgroundFetching && <Spinner />}
+      {userIsError && <p className="errorMessage">Error fetching user</p>}
+
+      <PostWriter />
+      <NavBar />
+      <Padding />
     </>
   );
 };

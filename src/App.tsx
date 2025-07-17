@@ -10,6 +10,13 @@ import { auth } from "../firebaseConfig";
 import { useEffect } from "react";
 import { setUiConfig } from "./features/uiConfig/uiConfigSlice";
 
+import HomePageSkeleton from "./components/PageSkeletons/HomePageSkeleton";
+import PostPageSkeleton from "./components/PageSkeletons/PostPageSkeleton";
+import NewPostPageSkeleton from "./components/PageSkeletons/NewPostPageSkeleton";
+import NoPageSkeleton from "./components/PageSkeletons/NoPageSkeleton";
+
+import Spinner from "./components/Spinner/Spinner";
+
 const Layout = lazy(() => import("./pages/Layout"));
 const Home = lazy(() => import("./pages/HomePage"));
 const Post = lazy(() => import("./pages/PostPage"));
@@ -21,24 +28,28 @@ const Login = lazy(() => import("./pages/SignInPage"));
 // and UI configuration. Fetches UI settings based on the tenant ID found in the URL
 // and applies them using CSS variables.
 export default function App() {
-
   // Set up tracking of user auth status via redux
   const dispatch = useDispatch();
+
+  // Auth setup
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       dispatch(setUser(user));
     });
-
     return () => unsubscribe();
   }, []);
 
   // Get tenant details from URL
-  const pathSegments = window.location.pathname.split('/');
-  let tenantId = pathSegments[1];
+  const pathSegments = window.location.pathname.split("/");
+  const tenantId = pathSegments[1];
   console.log("TenantId from URL: " + tenantId);
 
   // Get Ui config - this is an unautenticated request
-  const { data: uiConfig, isLoading, isError } = useGetUiConfigByTenantQuery({tenantId: tenantId});
+  const {
+    data: uiConfig,
+    isLoading,
+    isError,
+  } = useGetUiConfigByTenantQuery({ tenantId: tenantId });
   useEffect(() => {
     if (uiConfig) {
       dispatch(setUiConfig(uiConfig));
@@ -48,66 +59,84 @@ export default function App() {
   // Display messages while data loading
   // ToDo: Skeletins when loading?
   // ToDo: Improve error handling - UI Config could no tbe loaded (eg. May not be defined?)
-  if (isLoading)
-    return <div data-oid="app-loading-message">Loading UI config...</div>;
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   if (isError || !uiConfig)
-    return <div data-oid="app-error-message">Error loading UI config</div>;
+    return (
+      <p className="errorMessage" data-oid="7a3q_j2">
+        Error loading UI config
+      </p>
+    );
 
   return (
-    <BrowserRouter data-oid="app-container">
-      <CssTokenSetter uiConfig={uiConfig} data-oid="app-css-token-setter" />
-      <Suspense
-        fallback={
-          <div className="container" data-oid="app-suspense-loading-message">
-            Loading...
-          </div>
-        }
-        data-oid="app-suspense"
-      >
-        <Routes data-oid="app-routes">
+    <BrowserRouter data-oid="z21o2cr">
+      <CssTokenSetter uiConfig={uiConfig} data-oid=":5c6uxo" />
+
+      <Routes data-oid="r01at4u">
+        <Route
+          path="/:tenantId/"
+          element={<Layout data-oid="app-layout" />}
+          data-oid="app-layout-route"
+        >
           <Route
-            path="/:tenantId/"
-            element={<Layout data-oid="app-layout" />}
-            data-oid="app-layout-route"
-          >
-            <Route
-              index
-              element={<Login data-oid="app-login" />}
-              data-oid="app-login-route"
-            />
+            index
+            element={<Login data-oid="app-login" />}
+            data-oid="app-login-route"
+          />
 
-            <Route
-              path="login"
-              element={<Login data-oid="app-login-2" />}
-              data-oid="app-login-route-2"
-            />
+          <Route
+            path="login"
+            element={
+              <Suspense fallback={<div>Loading login...</div>}>
+                <Login data-oid="x710.m3" />
+              </Suspense>
+            }
+            data-oid="cw6ld.h"
+          />
 
-            <Route
-              path="home"
-              element={<Home data-oid="app-home" />}
-              data-oid="app-home-route"
-            />
+          <Route
+            path="home"
+            element={
+              <Suspense fallback={<HomePageSkeleton />}>
+                <Home data-oid="_ntgjou" />
+              </Suspense>
+            }
+            data-oid=".:wxfzt"
+          />
 
-            <Route
-              path="home/post/:postId"
-              element={<Post data-oid="app-post" />}
-              data-oid="app-post-route"
-            />
+          <Route
+            path="home/post/:postId"
+            element={
+              <Suspense fallback={<PostPageSkeleton />}>
+                <Post data-oid="13fe448" />
+              </Suspense>
+            }
+            data-oid="_vuwhm3"
+          />
 
-            <Route
-              path="home/newpost"
-              element={<NewPost data-oid="app-new-post" />}
-              data-oid="app-new-post-route"
-            />
+          <Route
+            path="home/newpost"
+            element={
+              <Suspense fallback={<NewPostPageSkeleton />}>
+                <NewPost data-oid="k8p056z" />
+              </Suspense>
+            }
+            data-oid="usifg-u"
+          />
 
-            <Route
-              path="*"
-              element={<NoPage data-oid="app-no-page" />}
-              data-oid="app-no-page-route"
-            />
-          </Route>
-        </Routes>
-      </Suspense>
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={<NoPageSkeleton />}>
+                <NoPage data-oid="jfzmy13" />
+              </Suspense>
+            }
+            data-oid="5v7m:s3"
+          />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

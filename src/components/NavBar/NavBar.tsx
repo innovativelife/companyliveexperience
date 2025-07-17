@@ -2,9 +2,6 @@ import { useSelector } from "react-redux";
 import { useCurrentPage } from "../../hooks/useCurrentPage";
 import { svgs } from "../../assets/svgs";
 
-//Css
-// import "./NavBar.css";
-
 //Components
 import NavItem from "../NavItem/NavItem";
 
@@ -49,10 +46,7 @@ const NavBar = () => {
   ];
 
   return (
-    <div
-      className="bg-tertiary w-full fixed box-border bottom-0 flex gap-2 border-t border-[#f3f0e7] px-4 pb-3 pt-2"
-      data-oid="nav-bar-container"
-    >
+    <div className="bg-tertiary w-full fixed box-border bottom-0 flex gap-2 border-t border-[#f3f0e7] px-4 pb-3 pt-2">
       {navItems.map((item, index) => (
         <NavItem
           key={index}
@@ -60,7 +54,6 @@ const NavBar = () => {
           iconPath={item.icon}
           location={item.location}
           active={item.label === currentPage ? true : false}
-          data-oid="nav-bar-item"
         />
       ))}
     </div>
