@@ -20,27 +20,27 @@ const NavBar = () => {
   const navItems = [
     {
       label: homeTitle ?? "Home",
-      location: `/${homeTitle}`.toLowerCase(),
+      location: `${homeTitle}`.toLowerCase(),
       icon: svgs.home,
     },
     {
       label: peopleTitle ?? "People",
-      location: `/${peopleTitle}`.toLowerCase(),
+      location: `${peopleTitle}`.toLowerCase(),
       icon: svgs.people,
     },
     {
       label: calendarTitle ?? "Calendar",
-      location: `/${calendarTitle}`.toLowerCase(),
+      location: `${calendarTitle}`.toLowerCase(),
       icon: svgs.calendar,
     },
     {
       label: tribesTitle ?? "Tribes",
-      location: `/${tribesTitle}`.toLowerCase(),
+      location: `${tribesTitle}`.toLowerCase(),
       icon: svgs.tribes,
     },
     {
       label: moreTitle ?? "More",
-      location: `/${moreTitle}`.toLowerCase(),
+      location: `${moreTitle}`.toLowerCase(),
       icon: svgs.more,
     },
   ];

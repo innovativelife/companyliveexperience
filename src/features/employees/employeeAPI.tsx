@@ -1,25 +1,15 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { Employee, CreateEmployeePayload } from "./employeeTypes";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-const tenantId = import.meta.env.VITE_TENANT_ID;
-const userUID = import.meta.env.VITE_USER_UID;
+import { baseQueryWithReauth } from "../common/baseQuery";
 
 export const employeesApi = createApi({
   reducerPath: "employeesApi",
   tagTypes: ["Employee"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${API_BASE_URL}/api/v1/tenants/`,
-    prepareHeaders: (headers) => {
-      headers.set("Content-Type", "application/json");
-      headers.set("tenantid", tenantId);
-      headers.set("uid", userUID);
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    getEmployees: builder.query<Employee[], void>({
-      query: () => `${tenantId}/Employees`,
+    getEmployees: builder.query<Employee[], { tenantId: string }>({
+      query: (queryParams) => 
+        `${queryParams.tenantId}/Employees`,
       transformResponse: (response: { employees: Employee[] }) =>
         response.employees,
       providesTags: (result) =>
@@ -33,19 +23,23 @@ export const employeesApi = createApi({
             ]
           : [{ type: "Employee", id: "LIST" }],
     }),
-    getEmployeeById: builder.query<Employee, string>({
-      query: (employeeUID) => `${tenantId}/Employees/${employeeUID}`,
+    getEmployeeById: builder.query<Employee, { tenantId: string, employeeUID: string }>({
+      query: (queryParams) => 
+        {
+
+          return `${queryParams.tenantId}/Employees/${queryParams.employeeUID}`
+        },
       transformResponse: (response: { employee: Employee }) =>
         response.employee,
-      providesTags: (_, __, employeeUID) => [
+      providesTags: (_, __, { employeeUID }) => [
         { type: "Employee", id: employeeUID },
       ],
     }),
-    createEmployee: builder.mutation<void, CreateEmployeePayload>({
-      query: (employeeData) => ({
-        url: `${tenantId}/Employees`,
+    createEmployee: builder.mutation<void, { tenantId: string, employeeData: CreateEmployeePayload}>({
+      query: (data) => ({
+        url: `${data.tenantId}/Employees`,
         method: "POST",
-        body: employeeData,
+        body: data.employeeData,
       }),
       invalidatesTags: [{ type: "Employee", id: "LIST" }],
     }),

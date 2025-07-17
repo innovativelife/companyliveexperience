@@ -6,6 +6,11 @@ export interface Tenant {
   customerName: string;
 }
 
+export interface TenantIdentityProviderId {
+  tenantId: string;
+  identityManagerTenantIdTenantId: string;
+}
+
 export interface CreateTenantPayload {
   tenantId: string;
   tenantName: string;

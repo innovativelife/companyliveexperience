@@ -6,15 +6,24 @@ import Padding from "../components/Padding/Padding";
 import PostWriter from "../components/PostWriter/PostWriter";
 import Spinner from "../components/Spinner/Spinner";
 
+import { useParams, useNavigate } from "react-router-dom";
+
 //Data
 import { useGetEmployeeByIdQuery } from "../features/employees/employeeAPI";
 import { svgs } from "../assets/svgs";
+
 const userUID = import.meta.env.VITE_USER_UID;
 
 const NewPostPage = () => {
+  const { tenantId } = useParams<{ tenantId?: string }>();
+
   //Top bar data
   const iconPath = svgs.back;
-  const topBarButtonLocation = "/home";
+
+  const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate(-1);
+  };
 
   //Chanel data
   const {
@@ -22,7 +31,10 @@ const NewPostPage = () => {
     isLoading: userIsLoading,
     isFetching: userIsFetching,
     isError: userIsError,
-  } = useGetEmployeeByIdQuery(userUID ?? "");
+  } = useGetEmployeeByIdQuery({
+    tenantId: tenantId ?? "",
+    employeeUID: userUID ?? "",
+  });
 
   // Determine if background fetching is happening for spinner
   const isBackgroundFetching = userIsFetching && !userIsLoading;
@@ -32,7 +44,8 @@ const NewPostPage = () => {
       <TopBar
         title="New Post"
         icon={iconPath}
-        buttonClickLocation={topBarButtonLocation}
+        onClick={handleGoBack}
+        data-oid="new-post-top-bar"
       />
       <UserBar
         employee={user}

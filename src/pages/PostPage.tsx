@@ -12,6 +12,8 @@ import ReplyInput from "../components/ReplyInput/ReplyInput";
 import Spinner from "../components/Spinner/Spinner";
 import PostSkeleton from "../components/Post/PostSkeleton";
 
+import { useNavigate } from "react-router-dom";
+
 //Data
 import { svgs } from "../assets/svgs";
 import { useGetRepliesQuery } from "../features/replies/repliesAPI";
@@ -19,9 +21,14 @@ import { useGetPostByIdQuery } from "../features/posts/postAPI";
 import { useGetEmployeesQuery } from "../features/employees/employeeAPI";
 
 const PostPage = () => {
+  const { tenantId } = useParams();
   //Top bar data
   const iconPath = svgs.back;
-  const topBarButtonLocation = "/home";
+
+  const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate(-1); // This is the recommended way to go back!
+  };
 
   //Chanel data
   const { postId } = useParams();
@@ -31,7 +38,7 @@ const PostPage = () => {
     isFetching: postIsFetching,
     isError: postIsError,
     refetch: postRefetch,
-  } = useGetPostByIdQuery(postId ?? ""); //{ data: post, isLoading, error }
+  } = useGetPostByIdQuery({ tenantId: tenantId ?? "", postId: postId ?? "" });
 
   const {
     data: replies,
@@ -39,11 +46,14 @@ const PostPage = () => {
     isFetching: repliesIsFetching,
     isError: repliesIsError,
     refetch: repliesRefetch,
-  } = useGetRepliesQuery(postId ?? "", {
-    pollingInterval: 30000,
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
+  } = useGetRepliesQuery(
+    { tenantId: tenantId ?? "", postId: postId ?? "" },
+    {
+      pollingInterval: 30000000,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+    }
+  );
 
   const {
     data: employees,
@@ -51,10 +61,13 @@ const PostPage = () => {
     isFetching: employeesIsFetching,
     isError: employeesIsError,
     refetch: employeesRefetch,
-  } = useGetEmployeesQuery(undefined, {
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
+  } = useGetEmployeesQuery(
+    { tenantId: tenantId ?? "" },
+    {
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+    }
+  );
 
   const employeeMap = useMemo(() => {
     return Object.fromEntries(
@@ -95,7 +108,8 @@ const PostPage = () => {
       <TopBar
         title="Post"
         icon={iconPath}
-        buttonClickLocation={topBarButtonLocation}
+        onClick={handleGoBack}
+        data-oid="3h_kbqw"
       />
 
       {/* Render post as a skeleton, error or post */}

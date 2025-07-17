@@ -1,111 +1,213 @@
-// src/features/auth/AuthStatus.tsx
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../../app/store"; // Import types
+import { useParams, useNavigate } from "react-router-dom";
 import {
-  signInWithGoogle,
-  signOutUser,
-  setUser,
-} from "../../features/auth/authSlice"; // Import auth actions/thunks
-import { onAuthStateChanged } from "firebase/auth"; // Import listener
-import { auth } from "../../../firebaseConfig"; // Import auth instance
-import LargeButton from "../LargeButton/LargeButton";
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  User,
+} from "firebase/auth";
+import { auth } from "../../../firebaseConfig"; // Import auth and googleProvider
+import { app } from "../../../firebaseConfig";
+import {
+  setCredentials,
+  logout,
+  setAuthLoading,
+  setAuthError,
+} from "../../features/auth/authSlice";
+import type { RootState } from "../../app/store"; // Import RootState for useSelector
+import { useGetTenantByIdQuery } from "../../features/tenants/publicTenantApi";
 
 import "./authPage.css"; // Import the CSS file
 
-function AuthPage() {
-  // Use the typed hooks
-  const user = useSelector((state: RootState) => state.auth.user);
-  const isLoading = useSelector((state: RootState) => state.auth.isLoading);
-  const error = useSelector((state: RootState) => state.auth.error);
-  const dispatch: AppDispatch = useDispatch();
+interface AuthWrapperProps {
+  devMode: boolean;
+  isAuthenticated: boolean;
+}
 
-  // Effect to listen for Firebase auth state changes (important for persistence)
+// Initialize Firebase Auth
+const authenticator = getAuth(app);
+
+// Get tenant details from URL
+const AuthPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, status, error, token } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const { tenantId } = useParams();
+
+  const devMode = import.meta.env.DEV;
+  const devUid = import.meta.env.VITE_USER_UID;
+
+  // Redirect if already authenticated
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      // Dispatch the setUser action whenever the auth state changes
-      dispatch(setUser(currentUser));
-      // This will update the Redux state based on the Firebase auth state
-      console.log(
-        "Firebase Auth State Changed:",
-        currentUser ? "Signed In" : "Signed Out",
+    console.log("UseEffect to check if user is authenticated in AuthPage:");
+    console.log("  - token: " + token);
+    console.log("  - isAuthenticated: " + isAuthenticated);
+    console.log("  - displayName: " + user?.displayName);
+
+    if (isAuthenticated && token) {
+      console.log("Authenticated - Redirect home");
+      if (tenantId) {
+        navigate(`/${tenantId}/home`); // Redirect to the tenant's home page
+      } else {
+        navigate("/"); // Or handle the case where tenantId is not available
+      }
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Call tenant service to get the auth provider if for the tenant (created by GCP when tenant added,but stored in firestore).
+  // The provider tenantId is required as part of auth process.  Note that the Google login button is disabled until this completes.
+  const {
+    data: tenantDetails,
+    error: apiError,
+    isLoading,
+  } = useGetTenantByIdQuery(tenantId ?? "");
+  useEffect(() => {
+    console.log("Query result:", { tenantDetails, apiError, isLoading });
+  }, [tenantDetails, apiError, isLoading]);
+
+  // Render the Auth component differently, depending upon the state of the Authentication process
+  const AuthWrapper: React.FC<AuthWrapperProps> = ({
+    devMode,
+    isAuthenticated,
+  }) => {
+    if (devMode) {
+      return (
+        <button
+          onClick={handleDevModeSignIn}
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+        >
+          Dev Mode Login
+        </button>
       );
-    });
-
-    // Clean up the listener on component unmount
-    return () => unsubscribe();
-  }, [dispatch]); // Dependency array includes dispatch
-
-  const handleSignIn = () => {
-    dispatch(signInWithGoogle());
+    } else if (isAuthenticated) {
+      return (
+        <button
+          onClick={handleLogout}
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+        >
+          Logout
+        </button>
+      );
+    } else {
+      return (
+        <button
+          onClick={handleGoogleSignIn}
+          disabled={!tenantDetails}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center space-x-2"
+        >
+          Sign in with Google
+        </button>
+      );
+    }
   };
 
-  const handleSignOut = () => {
-    dispatch(signOutUser());
+  const handleDevModeSignIn = async () => {
+    try {
+      console.log("Using dev mode (determined by env variable: DEV)");
+
+      // Create a mock User object for dev mode
+      const devUser: User = {
+        uid: devUid,
+        email: "dev@example.com",
+        displayName: "Dev User",
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerData: [],
+        metadata: {},
+        tenantId: null,
+        refreshToken: "",
+        phoneNumber: "039498484",
+        delete: async () => {},
+        getIdToken: async () => "dev-id-token",
+        getIdTokenResult: async () => ({
+          authTime: "",
+          claims: {},
+          expirationTime: "",
+          issuedAtTime: "",
+          signInProvider: null,
+          signInSecondFactor: null,
+          token: "dev-id-token",
+        }),
+        reload: async () => {},
+        toJSON: () => ({}),
+        providerId: "",
+      };
+
+      dispatch(setCredentials({ token: "dev-id-token", user: devUser }));
+    } catch (err: any) {
+      console.error("Dev sign-in error:", err);
+      dispatch(setAuthError(err.message || "Failed to sign in Dev Mode."));
+    }
   };
 
-  if (isLoading) {
-    return <p>Loading auth status...</p>;
-  }
+  const handleGoogleSignIn = async () => {
+    dispatch(setAuthLoading());
+    try {
+      // At this point, tenantDetails should be available because button was enabled
+      if (!tenantDetails) {
+        throw new Error(`Tenant details not available for ID: ${tenantId}.`);
+      }
 
-  if (error) {
-    return (
-      <div>
-        <p style={{ color: "red" }}>Error: {error}</p>
-        {/* Optionally add a retry button or clear error action */}
-      </div>
-    );
+      console.log(`Successfully using tenant details:`, tenantDetails);
+      auth.tenantId = tenantDetails.identityManagerTenantIdTenantId;
+      console.log(`Attempting to sign in with tenant: ${auth.tenantId}`);
+
+      const googleProvider = new GoogleAuthProvider();
+
+      const result = await signInWithPopup(authenticator, googleProvider);
+      const firebaseUser = result.user;
+      const idToken = await firebaseUser.getIdToken();
+
+      dispatch(setCredentials({ token: idToken, user: firebaseUser }));
+    } catch (err: any) {
+      console.error("Google sign-in error:", err);
+      dispatch(setAuthError(err.message || "Failed to sign in with Google."));
+    }
+  };
+
+  const handleLogout = async () => {
+    dispatch(setAuthLoading());
+    try {
+      await signOut(auth);
+      dispatch(logout()); // Clear state and localStorage
+      navigate("/login"); // Redirect to login page
+    } catch (err: any) {
+      console.error("Logout error:", err);
+      dispatch(setAuthError(err.message || "Failed to log out."));
+    }
+  };
+
+  if (status === "loading") {
+    return <div className="text-center text-gray-700">Loading...</div>;
   }
 
   return (
-    <div className="auth-page-container">
-      {/* --- Loading State --- */}
-      {isLoading && (
-        <div className="loading-message">
-          <p>Loading...</p>
-          {/* You could add a spinner icon here */}
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center p-4">
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md text-center">
+        <h2 className="text-3xl font-extrabold text-gray-900 mb-6">
+          {isAuthenticated
+            ? `Welcome, ${user?.displayName || user?.email || "User"}!`
+            : ""}
+        </h2>
 
-      {/* --- Error State --- */}
-      {error && (
-        <div className="error-message">
-          <p>Authentication Error:</p>
-          <p>{error}</p>
-          {/* Optionally add a button to clear the error or retry */}
-        </div>
-      )}
-
-      {/* --- Authenticated State (User is logged in) --- */}
-      {!isLoading && !error && user ? (
-        <div className="user-info">
-          <h2>Welcome!</h2>
-          {user.photoURL && (
-            <img src={user.photoURL} alt="Profile" className="profile-pic" />
-          )}
-          <p className="display-name">{user.displayName || user.email}</p>{" "}
-          {/* Display name or email */}
-          <button
-            className="sign-out-button"
-            onClick={handleSignOut}
-            disabled={isLoading} // Disable button while signing out
+        {error && (
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+            role="alert"
           >
-            Sign Out
-          </button>
-        </div>
-      ) : (
-        /* --- Unauthenticated State (User is logged out) --- */
-        !isLoading &&
-        !error && (
-          <div className="sign-in-prompt">
-            <h2>Please Sign In</h2>
-            <p>Access awesome features by signing in.</p>
-            <LargeButton onClick={handleSignIn} label="Sign in" />
+            <strong className="font-bold">Error:</strong>
+            <span className="block sm:inline"> {error}</span>
           </div>
-        )
-      )}
+        )}
+        <AuthWrapper devMode={devMode} isAuthenticated={isAuthenticated} />
+      </div>
     </div>
   );
-}
+};
 
 export default AuthPage;

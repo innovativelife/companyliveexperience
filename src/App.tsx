@@ -24,8 +24,11 @@ const NewPost = lazy(() => import("./pages/NewPostPage"));
 const NoPage = lazy(() => import("./pages/NoPage"));
 const Login = lazy(() => import("./pages/SignInPage"));
 
-// Create Routes for all the pages
+// The main application component. Sets up routing, authentication state management,
+// and UI configuration. Fetches UI settings based on the tenant ID found in the URL
+// and applies them using CSS variables.
 export default function App() {
+  // Set up tracking of user auth status via redux
   const dispatch = useDispatch();
 
   // Auth setup
@@ -36,15 +39,26 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // UI Config
-  const { data: uiConfig, isLoading, isError } = useGetUiConfigByTenantQuery();
+  // Get tenant details from URL
+  const pathSegments = window.location.pathname.split("/");
+  const tenantId = pathSegments[1];
+  console.log("TenantId from URL: " + tenantId);
 
+  // Get Ui config - this is an unautenticated request
+  const {
+    data: uiConfig,
+    isLoading,
+    isError,
+  } = useGetUiConfigByTenantQuery({ tenantId: tenantId });
   useEffect(() => {
     if (uiConfig) {
       dispatch(setUiConfig(uiConfig));
     }
   }, [uiConfig, dispatch]);
 
+  // Display messages while data loading
+  // ToDo: Skeletins when loading?
+  // ToDo: Improve error handling - UI Config could no tbe loaded (eg. May not be defined?)
   if (isLoading) {
     return <Spinner />;
   }
@@ -62,18 +76,14 @@ export default function App() {
 
       <Routes data-oid="r01at4u">
         <Route
-          path="/"
-          element={<Layout data-oid="orlgny3" />}
-          data-oid="objg-jn"
+          path="/:tenantId/"
+          element={<Layout data-oid="app-layout" />}
+          data-oid="app-layout-route"
         >
           <Route
             index
-            element={
-              <Suspense fallback={<div>Loading login...</div>}>
-                <Login data-oid="ehdazux" />
-              </Suspense>
-            }
-            data-oid="u-m6rhi"
+            element={<Login data-oid="app-login" />}
+            data-oid="app-login-route"
           />
 
           <Route

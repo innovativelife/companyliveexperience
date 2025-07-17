@@ -1,29 +1,19 @@
 // services/postsApi.ts
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { Reply } from "./repliesType";
+import { baseQueryWithReauth } from "../common/baseQuery";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-//------------------------------HOW can these be set dynamically
-const tenantId = import.meta.env.VITE_TENANT_ID;
 const userUID = import.meta.env.VITE_USER_UID;
 
 export const repliesApi = createApi({
   reducerPath: "repliesApi",
   tagTypes: ["Reply"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${API_BASE_URL}/api/v1/tenants/`,
-    prepareHeaders: (headers) => {
-      headers.set("Content-Type", "application/json");
-      headers.set("tenantid", tenantId);
-      headers.set("uid", userUID);
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    getReplies: builder.query<Reply[], string>({
-      query: (postId) => `${tenantId}/${postId}/replies`,
+    getReplies: builder.query<Reply[], { tenantId: string; postId: string }>({
+      query: (query) => `${query.tenantId}/${query.postId}/replies`,
       transformResponse: (response: { replies: Reply[] }) => response.replies,
-      providesTags: (result, _error, postId) =>
+      providesTags: (result, _error, { postId }) =>
         result
           ? [
               ...result.map((reply) => ({
@@ -34,8 +24,11 @@ export const repliesApi = createApi({
             ]
           : [{ type: "Reply", id: postId }],
     }),
-    createReply: builder.mutation<void, { message: string; postId: string }>({
-      query: ({ message, postId }) => ({
+    createReply: builder.mutation<
+      void,
+      { tenantId: string; message: string; postId: string }
+    >({
+      query: ({ tenantId, message, postId }) => ({
         url: `${tenantId}/${postId}/reply`,
         method: "POST",
         body: {
