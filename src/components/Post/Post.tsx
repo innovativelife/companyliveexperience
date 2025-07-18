@@ -40,10 +40,15 @@ const Post = ({ post, employees, employeeLoading }: PostProps) => {
         employeeLoading={employeeLoading}
       />
 
-      <PostContent message={post.message} imageURL={post.imageURL} />
+      <PostContent
+        message={post.message}
+        imageURL={post.imageURL}
+        handleClick={toggleRepliesState}
+      />
 
       <ActionItemBar
         likeFunction={likeFunction}
+        repliesShown={showReplies}
         repliesFunction={toggleRepliesState}
       />
       {showReplies && (

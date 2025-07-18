@@ -8,13 +8,17 @@ import { svgs } from "../../assets/svgs";
 type ActionItemBarProps = {
   likeFunction: () => void;
   repliesFunction: () => void;
+  repliesShown: boolean;
 };
 
 const ActionItemBar = ({
   likeFunction,
   repliesFunction,
+  repliesShown,
 }: ActionItemBarProps) => {
   //Action Item Functions
+
+  const repliesSvg = repliesShown ? svgs.downCaret : svgs.chat;
 
   return (
     <div className="flex flex-wrap justify-between gap-4 pl-[20px] pr-[20px] pb-[18px] pt-[6px]">
@@ -24,7 +28,7 @@ const ActionItemBar = ({
         handleClick={likeFunction}
       />
 
-      <ActionItem icon={svgs.chat} count={5} handleClick={repliesFunction} />
+      <ActionItem icon={repliesSvg} count={5} handleClick={repliesFunction} />
     </div>
   );
 };
