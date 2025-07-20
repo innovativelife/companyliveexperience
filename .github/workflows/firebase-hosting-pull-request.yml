@@ -1,82 +1,321 @@
-# This workflow automatically builds and deploys the companyliveexperience React app
-# to Firebase Hosting on PRs and pushes to the main branch.
-# It also allows manual triggering with a specified channel ID.
+# This workflow automatically builds and deploys the React application to Firebase Hosting
+# for PRs, pushes to staging, and pushes to main (production).
+# Each environment uses separate Firebase projects and service accounts for security isolation.
 name: Deploy to Firebase Hosting
 
 # Define when this workflow should run
 on:
-  # Trigger on pull requests to the main branch (for preview channels)
+  # Trigger on pull requests targeting the main branch (for PR preview channels)
   pull_request:
     branches:
-      - main # Replace 'main' with your primary branch name if different
-  # Trigger on pushes to the main branch (for live channel)
+      - main
+  # Trigger on pushes to specific branches (for staging and production)
   push:
     branches:
-      - main # Replace 'main' with your primary branch name if different
-  # Allow manual triggering from the GitHub UI
+      - main      # For production deployment
+      - staging   # For staging deployment (adjust branch name if different)
+  # Trigger on GitHub releases for production deployment
+  release:
+    types: [published]
+  # Allow manual triggering from the GitHub UI for specific environments
   workflow_dispatch:
     inputs:
+      target_environment:
+        description: 'Select environment to deploy to:'
+        required: true
+        type: choice
+        options:
+          - pr       # Deploy to a PR-specific preview channel
+          - staging  # Deploy to the staging Firebase project
+          - prod     # Deploy to the production Firebase project
+      pr_number:
+        description: 'PR number (required for "pr" environment via manual trigger)'
+        required: false
+        type: number
       channel_id:
-        description: 'The ID for the preview channel to deploy to (e.g., "my-feature-branch", "test-123"). Required for channel deployments via manual trigger.'
-        required: true # Make this input mandatory for manual runs
+        description: 'Custom channel ID (optional, for manual PR deployments)'
+        required: false
         type: string
 
+# Global environment variables
+env:
+  NODE_VERSION: 'lts/*'              # Node.js version to use
+  BUILD_COMMAND: 'npm run build'     # Build command for your React app
+  BUILD_DIR: 'dist'                  # Output directory after build (adjust if using 'build' instead)
+  
+  # Firebase Project IDs for each environment
+  PR_PROJECT_ID: 'companylive-pr-sydney'
+  STAGING_PROJECT_ID: 'companylive-staging-sydney'
+  PROD_PROJECT_ID: 'companylive-c3879'
+
 jobs:
-  build_and_deploy:
-    # Specify the runner environment
+  # Job to determine which environment we're deploying to
+  determine-environment:
     runs-on: ubuntu-latest
-    permissions: 
-      checks: write
-      contents: read
-      pull-requests: write
+    outputs:
+      environment: ${{ steps.determine.outputs.environment }}
+      project_id: ${{ steps.determine.outputs.project_id }}
+      channel_id: ${{ steps.determine.outputs.channel_id }}
+      is_live_deploy: ${{ steps.determine.outputs.is_live_deploy }}
+    
     steps:
-      # Step 1: Checkout the code from your repository
+      - name: Determine deployment environment
+        id: determine
+        run: |
+          # Logic for Pull Request builds
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "environment=pr" >> $GITHUB_OUTPUT
+            echo "project_id=${{ env.PR_PROJECT_ID }}" >> $GITHUB_OUTPUT
+            echo "channel_id=pr-${{ github.event.number }}" >> $GITHUB_OUTPUT
+            echo "is_live_deploy=false" >> $GITHUB_OUTPUT
+          # Logic for Staging branch pushes
+          elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "project_id=${{ env.STAGING_PROJECT_ID }}" >> $GITHUB_OUTPUT
+            echo "channel_id=live" >> $GITHUB_OUTPUT
+            echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+          # Logic for Production (main branch) pushes
+          elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "project_id=${{ env.PROD_PROJECT_ID }}" >> $GITHUB_OUTPUT
+            echo "channel_id=live" >> $GITHUB_OUTPUT
+            echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+          # Logic for GitHub Releases (production deployment)
+          elif [[ "${{ github.event_name }}" == "release" ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "project_id=${{ env.PROD_PROJECT_ID }}" >> $GITHUB_OUTPUT
+            echo "channel_id=live" >> $GITHUB_OUTPUT
+            echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+          # Logic for Manual Trigger (workflow_dispatch)
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            case "${{ github.event.inputs.target_environment }}" in
+              "pr")
+                if [[ -z "${{ github.event.inputs.pr_number }}" ]]; then
+                  echo "::error::Error: 'pr_number' input is required for 'pr' environment via manual trigger."
+                  exit 1
+                fi
+                echo "environment=pr" >> $GITHUB_OUTPUT
+                echo "project_id=${{ env.PR_PROJECT_ID }}" >> $GITHUB_OUTPUT
+                # Use custom channel_id if provided, otherwise use pr-{number}
+                if [[ -n "${{ github.event.inputs.channel_id }}" ]]; then
+                  echo "channel_id=${{ github.event.inputs.channel_id }}" >> $GITHUB_OUTPUT
+                else
+                  echo "channel_id=pr-${{ github.event.inputs.pr_number }}" >> $GITHUB_OUTPUT
+                fi
+                echo "is_live_deploy=false" >> $GITHUB_OUTPUT
+                ;;
+              "staging")
+                echo "environment=staging" >> $GITHUB_OUTPUT
+                echo "project_id=${{ env.STAGING_PROJECT_ID }}" >> $GITHUB_OUTPUT
+                echo "channel_id=live" >> $GITHUB_OUTPUT
+                echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+                ;;
+              "prod")
+                echo "environment=production" >> $GITHUB_OUTPUT
+                echo "project_id=${{ env.PROD_PROJECT_ID }}" >> $GITHUB_OUTPUT
+                echo "channel_id=live" >> $GITHUB_OUTPUT
+                echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+                ;;
+              *)
+                echo "::error::Error: Invalid 'target_environment' input for manual trigger."
+                exit 1
+                ;;
+            esac
+          else
+            echo "::error::Error: Unable to determine deployment environment."
+            exit 1
+          fi
+
+  # Build job - shared by all environments
+  build:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      # Step 2: Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*' # Use the Node.js version your project requires
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
       
-      # Step 3: Install dependencies
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
       
-      # Step 4: Build the React application
-      - name: Build Application
-        run: npm run build
+      - name: Build application
+        run: ${{ env.BUILD_COMMAND }}
       
-      # Step 5a: Deploy to consistent PR Channel (always use pr-preview for all PRs)
-      - name: Deploy to Firebase Hosting PR Channel
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: ${{ env.BUILD_DIR }}
+          retention-days: 1
+
+  # PR deployments - no environment protection needed
+  deploy-pr:
+    if: needs.determine-environment.outputs.environment == 'pr'
+    needs: [determine-environment, build]
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: ${{ env.BUILD_DIR }}
+      
+      - name: Deploy to Firebase Hosting (PR Preview)
+        id: deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: 'TODO'  # PR-specific service account
+          projectId: ${{ needs.determine-environment.outputs.project_id }}
+          channelId: ${{ needs.determine-environment.outputs.channel_id }}
+          expires: 7d
+          public: ${{ env.BUILD_DIR }}
+      
+      - name: Comment PR with deployment info
         if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **PR Preview Deployed Successfully!**
+              
+              **Environment:** PR Preview
+              **Project:** \`${{ needs.determine-environment.outputs.project_id }}\`
+              **Channel:** \`${{ needs.determine-environment.outputs.channel_id }}\`
+              **Preview URL:** ${{ steps.deploy.outputs.details_url }}
+              
+              This preview will expire in 7 days or when the PR is closed.`
+            })
+      
+      - name: Show deployment output (PR)
+        run: |
+          echo "PR Deployment successful!"
+          echo "Deployed to Firebase Project ID: ${{ needs.determine-environment.outputs.project_id }}"
+          echo "Channel ID: ${{ needs.determine-environment.outputs.channel_id }}"
+          echo "Preview URL: ${{ steps.deploy.outputs.details_url }}"
+
+  # Staging deployments - with staging environment protection
+  deploy-staging:
+    if: needs.determine-environment.outputs.environment == 'staging'
+    needs: [determine-environment, build]
+    runs-on: ubuntu-latest
+    environment: staging  # This enables environment protection rules in GitHub
+    
+    permissions:
+      contents: write
+      checks: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: ${{ env.BUILD_DIR }}
+      
+      - name: Deploy to Firebase Hosting (Staging)
+        id: deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-         repoToken: '${{secrets.GITHUB_TOKEN }}'
-         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
-         projectId: companylive-c3879
-         channelId: pr-preview
-         expires: 7d # channel expires after 7 days
-         
-      # Step 5b: Deploy to Manual Channel (using provided channel ID)
-      - name: Deploy to Firebase Hosting Manual Channel
-        if: github.event_name == 'workflow_dispatch'
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: 'github-webapp-deploy@companylive-staging-sydney.iam.gserviceaccount.com'  # Staging-specific service account
+          projectId: ${{ needs.determine-environment.outputs.project_id }}
+          channelId: ${{ needs.determine-environment.outputs.channel_id }}
+          public: ${{ env.BUILD_DIR }}
+      
+      - name: Show deployment output (Staging)
+        run: |
+          echo "Staging Deployment successful!"
+          echo "Deployed to Firebase Project ID: ${{ needs.determine-environment.outputs.project_id }}"
+          echo "Channel ID: ${{ needs.determine-environment.outputs.channel_id }}"
+          echo "Live URL: ${{ steps.deploy.outputs.details_url }}"
+      
+      - name: Create GitHub Release (Staging)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const tag = `staging-v${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}`;
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: `Staging Release ${tag}`,
+              body: `Automated staging deployment\n\n**Live URL:** ${{ steps.deploy.outputs.details_url }}`,
+              draft: false,
+              prerelease: true
+            });
+
+  # Production deployments - with production environment protection
+  deploy-production:
+    if: needs.determine-environment.outputs.environment == 'production'
+    needs: [determine-environment, build]
+    runs-on: ubuntu-latest
+    environment: production  # This enables environment protection rules in GitHub
+    
+    permissions:
+      contents: write
+      checks: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: ${{ env.BUILD_DIR }}
+      
+      - name: Deploy to Firebase Hosting (Production)
+        id: deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-         repoToken: '${{secrets.GITHUB_TOKEN }}'
-         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
-         projectId: companylive-c3879
-         channelId: ${{ github.event.inputs.channel_id }}
-         expires: 7d # channel expires after 7 days
-         
-      # Step 5c: Deploy to the Live Channel (triggered by push to main)
-      - name: Deploy to Firebase Hosting Live Channel
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: 'github-deployment@companylive-c3879.iam.gserviceaccount.com'  # Production service account
+          projectId: ${{ needs.determine-environment.outputs.project_id }}
+          channelId: ${{ needs.determine-environment.outputs.channel_id }}
+          public: ${{ env.BUILD_DIR }}
+      
+      - name: Show deployment output (Production)
+        run: |
+          echo "Production Deployment successful!"
+          echo "Deployed to Firebase Project ID: ${{ needs.determine-environment.outputs.project_id }}"
+          echo "Channel ID: ${{ needs.determine-environment.outputs.channel_id }}"
+          echo "Live URL: ${{ steps.deploy.outputs.details_url }}"
+      
+      - name: Create GitHub Release (Production)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: actions/github-script@v7
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}' # Still needed for potential status checks
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'
-          projectId: companylive-c3879
-          public: dist
-          channelId: live
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const tag = `v${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}`;
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: `Production Release ${tag}`,
+              body: `Automated production deployment\n\n**Live URL:** ${{ steps.deploy.outputs.details_url }}`,
+              draft: false,
+              prerelease: false
+            });
