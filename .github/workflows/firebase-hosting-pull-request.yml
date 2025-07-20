@@ -291,7 +291,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: 'github-deployment@companylive-c3879.iam.gserviceaccount.com'  # Production service account
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'  # Production service account
           projectId: ${{ needs.determine-environment.outputs.project_id }}
           channelId: ${{ needs.determine-environment.outputs.channel_id }}
           public: ${{ env.BUILD_DIR }}
