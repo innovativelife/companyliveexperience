@@ -182,7 +182,7 @@ jobs:
           projectId: ${{ needs.determine-environment.outputs.project_id }}
           channelId: ${{ needs.determine-environment.outputs.channel_id }}
           expires: 7d
-          target: ${{ env.BUILD_DIR }}
+          # target: ${{ env.BUILD_DIR }}
       
       - name: Comment PR with deployment info
         if: github.event_name == 'pull_request'
@@ -239,7 +239,7 @@ jobs:
           firebaseServiceAccount: 'github-webapp-deploy@companylive-staging-sydney.iam.gserviceaccount.com'  # Staging-specific service account
           projectId: ${{ needs.determine-environment.outputs.project_id }}
           channelId: ${{ needs.determine-environment.outputs.channel_id }}
-          target: ${{ env.BUILD_DIR }}
+          # target: ${{ env.BUILD_DIR }}
       
       - name: Show deployment output (Staging)
         run: |
@@ -294,7 +294,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_C3879 }}'  # Production service account
           projectId: ${{ needs.determine-environment.outputs.project_id }}
           channelId: ${{ needs.determine-environment.outputs.channel_id }}
-          target: ${{ env.BUILD_DIR }}
+          # target: ${{ env.BUILD_DIR }}
       
       - name: Show deployment output (Production)
         run: |
