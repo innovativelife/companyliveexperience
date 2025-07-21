@@ -40,7 +40,7 @@ on:
 # Global environment variables
 env:
   NODE_VERSION: 'lts/*'              # Node.js version to use
-  BUILD_COMMAND: 'npm run build'     # Build command for your React app
+  BUILD_COMMAND: 'npx vite build --mode'     # Build command for your React app
   BUILD_DIR: 'dist'                  # Output directory after build (adjust if using 'build' instead)
   
   # Firebase Project IDs for each environment
@@ -57,6 +57,7 @@ jobs:
       project_id: ${{ steps.determine.outputs.project_id }}
       channel_id: ${{ steps.determine.outputs.channel_id }}
       is_live_deploy: ${{ steps.determine.outputs.is_live_deploy }}
+      vite_mode: ${{ steps.determine.outputs.vite_mode }}
     
     steps:
       - name: Determine deployment environment
@@ -68,24 +69,28 @@ jobs:
             echo "project_id=${{ env.PR_PROJECT_ID }}" >> $GITHUB_OUTPUT
             echo "channel_id=pr-${{ github.event.number }}" >> $GITHUB_OUTPUT
             echo "is_live_deploy=false" >> $GITHUB_OUTPUT
+            echo "vite_mode=pr" >> $GITHUB_OUTPUT
           # Logic for Staging branch pushes
           elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/staging" ]]; then
             echo "environment=staging" >> $GITHUB_OUTPUT
             echo "project_id=${{ env.STAGING_PROJECT_ID }}" >> $GITHUB_OUTPUT
             echo "channel_id=live" >> $GITHUB_OUTPUT
             echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+            echo "vite_mode=staging" >> $GITHUB_OUTPUT
           # Logic for Production (main branch) pushes
           elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "environment=production" >> $GITHUB_OUTPUT
             echo "project_id=${{ env.PROD_PROJECT_ID }}" >> $GITHUB_OUTPUT
             echo "channel_id=live" >> $GITHUB_OUTPUT
             echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+            echo "vite_mode=production" >> $GITHUB_OUTPUT
           # Logic for GitHub Releases (production deployment)
           elif [[ "${{ github.event_name }}" == "release" ]]; then
             echo "environment=production" >> $GITHUB_OUTPUT
             echo "project_id=${{ env.PROD_PROJECT_ID }}" >> $GITHUB_OUTPUT
             echo "channel_id=live" >> $GITHUB_OUTPUT
             echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+            echo "vite_mode=production" >> $GITHUB_OUTPUT
           # Logic for Manual Trigger (workflow_dispatch)
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             case "${{ github.event.inputs.target_environment }}" in
@@ -103,18 +108,21 @@ jobs:
                   echo "channel_id=pr-${{ github.event.inputs.pr_number }}" >> $GITHUB_OUTPUT
                 fi
                 echo "is_live_deploy=false" >> $GITHUB_OUTPUT
+                echo "vite_mode=pr" >> $GITHUB_OUTPUT
                 ;;
               "staging")
                 echo "environment=staging" >> $GITHUB_OUTPUT
                 echo "project_id=${{ env.STAGING_PROJECT_ID }}" >> $GITHUB_OUTPUT
                 echo "channel_id=live" >> $GITHUB_OUTPUT
                 echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+                echo "vite_mode=staging" >> $GITHUB_OUTPUT
                 ;;
               "prod")
                 echo "environment=production" >> $GITHUB_OUTPUT
                 echo "project_id=${{ env.PROD_PROJECT_ID }}" >> $GITHUB_OUTPUT
                 echo "channel_id=live" >> $GITHUB_OUTPUT
                 echo "is_live_deploy=true" >> $GITHUB_OUTPUT
+                echo "vite_mode=production" >> $GITHUB_OUTPUT
                 ;;
               *)
                 echo "::error::Error: Invalid 'target_environment' input for manual trigger."
@@ -143,7 +151,7 @@ jobs:
         run: npm ci
       
       - name: Build application
-        run: ${{ env.BUILD_COMMAND }}
+        run: npx vite build --mode ${{ needs.determine-environment.outputs.vite_mode }}
       
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
