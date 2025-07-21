@@ -138,6 +138,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Show VITE mode parameter
+        run: |
+          echo "Vite Mode: ${{ needs.determine-environment.outputs.vite_mode }}"
+          
       - name: Checkout code
         uses: actions/checkout@v4
       
