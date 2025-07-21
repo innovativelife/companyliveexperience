@@ -236,7 +236,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: 'github-webapp-deploy@companylive-staging-sydney.iam.gserviceaccount.com'  # Staging-specific service account
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPANYLIVE_STAGING }}'  # Staging-specific service account
           projectId: ${{ needs.determine-environment.outputs.project_id }}
           channelId: ${{ needs.determine-environment.outputs.channel_id }}
           # target: ${{ env.BUILD_DIR }}
