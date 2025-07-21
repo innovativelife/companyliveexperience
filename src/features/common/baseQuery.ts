@@ -42,8 +42,7 @@ const baseQueryWithAuth = fetchBaseQuery({
 export const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
+  FetchBaseQueryError > = async (args, api, extraOptions) => {
   let result = await baseQueryWithAuth(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
@@ -51,7 +50,7 @@ export const baseQueryWithReauth: BaseQueryFn<
     const refreshResult = await baseQueryWithAuth('/refresh-token', api, extraOptions);
 
     if (refreshResult.data) {
-      // To do - Implement Re-auth
+      // ToDo - Implement Re-auth / token refresh
       console.log("Reauth not implmented");
       //   // If refresh successful, update the token in your Redux store
       //   api.dispatch(setCredentials(refreshResult.data));

@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "companylive-c3879"
+    "default": "companylive-c3879",
+    "pr": "companylive-c3879-pr",
+    "staging": "companylive-c3879-staging"
   }
 }
