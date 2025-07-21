@@ -136,6 +136,7 @@ jobs:
 
   # Build job - shared by all environments
   build:
+    needs: [determine-environment]
     runs-on: ubuntu-latest
     steps:
       - name: Show VITE mode parameter
