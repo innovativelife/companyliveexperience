@@ -8,13 +8,13 @@ import { FirebaseOptions } from "firebase/app"; // Import the FirebaseOptions ty
 
 // Web app's Firebase configuration
 const firebaseConfig: FirebaseOptions = {
-  apiKey: "AIzaSyCF00k7MPryL89I-FqQ4SlijW7i_8WriIw",
-  authDomain: "companylive-c3879.firebaseapp.com",
-  projectId: "companylive-c3879",
-  storageBucket: "companylive-c3879.firebasestorage.app",
-  messagingSenderId: "1051288677497",
-  appId: "1:1051288677497:web:34d460d07857a8e436f8a8",
-  measurementId: "G-ZPLZFY9MP7",
+ apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
