@@ -151,7 +151,31 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
+      - name: Create VITE .env file for staging environment
+        if: needs.determine-environment.outputs.environment == 'staging'
+        run: |
+          echo "VITE_API_URL=https://australia-southeast1-companylive-staging-sydney.cloudfunctions.net/companyliveservices-2-staging" >> .env.staging
+          echo "VITE_USE_DYNAMIC_AUTH=true" >> .env.staging
+          echo "VITE_FIREBASE_API_KEY={{ secrets.FIREBASE_STAGING_API_KEY }}" >> .env.staging
+          echo "VITE_FIREBASE_AUTH_DOMAIN=companylive-staging-sydney.firebaseapp.com" >> .env.staging
+          echo "VITE_FIREBASE_STORAGE_BUCKET=companylive-staging-sydney.firebasestorage.app" >> .env.staging
+          echo "VITE_FIREBASE_MESSAGING_SENDER_ID={{ secrets.FIREBASE_STAGING_MEASUREMENT_ID }}" >> .env.staging
+          echo "VITE_FIREBASE_APP_ID={{ secrets.FIREBASE_STAGING_APP_ID }}" >> .env.staging
+          echo "VITE_FIREBASE_MEASUREMENT_ID={{ secrets.FIREBASE_STAGING_MEASUREMENT_ID }}" >> .env.staging
+
+      - name: Create VITE .env file for production environment
+        if: needs.determine-environment.outputs.environment == 'production'
+        run: |
+          echo "VITE_API_URL=https://australia-southeast1-companylive-c3879.cloudfunctions.net/companyliveservices-2" >> .env.production
+          echo "VITE_USE_DYNAMIC_AUTH=true" >> .env.production
+          echo "VITE_FIREBASE_API_KEY={{ secrets.FIREBASE_PROD_API_KEY }}" >> .env.production
+          echo "VITE_FIREBASE_AUTH_DOMAIN=companylive-c3879.firebaseapp.com" >> .env.production
+          echo "VITE_FIREBASE_STORAGE_BUCKET=companylive-c3879.firebasestorage.app" >> .env.production
+          echo "VITE_FIREBASE_MESSAGING_SENDER_ID={{ secrets.FIREBASE_PROD_MEASUREMENT_ID }}" >> .env.production
+          echo "VITE_FIREBASE_APP_ID={{ secrets.FIREBASE_PROD_APP_ID }}" >> .env.production
+          echo "VITE_FIREBASE_MEASUREMENT_ID={{ secrets.FIREBASE_PROD_MEASUREMENT_ID }}" >> .env.production
+  
       - name: Install dependencies
         run: npm ci
       
