@@ -15,6 +15,9 @@ import { postsApi } from '../features/posts/postAPI';
 import repliesReducer from '../features/replies/repliesSlice';
 import { repliesApi } from '../features/replies/repliesAPI';
 
+import reactionsReducer from '../features/reactions/reactionsSlice';
+import { reactionApi } from '../features/reactions/reactionsAPI';
+
 import { publicTenantApi } from '../features/tenants/publicTenantApi';
 
 import authReducer from '../features/auth/authSlice';
@@ -31,6 +34,8 @@ export const store = configureStore({
     [postsApi.reducerPath]: postsApi.reducer,
     replies: repliesReducer,
     [repliesApi.reducerPath]: repliesApi.reducer,
+    reactions: reactionsReducer,
+    [reactionApi.reducerPath]: reactionApi.reducer,
     auth: authReducer,
     [publicTenantApi.reducerPath]: publicTenantApi.reducer,
   },
@@ -41,6 +46,7 @@ export const store = configureStore({
       employeesApi.middleware,
       postsApi.middleware,
       repliesApi.middleware,
+      reactionApi.middleware,
       publicTenantApi.middleware,
     ),
 });

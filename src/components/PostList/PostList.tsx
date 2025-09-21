@@ -12,6 +12,7 @@ type PostListProps = {
   postLoading: boolean;
   employees?: Record<string, Employee>;
   employeeLoading: boolean;
+  reactionFunction: (postId: string) => void;
 };
 
 const PostList = ({
@@ -19,6 +20,7 @@ const PostList = ({
   postLoading,
   employees,
   employeeLoading,
+  reactionFunction,
 }: PostListProps) => {
   if (postLoading) {
     return <PostListSkeleton />;
@@ -48,6 +50,7 @@ const PostList = ({
             postLoading={postLoading}
             employees={employees}
             employeeLoading={employeeLoading}
+            reactionFunction={reactionFunction}
           />
         </div>
       ))

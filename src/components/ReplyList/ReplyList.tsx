@@ -14,9 +14,15 @@ type ReplyListProps = {
   postId: string;
   employees?: Record<string, Employee>;
   employeeLoading: boolean;
+  reactionFunction: (postId: string) => void;
 };
 
-const ReplyPanel = ({ postId, employees, employeeLoading }: ReplyListProps) => {
+const ReplyPanel = ({
+  postId,
+  employees,
+  employeeLoading,
+  reactionFunction,
+}: ReplyListProps) => {
   // TODO: Findout where to get tenantId (probably in outer page)
   const { tenantId } = useParams();
 
@@ -56,12 +62,14 @@ const ReplyPanel = ({ postId, employees, employeeLoading }: ReplyListProps) => {
         {repliesIsFetching && <Spinner />}
         {Array.isArray(replies) &&
           replies.map((reply, index) => (
+            //TODO add replyId
             <Reply
               key={index}
               reply={reply}
               replyLoading={repliesIsLoading}
               employee={employees?.[reply.employeeUID]}
               employeeLoading={employeeLoading}
+              reactionFunction={reactionFunction}
             />
           ))}
         <ReplyInput postId={postId ?? ""} employeeLoading={employeeLoading} />

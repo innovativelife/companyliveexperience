@@ -16,9 +16,15 @@ type PostProps = {
   postLoading: boolean;
   employees?: Record<string, Employee>;
   employeeLoading: boolean;
+  reactionFunction: (postId: string) => void;
 };
 
-const Post = ({ post, employees, employeeLoading }: PostProps) => {
+const Post = ({
+  post,
+  employees,
+  employeeLoading,
+  reactionFunction,
+}: PostProps) => {
   //Stores whether replies should be stored
   const [showReplies, setShowReplies] = useState(false);
 
@@ -26,11 +32,6 @@ const Post = ({ post, employees, employeeLoading }: PostProps) => {
   const toggleRepliesState = () => {
     setShowReplies((prevShowReplies) => !prevShowReplies); // Use the updater function
   };
-
-  //TODO implement reactions
-  function likeFunction() {
-    console.log("You liked a post");
-  }
 
   return (
     <>
@@ -47,9 +48,10 @@ const Post = ({ post, employees, employeeLoading }: PostProps) => {
       />
 
       <ActionItemBar
-        likeFunction={likeFunction}
         repliesShown={showReplies}
         repliesFunction={toggleRepliesState}
+        reactionFunction={reactionFunction}
+        postId={post.postId}
       />
       {showReplies && (
         <div className="pl-[40px]">
@@ -57,6 +59,7 @@ const Post = ({ post, employees, employeeLoading }: PostProps) => {
             postId={post.postId}
             employees={employees}
             employeeLoading={employeeLoading}
+            reactionFunction={reactionFunction}
           />
         </div>
       )}

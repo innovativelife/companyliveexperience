@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import PullToRefresh from "react-pull-to-refresh";
 import { useParams, useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ import PostList from "../components/PostList/PostList";
 import Banner from "../components/Banner/Banner";
 import Padding from "../components/Padding/Padding";
 import Spinner from "../components/Spinner/Spinner";
+// import ReactionBar from "../components/ReactionBar/ReactionBar";
+import ReactionSlideUpSheet from "../components/ReactionSlideUpSheet/ReactionSlideUpSheet";
 
 //Data
 import { selectPages } from "../features/uiConfig/uiSelectors";
@@ -80,6 +82,19 @@ const HomePage = () => {
     await Promise.all([employeesRefetch(), postsRefetch()]);
   };
 
+  //Reaction Slide Up Sheet Data
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [activePostId, setActivePostId] = useState<string | null>(null);
+  const openReactionSheet = (postId: string) => {
+    setActivePostId(postId);
+    setIsSheetOpen(true);
+  };
+
+  const closeReactionSheet = () => {
+    setIsSheetOpen(false);
+    setActivePostId(null);
+  };
+
   return (
     <>
       <PullToRefresh
@@ -101,6 +116,15 @@ const HomePage = () => {
           fallbackImageUrl={images.ImageNotFound}
         />
 
+        {/* Reaction Slide Up Sheet */}
+        {isSheetOpen && activePostId && (
+          <ReactionSlideUpSheet
+            isOpen={isSheetOpen}
+            onClose={closeReactionSheet}
+            postId={activePostId}
+          />
+        )}
+
         {/* Show error messages if their are problems fetching posts or employees*/}
         {postsIsError && <p className="errorMessage">Error fetching posts</p>}
         {employeesIsError && (
@@ -112,6 +136,7 @@ const HomePage = () => {
           postLoading={postsIsLoading}
           employees={employeeMap}
           employeeLoading={employeesIsLoading}
+          reactionFunction={openReactionSheet}
         />
 
         <NavBar />

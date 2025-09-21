@@ -14,17 +14,19 @@ type ReplyProps = {
   replyLoading: boolean;
   employee?: Employee;
   employeeLoading: boolean;
+  reactionFunction: (postId: string) => void;
 };
 
-const Reply = ({ reply, employee, employeeLoading }: ReplyProps) => {
+const Reply = ({
+  reply,
+  employee,
+  employeeLoading,
+  reactionFunction,
+}: ReplyProps) => {
   const time = timeAgo(reply.timeSent);
 
-  function likeFunction() {
-    console.log("You liked a post");
-  }
-
   return (
-    <div className="flex w-full flex-row box-border flex-row items-start justify-star gap-3 p-4">
+    <div className="flex w-full flex-row box-border items-start justify-star gap-3 p-4">
       <Avatar
         employee={employee}
         size="small"
@@ -40,9 +42,10 @@ const Reply = ({ reply, employee, employeeLoading }: ReplyProps) => {
 
         <div className="flex w-full flex-row items-center justify-start gap-9 pt-2">
           <ActionItem
-            icon={svgs.addReaction}
+            svgIcon={svgs.addReaction}
             count={23}
-            handleClick={likeFunction}
+            handleClick={() => reactionFunction(reply.postId)}
+            //TODO: change from postId to replyId or whatever is needed
           />
         </div>
       </div>
