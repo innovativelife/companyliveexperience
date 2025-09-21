@@ -25,9 +25,9 @@ on:
         required: true
         type: choice
         options:
-          - pr       # Deploy to a PR-specific preview channel
-          - staging  # Deploy to the staging Firebase project
-          - prod     # Deploy to the production Firebase project
+          - pr       # Build PR
+          - staging  # Build and deploy to the staging Firebase project
+          - prod     # Build and deploy to the production Firebase project
       pr_number:
         description: 'PR number (required for "pr" environment via manual trigger)'
         required: false
@@ -188,64 +188,6 @@ jobs:
           name: build-artifacts
           path: ${{ env.BUILD_DIR }}
           retention-days: 1
-
-  # PR deployments - no environment protection needed
-  deploy-pr:
-    if: needs.determine-environment.outputs.environment == 'pr'
-    needs: [determine-environment, build]
-    runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
-      pull-requests: write
-      checks: write
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: ${{ env.BUILD_DIR }}
-      
-      - name: Deploy to Firebase Hosting (PR Preview)
-        id: deploy
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: 'TODO'  # PR-specific service account
-          projectId: ${{ needs.determine-environment.outputs.project_id }}
-          channelId: ${{ needs.determine-environment.outputs.channel_id }}
-          expires: 7d
-          # target: ${{ env.BUILD_DIR }}
-      
-      - name: Comment PR with deployment info
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `🚀 **PR Preview Deployed Successfully!**
-              
-              **Environment:** PR Preview
-              **Project:** \`${{ needs.determine-environment.outputs.project_id }}\`
-              **Channel:** \`${{ needs.determine-environment.outputs.channel_id }}\`
-              **Preview URL:** ${{ steps.deploy.outputs.details_url }}
-              
-              This preview will expire in 7 days or when the PR is closed.`
-            })
-      
-      - name: Show deployment output (PR)
-        run: |
-          echo "PR Deployment successful!"
-          echo "Deployed to Firebase Project ID: ${{ needs.determine-environment.outputs.project_id }}"
-          echo "Channel ID: ${{ needs.determine-environment.outputs.channel_id }}"
-          echo "Preview URL: ${{ steps.deploy.outputs.details_url }}"
 
   # Staging deployments - with staging environment protection
   deploy-staging:
