@@ -49,7 +49,7 @@ const PostPage = () => {
   } = useGetRepliesQuery(
     { tenantId: tenantId ?? "", postId: postId ?? "" },
     {
-      pollingInterval: 30000000,
+      pollingInterval: 30000,
       refetchOnFocus: true,
       refetchOnReconnect: true,
     }
