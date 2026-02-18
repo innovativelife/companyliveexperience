@@ -42,33 +42,16 @@ const baseQueryWithAuth = fetchBaseQuery({
 export const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
-  FetchBaseQueryError > = async (args, api, extraOptions) => {
-  let result = await baseQueryWithAuth(args, api, extraOptions);
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  const result = await baseQueryWithAuth(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
-    // Attempt to refresh the token
-    const refreshResult = await baseQueryWithAuth('/refresh-token', api, extraOptions);
+  // TODO: Implement token refresh logic
+  // When 401 is received:
+  // 1. Attempt to refresh the Firebase token using auth.currentUser?.getIdToken(true)
+  // 2. Update the token in Redux store via setCredentials()
+  // 3. Retry the original request
+  // 4. If refresh fails, dispatch logout() and redirect to login
 
-    if (refreshResult.data) {
-      // ToDo - Implement Re-auth / token refresh
-      console.log("Reauth not implmented");
-      //   // If refresh successful, update the token in your Redux store
-      //   api.dispatch(setCredentials(refreshResult.data));
-      //   // Retry the original request
-      //   result = await baseQueryWithAuth(args, api, extraOptions);
-      // } else {
-      //   // If refresh fails, log out the user
-      //   api.dispatch(clearCredentials());
-
-
-      //   if (result.error && (result.error.status === 401 || result.error.status === 403)) {
-      //     console.warn('Unauthorized or Forbidden: Logging out user.');
-      //     api.dispatch(logout()); // Dispatch logout action
-      //     // ToDo: Add a global redirect here if not handled by a PrivateRoute
-      //     // For example: window.location.href = '/login';
-      //   }
-      //   return result;
-    }
-  }
   return result;
 };

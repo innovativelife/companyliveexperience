@@ -45,7 +45,7 @@ const HomePage = () => {
   } = useGetPostsQuery(
     { tenantId: tenantId ?? "" },
     {
-      pollingInterval: 30000000,
+      pollingInterval: 30000,
       refetchOnFocus: true,
       refetchOnReconnect: true,
     }
